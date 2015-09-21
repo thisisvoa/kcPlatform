@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.casic27.platform.common.user.dao.IUserMapper">
+	<resultMap id="userMap" type="com.casic27.platform.common.user.entity.User">
+		<id property="zjid" column="ZJID" />
+		<result property="yhmc" column="YHMC" />  
+		<result property="yhdlzh" column="YHDLZH"/>
+		<result property="yhdlmm" column="YHDLMM" /> 
+		<result property="sfzh" column="SFZH" />
+		<result property="jybh" column="JYBH" />
+		<result property="ssdw_zjid" column="SSDW_ZJID" /> 
+		<result property="lxdh" column="LXDH" /> 
+		<result property="yddh" column="YDDH" /> 
+		<result property="dzyx" column="DZYX" /> 
+		<result property="yhlx" column="YHLX" /> 
+		<result property="yhjb" column="YHJB" /> 
+		<result property="sybz" column="SYBZ" /> 
+		<result property="bz" column="BZ" /> 
+		<result property="cjyh" column="CJYH" /> 
+		<result property="gxyh" column="GXYH" /> 
+		<result property="jlxzsj" column="JLXZSJ" /> 
+		<result property="jlxgsj" column="JLXGSJ" /> 
+		<result property="jlscsj" column="JLSCSJ" /> 
+		<result property="jlyxzt" column="JLYXZT" />
+	</resultMap>
+	
+	<select id="queryUserList" parameterType="com.casic27.platform.common.user.entity.User" resultMap="userMap">
+		SELECT ZJID,YHMC,YHDLZH,SFZH,YHDLMM,SFZH,JYBH,SSDW_ZJID,XB,LXDH,YDDH,
+			DZYX,YHLX,YHJB,SYBZ,BZ,CJYH,GXYH,
+			JLXZSJ,JLXGSJ,JLSCSJ,JLYXZT from TB_YHXX 
+			where 1=1 
+		<if test="zjid!=null and zjid!=''">
+			and ZJID=#{zjid}
+		</if>
+		<if test="yhmc!=null">
+			and YHMC=#{yhmc}
+		</if>
+		<if test="ssdw_zjid!=null and ssdw_zjid!=''">
+			and SSDW_ZJID=#{ssdw_zjid}
+		</if>
+		
+		<if test="sybz!=null and sybz!=''">
+			and SYBZ=#{sybz}
+		</if>
+		<if test="jlyxzt!=null and jlyxzt!=''">
+			and JLYXZT=#{jlyxzt}
+		</if>
+	</select>
+	
+	<select id="queryCurAndChildOrgUserList" parameterType="com.casic27.platform.common.user.entity.User" resultType="java.util.HashMap">
+		SELECT B.ZJID,
+		       B.YHMC,
+		       B.YHDLZH,
+		       B.YHDLMM,
+		       B.SFZH,
+		       B.JYBH,
+		       B.SSDW_ZJID,
+		       B.XB,
+		       B.LXDH,
+		       B.YDDH,
+		       B.DZYX,
+		       B.YHLX,
+		       B.YHJB,
+		       B.SYBZ,
+		       B.BZ,
+		       B.CJYH,
+		       B.GXYH,
+		       B.JLXZSJ,
+		       B.JLXGSJ,
+		       B.JLSCSJ,
+		       B.JLYXZT,
+		       A.DWMC
+		  FROM TB_YHXX B, TB_DWXX A
+		 WHERE A.ZJID = B.SSDW_ZJID
+	 	<if test="yhmc != null and yhmc !=''">
+			and b.YHMC like '%'||#{yhmc}||'%'
+		</if>	
+		<if test="yhdlzh and yhdlzh != ''">
+			and b.YHDLZH like '%'||#{yhdlzh}||'%'
+		</if>
+		<if test="jybh != null and jybh != ''">
+			and b.JYBH like '%'||#{jybh}||'%'
+		</if>	
+		<if test="lxdh != null and lxdh != ''">
+			and b.LXDH like '%'||#{lxdh}||'%'
+		</if>
+		<if test="yddh != null and yddh != ''">
+			and b.YDDH like '%'||#{yddh}||'%'
+		</if>		
+		<if test=" dzyx !=null and dzyx != ''">
+			and b.DZYX like '%'||#{dzyx}||'%'
+		</if>
+		<if test="yhlx != null and yhlx != ''">
+			and b.YHLX = #{yhlx}
+		</if>
+		<if test="yhjb != null and yhjb != ''">
+			and b.YHJB >= #{yhjb}
+		</if>
+	     <if test="sybz!=null and sybz!=''">
+			and b.SYBZ = #{sybz}
+		 </if>
+		 <if test="jlyxzt!=null and jlyxzt!=''">
+			and b.JLYXZT = #{jlyxzt}
+		</if>
+		<if test="ssdw_zjid!=null and ssdw_zjid!=''">
+		   AND A.ZJID IN (SELECT DW.ZJID
+			                    FROM TB_DWXX DW
+			                   WHERE 1 = 1
+			                   START WITH DW.ZJID = #{ssdw_zjid}
+			                  CONNECT BY PRIOR DW.ZJID = DW.SJDW_ZJID)
+		</if>
+		ORDER BY B.ZJID
+	</select>
+	
+	<select id="findUserByOrg" parameterType="hashmap" resultType="java.util.HashMap">
+		SELECT B.ZJID,
+		       B.YHMC,
+		       B.YHDLZH,
+		       B.YHDLMM,
+		       B.SFZH,
+		       B.JYBH,
+		       B.SSDW_ZJID,
+		       B.XB,
+		       B.LXDH,
+		       B.YDDH,
+		       B.DZYX,
+		       B.YHLX,
+		       B.YHJB,
+		       B.SYBZ,
+		       B.BZ,
+		       B.CJYH,
+		       B.GXYH,
+		       B.JLXZSJ,
+		       B.JLXGSJ,
+		       B.JLSCSJ,
+		       B.JLYXZT,
+		       A.DWMC
+		  FROM TB_YHXX B, TB_DWXX A
+		 WHERE A.ZJID = B.SSDW_ZJID
+		 <if test="ssdwZjid!=null and ssdwZjid!=''">
+			and B.SSDW_ZJID = #{ssdwZjid}
+		 </if>
+	     <if test="sybz!=null and sybz!=''">
+			and b.SYBZ = #{sybz}
+		 </if>
+		 <if test="jlyxzt!=null and jlyxzt!=''">
+			and b.JLYXZT = #{jlyxzt}
+		</if>
+		ORDER BY B.ZJID
+	</select>
+	<select id="queryUserByYhdlzh" resultMap="userMap" parameterType="String">
+		SELECT ZJID,YHMC,YHDLZH,YHDLMM,SFZH,JYBH,SSDW_ZJID,XB,LXDH,YDDH,
+			DZYX,YHLX,YHJB,SYBZ,BZ,CJYH,GXYH,
+			JLXZSJ,JLXGSJ,JLSCSJ,JLYXZT from TB_YHXX 
+			WHERE YHDLZH=#{yhdlzh} AND SYBZ='1' AND JLYXZT='1' 
+	</select>
+	
+	<update id="updateUser" parameterType="com.casic27.platform.common.user.entity.User">
+		UPDATE TB_YHXX SET 
+			YHMC=#{yhmc,jdbcType=VARCHAR}
+			,YHDLZH=#{yhdlzh,jdbcType=VARCHAR}
+			,SFZH=#{sfzh,jdbcType=VARCHAR}
+			,JYBH=#{jybh,jdbcType=VARCHAR}
+			,SSDW_ZJID=#{ssdw_zjid,jdbcType=VARCHAR}
+			,XB=#{xb,jdbcType=VARCHAR}
+			,LXDH=#{lxdh,jdbcType=VARCHAR}
+			,YDDH=#{yddh,jdbcType=VARCHAR}
+			,DZYX=#{dzyx,jdbcType=VARCHAR}
+			,YHLX=#{yhlx,jdbcType=VARCHAR}
+			,YHJB=#{yhjb,jdbcType=VARCHAR}
+			,SYBZ=#{sybz,jdbcType=VARCHAR}
+			,BZ=#{bz,jdbcType=VARCHAR}
+			,GXYH=#{gxyh,jdbcType=VARCHAR}
+			,JLXGSJ=#{jlxgsj,jdbcType=VARCHAR}
+		WHERE ZJID=#{zjid}
+    </update>
+	
+	<update id="updateUserSybz" parameterType="com.casic27.platform.common.user.entity.User">
+		UPDATE TB_YHXX SET 
+			SYBZ=#{sybz,jdbcType=VARCHAR},
+			JLXGSJ=#{jlxgsj,jdbcType=VARCHAR},
+			GXYH=#{gxyh,jdbcType=VARCHAR}
+			WHERE ZJID=#{zjid}
+	</update>
+	
+	<update id="updateUserJlyxzt" parameterType="com.casic27.platform.common.user.entity.User">
+		UPDATE TB_YHXX SET 
+			JLYXZT=#{jlyxzt,jdbcType=VARCHAR},
+			JLSCSJ=#{jlscsj,jdbcType=VARCHAR}
+			WHERE ZJID=#{zjid}
+	</update>
+	<update id="updateUserSsdw" parameterType="com.casic27.platform.common.user.entity.User">
+		UPDATE TB_YHXX SET 
+			SSDW_ZJID=#{ssdw_zjid,jdbcType=VARCHAR},
+			JLXGSJ=#{jlxgsj,jdbcType=VARCHAR},
+			GXYH=#{gxyh,jdbcType=VARCHAR}
+			WHERE ZJID=#{zjid}
+	</update>
+	<update id="resetPsw" parameterType="com.casic27.platform.common.user.entity.User">
+		UPDATE TB_YHXX SET 
+			YHDLMM=#{yhdlmm,jdbcType=VARCHAR},
+			JLXGSJ=#{jlxgsj,jdbcType=VARCHAR},
+			GXYH=#{gxyh,jdbcType=VARCHAR}
+			WHERE ZJID=#{zjid}
+	</update>
+	
+   	<insert id="insertUser" parameterType="com.casic27.platform.common.user.entity.User">
+    	<selectKey   keyProperty="zjid" resultType= "String" order="BEFORE"> 
+			SELECT SEQ_TB_YHXX.NEXTVAL FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_YHXX(ZJID,YHMC,YHDLZH,
+							YHDLMM,SFZH,JYBH,SSDW_ZJID,
+							XB,LXDH,YDDH,
+							DZYX,YHLX,YHJB,
+							SYBZ,BZ,CJYH,GXYH,
+							JLXZSJ,JLXGSJ,JLSCSJ,JLYXZT)
+		VALUES (#{zjid,jdbcType=VARCHAR},#{yhmc,jdbcType=VARCHAR},#{yhdlzh,jdbcType=VARCHAR},
+				#{yhdlmm,jdbcType=VARCHAR},#{sfzh,jdbcType=VARCHAR},#{jybh,jdbcType=VARCHAR},
+				#{ssdw_zjid,jdbcType=VARCHAR},#{xb,jdbcType=VARCHAR},#{lxdh,jdbcType=VARCHAR},
+				#{yddh,jdbcType=VARCHAR},#{dzyx,jdbcType=VARCHAR},#{yhlx,jdbcType=VARCHAR},
+				#{yhjb,jdbcType=VARCHAR},#{sybz,jdbcType=VARCHAR},#{bz,jdbcType=VARCHAR},
+				#{cjyh,jdbcType=VARCHAR},#{gxyh,jdbcType=VARCHAR},#{jlxzsj,jdbcType=VARCHAR},
+				#{jlxgsj,jdbcType=VARCHAR},#{jlscsj,jdbcType=VARCHAR},#{jlyxzt,jdbcType=VARCHAR})
+    </insert>
+    
+	<select id="getUserInfoById" resultMap="userMap" parameterType="String">
+		SELECT ZJID,YHMC,YHDLZH,YHDLMM,SFZH,JYBH,SSDW_ZJID,XB,LXDH,YDDH,
+			DZYX,YHLX,YHJB,SYBZ,BZ,CJYH,GXYH,
+			JLXZSJ,JLXGSJ,JLSCSJ,JLYXZT from TB_YHXX 
+			where ZJID=#{userId}
+	</select>
+	
+	<select id="getUserInfoMapById" parameterType="String" resultType="java.util.HashMap">
+		SELECT A.ZJID,A.YHMC,A.YHDLZH,A.YHDLMM,A.SFZH,A.JYBH,A.SSDW_ZJID,A.XB,A.LXDH,A.YDDH,
+			A.DZYX,A.YHLX,A.YHJB,A.SYBZ,A.BZ,A.CJYH,A.GXYH,
+			A.JLXZSJ,A.JLXGSJ,A.JLSCSJ,A.JLYXZT,B.DWMC
+			FROM TB_YHXX A LEFT JOIN TB_DWXX B ON A.SSDW_ZJID = B.ZJID
+			where a.ZJID=#{zjid}
+	</select>
+	
+	<select id="staticsUser" resultType="int">
+		select count(0) from TB_YHXX
+			where 1=1
+		<if test="zjid!=null and zjid!=''">
+			AND ZJID!=#{zjid}
+		</if>
+		<if test="jybh != null and jybh != ''"> 
+			AND JYBH=#{jybh}
+		</if>
+		<if test="yhdlzh != null and yhdlzh != ''"> 
+			AND YHDLZH=#{yhdlzh}
+		</if>
+		<if test="sfzh != null and sfzh != ''"> 
+			AND SFZH=#{sfzh}
+		</if>
+	</select>
+	
+	<select id="getUserPermission" parameterType="String" resultType="hashmap">
+		SELECT *
+		  FROM (SELECT 'MENU_' || V.ZJID AS ID,
+		               V.CDMC AS NAME,
+		               'MENU_' || V.SJCD AS PID,
+		               V.CDXH AS XH
+		          FROM (SELECT DISTINCT *
+		                  FROM TB_CDXX T1
+		                CONNECT BY PRIOR SJCD = ZJID
+		                 START WITH ZJID IN
+		                            (SELECT T2.CDXX_ZJID
+		                               FROM TB_GNXX T2, TB_JSXX_R_GNXX T3
+		                              WHERE T2.ZJID = T3.GNXX_ZJID
+		                                AND T2.SYBZ = '1'
+		                                AND T2.JLYXZT = '1'
+		                                AND T3.JSXX_ZJID IN
+		                                    (SELECT T4.JSXX_ZJID
+		                                       FROM TB_YHXX_R_JSXX T4, TB_JSXX T7
+		                                      WHERE T4.JSXX_ZJID = T7.ZJID
+		                                        AND T4.YHXX_ZJID = #{userId}
+		                                        AND T7.SYBZ = '1'
+		                                        AND T7.JLYXZT = '1'
+		                                     UNION
+		                                     SELECT T6.JSXX_ZJID
+		                                       FROM TB_YHXX        T5,
+		                                            TB_DWXX_R_JSXX T6,
+		                                            TB_JSXX        T7
+		                                      WHERE T5.SSDW_ZJID = T6.DWXX_ZJID
+		                                        AND T6.JSXX_ZJID = T7.ZJID
+		                                        AND T7.SYBZ = '1'
+		                                        AND T7.JLYXZT = '1'
+		                                        AND T5.ZJID = #{userId}))) V
+		         WHERE V.SYBZ = '1'
+		           AND V.JLYXZT = '1'
+		        UNION
+		        SELECT V2.CDXX_ZJID AS ID,
+		               V2.GNMC AS NAME,
+		               'MENU_' || V2.CDXX_ZJID AS PID,
+		               V2.GNXH AS XH
+		          FROM (SELECT *
+		                  FROM TB_GNXX T7, TB_JSXX_R_GNXX T8, TB_CDXX T9
+		                 WHERE T7.ZJID = T8.GNXX_ZJID
+		                   AND T7.CDXX_ZJID = T9.ZJID
+		                   AND T7.SYBZ = '1'
+		                   AND T7.JLYXZT = '1'
+		                   AND T9.SYBZ = '1'
+		                   AND T9.JLYXZT = '1'
+		                   AND T8.JSXX_ZJID IN
+		                       (SELECT T4.JSXX_ZJID
+		                          FROM TB_YHXX_R_JSXX T4, TB_JSXX T7
+		                         WHERE T4.JSXX_ZJID = T7.ZJID
+		                           AND T4.YHXX_ZJID = #{userId}
+		                           AND T7.SYBZ = '1'
+		                           AND T7.JLYXZT = '1'
+		                        UNION
+		                        SELECT T6.JSXX_ZJID
+		                          FROM TB_YHXX T5, TB_DWXX_R_JSXX T6, TB_JSXX T7
+		                         WHERE T5.SSDW_ZJID = T6.DWXX_ZJID
+		                           AND T6.JSXX_ZJID = T7.ZJID
+		                           AND T7.SYBZ = '1'
+		                           AND T7.JLYXZT = '1'
+		                           AND T5.ZJID = #{userId})) V2)
+		 ORDER BY XH
+	</select>
+	<select id="getAllPermission" resultType="hashmap">
+		SELECT *
+		  FROM (SELECT 'MENU_' || V.ZJID AS ID,
+		               V.CDMC AS NAME,
+		               'MENU_' || V.SJCD AS PID,
+		               V.CDXH AS XH
+		          FROM TB_CDXX V
+		         WHERE V.SYBZ = '1'
+		           AND V.JLYXZT = '1'
+		        UNION
+		        SELECT V2.CDXX_ZJID AS ID,
+		               V2.GNMC AS NAME,
+		               'MENU_' || V2.CDXX_ZJID AS PID,
+		               V2.GNXH AS XH
+		          FROM TB_GNXX V2
+		         WHERE V2.SYBZ = '1'
+		           AND V2.JLYXZT = '1'
+		           AND V2.CDXX_ZJID IN (SELECT ZJID
+		                                  FROM TB_CDXX
+		                                 WHERE SYBZ = '1'
+		                                   AND JLYXZT = '1'))
+		 ORDER BY XH
+	</select>
+	<select id="getOrgUserCount" resultType="int" >
+		SELECT COUNT(1)
+		  FROM TB_YHXX T
+		 WHERE T.SSDW_ZJID IN
+		       (SELECT DW.ZJID
+		          FROM TB_DWXX DW
+		         WHERE 1 = 1
+		         START WITH DW.ZJID = #{orgId}
+		        CONNECT BY PRIOR DW.ZJID = DW.SJDW_ZJID)
+		   		AND T.JLYXZT='1'
+	</select>
+	
+	<select id="getUserByIds" resultType="hashmap">
+		SELECT ZJID,YHMC,YHDLZH,SFZH,YHDLMM,SFZH,JYBH,SSDW_ZJID,XB,LXDH,YDDH,
+			DZYX,YHLX,YHJB,SYBZ,BZ,CJYH,GXYH,
+			JLXZSJ,JLXGSJ,JLSCSJ,JLYXZT from TB_YHXX 
+			WHERE ZJID IN
+			 <foreach collection="array" item="zjid"  open="(" separator="," close=")">  
+		        #{zjid}
+		     </foreach>
+	</select>
+	
+	<select id="findUserByRole" resultType="hashmap">
+		SELECT T1.*,T3.DWMC
+		  FROM TB_YHXX T1, TB_YHXX_R_JSXX T2, TB_DWXX T3
+		 WHERE T1.ZJID = T2.YHXX_ZJID
+		   AND T1.SSDW_ZJID = T3.ZJID
+		   AND T1.SYBZ = 1
+		   AND T1.JLYXZT = '1'
+		   AND T2.JSXX_ZJID = #{roleId}
+		   <if test="rootOrgId!=null and rootOrgId!=''">
+			   AND T3.ZJID IN (SELECT DW.ZJID
+				                    FROM TB_DWXX DW
+				                   WHERE 1 = 1
+				                   START WITH DW.ZJID = #{rootOrgId}
+				                  CONNECT BY PRIOR DW.ZJID = DW.SJDW_ZJID)
+		   </if>
+		   ORDER BY T1.ZJID
+	</select>
+	
+	<select id="getUserListByIds" resultMap="userMap">
+		SELECT T1.*
+		  FROM TB_YHXX T1
+		 WHERE T1.SYBZ = '1'
+		   AND T1.JLYXZT = '1'
+		   AND T1.ZJID IN 
+		   <foreach collection="array" item="zjid"  open="(" separator="," close=")">  
+		       #{zjid}
+		   </foreach>
+	</select>
+	
+	<select id="getUserByOrgIds" resultMap="userMap">
+		SELECT T1.*
+		  FROM TB_YHXX T1
+		 WHERE T1.SYBZ = '1'
+		   AND T1.JLYXZT = '1'
+		   AND T1.SSDW_ZJID IN 
+		   <foreach collection="array" item="zjid"  open="(" separator="," close=")">  
+		       #{zjid}
+		   </foreach>
+	</select>
+	
+	<select id="getUserByOrgId" resultMap="userMap">
+		SELECT T1.* FROM TB_YHXX T1 WHERE T1.SYBZ = '1' AND T1.JLYXZT = '1' AND T1.SSDW_ZJID = #{orgId}
+	</select>
+	
+	<select id="getUserByOrgIdRoleId" resultMap="userMap">
+		SELECT T1.* FROM TB_YHXX T1 WHERE T1.SYBZ = '1' AND T1.JLYXZT = '1' AND T1.SSDW_ZJID = #{orgId} AND T1.ZJID IN(SELECT YHXX_ZJID FROM TB_YHXX_R_JSXX WHERE JSXX_ZJID=#{roleId})
+	</select>
+	
+	<select id="getUserByRoleId" resultMap="userMap">
+		SELECT T1.* FROM TB_YHXX T1,TB_YHXX_R_JSXX T2 WHERE T1.ZJID = T2.YHXX_ZJID(+) AND T1.SYBZ = '1' AND T1.JLYXZT = '1' AND T2.JSXX_ZJID = #{roleId}
+	</select>
+	
+	<select id="getUserByRoleIds" resultMap="userMap">
+		SELECT T1.* FROM TB_YHXX T1,TB_YHXX_R_JSXX T2 WHERE T1.ZJID = T2.YHXX_ZJID(+) AND T1.SYBZ = '1' AND T1.JLYXZT = '1' 
+		   AND T2.JSXX_ZJID IN 
+		   <foreach collection="array" item="zjid"  open="(" separator="," close=")">  
+		        #{zjid}
+		   </foreach>
+	</select>
+	<select id="queryUserBySfzh" resultMap="userMap" parameterType="String">
+		SELECT ZJID,YHMC,YHDLZH,YHDLMM,SFZH,JYBH,SSDW_ZJID,XB,LXDH,YDDH,
+			DZYX,YHLX,YHJB,SYBZ,BZ,CJYH,GXYH,
+			JLXZSJ,JLXGSJ,JLSCSJ,JLYXZT from TB_YHXX 
+			WHERE UPPER(SFZH)=fun_chk_sfz(#{sfzh}) AND SYBZ='1' AND JLYXZT='1' and rownum=1
+	</select>
+</mapper>

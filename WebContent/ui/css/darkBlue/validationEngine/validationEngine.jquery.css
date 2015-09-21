@@ -1,0 +1,104 @@
+/* Z-INDEX */
+ .formError { z-index: 990; }
+
+.inputContainer {
+	position: relative;
+	float: left;
+}
+
+.formError {
+	position: absolute;
+	display: block;
+	cursor: pointer;
+}
+
+.ajaxSubmit {
+	padding: 20px;
+	background: #55ea55;
+	border: 1px solid #999;
+	display: none
+}
+body[dir='rtl'] .formError .formErrorArrow,
+body.rtl .formError .formErrorArrow {
+	margin: -2px 13px 0 0;
+}
+
+.greenPopup .formErrorArrow div {
+	background: #33be40;
+}
+
+.blackPopup .formErrorArrow div {
+	background: #393939;
+	color: #FFF;
+}
+.rcWarp{
+	padding:4px 1px 2px 1px;
+	border:1px solid transparent;
+}
+.err-c{
+	display:inline-block;
+	position:absolute;
+	padding:3px 5px;
+	border:1px solid #CC9933;
+	background:#FFFFCC;
+	z-index:9901;
+	font-size:12px;
+	width:100px;
+}
+.err-c-top{
+	bottom:10px;
+	left:0px;
+}
+
+.err-c-bottom{
+	top:10px;
+	left:0px;
+}
+.err-c-left{
+	top:0px;
+	right:10px;
+}
+.err-c-right{
+	top:0px;
+	left:10px;
+}
+.err-pointer{
+	display:inline-block;
+	position:absolute;
+	z-index:9902;
+}
+.err-pointer-top{
+	width:19px;
+	height:10px;
+	background:url('validatebox_pointer_t.gif') no-repeat left top ;
+	left:0px;
+	bottom:1px;
+}
+
+.err-pointer-bottom{
+	width:19px;
+	height:10px;
+	background:url('validatebox_pointer_b.gif') no-repeat left top ;
+	top:1px;
+	left:0px;
+}
+
+.err-pointer-left{
+	width:10px;
+	height:19px;
+	background:url('validatebox_pointer_l.gif') no-repeat left top ;
+	top:0px;
+	right:1px;
+}
+
+.err-pointer-right{
+	width:10px;
+	height:19px;
+	background:url('validatebox_pointer_r.gif') no-repeat left top ;
+	top:0px;
+	left:1px;
+}
+
+.form-invalid{
+	border:1px solid #ff0000;
+}

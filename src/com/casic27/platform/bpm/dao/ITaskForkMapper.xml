@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.casic27.platform.bpm.dao.ITaskForkMapper">
+	<resultMap id="taskForkMapper" type="com.casic27.platform.bpm.entity.TaskFork"> 
+			<result property="taskForkId" column="TASK_FORK_ID" />  
+			<result property="actInstId" column="ACT_INST_ID" />  
+			<result property="forkTaskName" column="FORK_TASK_NAME" />  
+			<result property="forkTaskKey" column="FORK_TASK_KEY" />  
+			<result property="forkSn" column="FORK_SN" />  
+			<result property="forkCount" column="FORK_COUNT" />  
+			<result property="fininshCount" column="FININSH_COUNT" />  
+			<result property="forkTime" column="FORK_TIME" />  
+			<result property="joinTaskName" column="JOIN_TASK_NAME" />  
+			<result property="joinTaskKey" column="JOIN_TASK_KEY" />  
+			<result property="forkTokens" column="FORK_TOKENS" />  
+			<result property="forkTokenPre" column="FORK_TOKEN_PRE" />  
+	</resultMap>
+	<select id="getMaxSn" resultType="java.lang.Integer">
+		select max(FORK_SN) from BPM_TASK_FORK where ACT_INST_ID=#{actInstId}
+	</select>
+	
+	<select id="getByInstIdJoinTaskKey" parameterType="java.lang.String" resultMap="taskForkMapper">
+		SELECT * FROM BPM_TASK_FORK WHERE JOIN_TASK_KEY=#{joinTaskKey} AND ACT_INST_ID=#{actInstId}
+	</select>
+	
+	<select id="getByInstIdJoinTaskKeyForkToken" resultMap="taskForkMapper">
+		SELECT * FROM BPM_TASK_FORK where ACT_INST_ID=#{actInstId} and FORK_TASK_KEY=#{joinTaskKey} and FORK_TOKENS like #{forkToken}
+	</select>
+	
+	<delete id="delByActInstId" parameterType="java.lang.String">
+		DELETE FROM BPM_TASK_FORK  WHERE ACT_INST_ID=#{actInstId}
+	</delete>
+	
+	<!--根据Id进行查询-->
+	<select id="getTaskForkById" parameterType="String" resultMap="taskForkMapper">
+		SELECT 
+				TASK_FORK_ID,
+				ACT_INST_ID,
+				FORK_TASK_NAME,
+				FORK_TASK_KEY,
+				FORK_SN,
+				FORK_COUNT,
+				FININSH_COUNT,
+				FORK_TIME,
+				JOIN_TASK_NAME,
+				JOIN_TASK_KEY,
+				FORK_TOKENS,
+				FORK_TOKEN_PRE
+		FROM BPM_TASK_FORK
+		WHERE TASK_FORK_ID=#{id}
+	</select>
+	
+	<!--新增-->
+	<insert id="addTaskFork" parameterType="com.casic27.platform.bpm.entity.TaskFork">
+		INSERT INTO BPM_TASK_FORK(
+				TASK_FORK_ID,
+				ACT_INST_ID,
+				FORK_TASK_NAME,
+				FORK_TASK_KEY,
+				FORK_SN,
+				FORK_COUNT,
+				FININSH_COUNT,
+				FORK_TIME,
+				JOIN_TASK_NAME,
+				JOIN_TASK_KEY,
+				FORK_TOKENS,
+				FORK_TOKEN_PRE
+		 )
+		values(
+				#{taskForkId,jdbcType=VARCHAR},
+				#{actInstId,jdbcType=VARCHAR},
+				#{forkTaskName,jdbcType=VARCHAR},
+				#{forkTaskKey,jdbcType=VARCHAR},
+				#{forkSn,jdbcType=INTEGER},
+				#{forkCount,jdbcType=INTEGER},
+				#{fininshCount,jdbcType=INTEGER},
+				#{forkTime,jdbcType=TIMESTAMP},
+				#{joinTaskName,jdbcType=VARCHAR},
+				#{joinTaskKey,jdbcType=VARCHAR},
+				#{forkTokens,jdbcType=VARCHAR},
+				#{forkTokenPre,jdbcType=VARCHAR}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateTaskFork" parameterType="com.casic27.platform.bpm.entity.TaskFork">
+		UPDATE BPM_TASK_FORK SET
+			ACT_INST_ID=#{actInstId,jdbcType=VARCHAR},
+			FORK_TASK_NAME=#{forkTaskName,jdbcType=VARCHAR},
+			FORK_TASK_KEY=#{forkTaskKey,jdbcType=VARCHAR},
+			FORK_SN=#{forkSn,jdbcType=INTEGER},
+			FORK_COUNT=#{forkCount,jdbcType=INTEGER},
+			FININSH_COUNT=#{fininshCount,jdbcType=INTEGER},
+			FORK_TIME=#{forkTime,jdbcType=TIMESTAMP},
+			JOIN_TASK_NAME=#{joinTaskName,jdbcType=VARCHAR},
+			JOIN_TASK_KEY=#{joinTaskKey,jdbcType=VARCHAR},
+			FORK_TOKENS=#{forkTokens,jdbcType=VARCHAR},
+			FORK_TOKEN_PRE=#{forkTokenPre,jdbcType=VARCHAR}
+		where TASK_FORK_ID=#{taskForkId}
+    </update>
+    
+	<!-- 物理删除 -->
+    <delete id="deleteById" parameterType="String">
+     	DELETE FROM BPM_TASK_FORK WHERE TASK_FORK_ID=#{id}
+    </delete>
+    
+    <!-- 根据条件统计记录数 -->
+	<select id="countTaskFork" parameterType="com.casic27.platform.bpm.entity.TaskFork" resultType="int">
+    	SELECT COUNT(1) FROM BPM_TASK_FORK WHERE 1=1
+    	<if test="taskForkId != null and taskForkId != ''">
+    		AND	TASK_FORK_ID != #{taskForkId}
+    	</if>
+    </select>
+    
+    <delete id="delByActDefId" parameterType="java.lang.String">
+		DELETE FROM BPM_TASK_FORK  WHERE ACT_INST_ID IN(SELECT ACT_INST_ID FROM BPM_PRO_RUN WHERE ACT_DEF_ID=#{actDefId})
+	</delete>
+    
+</mapper>

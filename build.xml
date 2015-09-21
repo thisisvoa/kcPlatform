@@ -1,0 +1,130 @@
+<?xml version="1.0"  encoding="UTF-8" ?>
+
+<project name="gdxt" default="run" basedir=".">
+
+	<!--===================================================================
+      定义属性（property tasks）
+      这里定义成全局变量
+      例：定义
+          <property name="a" value="hello"/>
+      以后就可以这样用它：
+          <property name="b" value="${a}/b"/>
+      现在:b=="hello/b"
+	===================================================================-->
+
+	<!--主要的app环境属性-->
+	<property name="project.name" value="gdxt" />
+	<property name="project.version" value="2.2.4-RELEASE" />
+	<property name="app.name" value="gdxt-2.2.4-RELEASE" />
+	<property name="app.jar" value="${app.name}.jar" />
+
+	<property name="depend.lib" value="WebContent/WEB-INF" />
+
+	<!--app中src的属性-->
+	<property name="src.dir" value="src" />
+	<property name="resource.dir" value="resource" />
+
+	<!-- app用到的lib -->
+	<property name="lib.dir" value="lib" />
+
+	<!--app的build目录中-->
+	<property name="build.dir" value="build" />
+	<property name="build.classes" value="${build.dir}/classes" />
+	<property name="build.source" value="${build.dir}/source" />
+	<property name="build.lib" value="${build.dir}/lib" />
+	<property name="build.project" value="${build.dir}/project" />
+
+	<!--app的dist (distribution) 目录中-->
+	<property name="dist.dir" value="dist" />
+
+	<path id="classpath">
+		<fileset dir="${depend.lib}/lib">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement location="${build.dir}" />
+	</path>
+
+	<!--==================================================================
+      init 准备目录(File Tasks)
+      主要的目录结构通常是不会变的，一起生成他们
+    ===================================================================-->
+	<target name="clean">
+		<!--清除以前目录-->
+		<delete dir="${build.dir}" failonerror="false" />
+		<delete dir="${build.classes}" failonerror="false" />
+		<delete dir="${build.source}" failonerror="false" />
+		<delete dir="${build.project}" failonerror="false" />
+		<delete dir="${dist.dir}" failonerror="false" />
+	</target>
+
+	<target name="init" depends="clean">
+		<!--准备目录-->
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.classes}" />
+		<mkdir dir="${build.source}" />
+		<mkdir dir="${build.lib}" />
+		<mkdir dir="${build.project}" />
+		<mkdir dir="${dist.dir}" />
+	</target>
+
+	<!--===================================================================
+      Build the code (Compile Tasks,File Tasks)
+    ===================================================================-->
+	<target name="build" depends="init">
+		<!--编译-->
+		<javac srcdir="${src.dir}" destdir="${build.classes}" debug="true">
+			<compilerarg line="-encoding UTF-8 " />
+			<classpath refid="classpath" />
+		</javac>
+		<copy todir="${build.classes}">
+			<fileset dir="${src.dir}">
+			</fileset>
+		</copy>
+		
+		<copy todir="${build.source}">
+			<fileset dir="." excludes="**/.svn,**/build.xml">
+				<exclude name="${build.dir}/**" />
+				<exclude name="${dist.dir}/**" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- ===================================================================
+      打包文档(Archive Tasks)
+      Create the project jars: xxx1.jar and xxx2.jar
+	===================================================================-->
+	<target name="jars" depends="build">
+		<jar basedir="${build.classes}" jarfile="${build.lib}/${app.jar}" />
+	</target>
+	
+	<target name="project" depends="jars">
+		<!-- copy project 文件 -->
+		<copy todir="${build.project}">
+			<fileset dir="." excludes="**/.svn,**/build.xml">
+			    <exclude name="${src.dir}/**" /> 
+				<exclude name="${build.dir}/**" />
+				<exclude name="${dist.dir}/**" />
+				<exclude name="${depend.lib}/classes/**" />
+			</fileset>
+		</copy>
+		
+		<copy todir="${build.project}/${depend.lib}/lib">
+			<fileset dir="${build.lib}/">
+			</fileset>
+		</copy>
+        <mkdir dir="${build.project}/${src.dir}" />
+	</target>
+	
+	<!-- ===================================================================
+       Create the distribution that can run (Archive Tasks)主要是从各目录中把该copy的copy上
+     ===================================================================-->
+	<target name="run" depends="project">
+		<zip destfile="${dist.dir}/${project.name}-${project.version}.zip">
+			<fileset dir="${build.project}/" />
+		</zip>
+		<zip destfile="${dist.dir}/${project.name}-${project.version}-source.zip">
+			<fileset dir="${build.source}/" />
+		</zip>
+	</target>
+
+</project>

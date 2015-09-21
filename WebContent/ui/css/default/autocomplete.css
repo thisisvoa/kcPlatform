@@ -1,0 +1,58 @@
+@charset "utf-8";
+.ac_results
+{
+	background-color: #FFF;
+	border: 1px solid #0370ad;
+}
+.ac_results ul
+{
+	margin: 0px;
+	padding: 0px;	
+}
+.ac_results li
+{
+	list-style: none;
+	padding: 5px 10px 5px 10px;
+	cursor:default;
+	margin: 3px;
+}
+
+.ac_results  .ac_caption
+{
+	border-bottom: dashed 1px #666;
+	color: #666;
+	margin: 8px 10px 3px 10px;
+}
+
+.ac_results .ac_even
+{
+	background-color:#FFF;
+}
+
+.ac_results ac_odd
+{
+	background-color: #FFF;
+}
+
+.ac_results .ac_over
+{
+	background-color:#bce7ff;
+}
+.ac_results .ac_code
+{
+	color: #000099;
+	width: 50%;
+	display: block;
+	float: left;
+	margin-right: 10px; 
+}
+
+.ac_results .ac_Name
+{
+	color: #000099;
+}
+.ac_results .ac_highLight
+{
+	font-weight: bold;
+	color: red;
+}

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.casic27.platform.common.para.dao.IParaMapper">
+	<resultMap id="paraMap" type="com.casic27.platform.common.para.entity.Parameter"> 
+		<id property="zjId" column="ZJID" /> 
+		<result property="csmc" column="CSMC"/> 
+		<result property="csdm" column="CSDM"/> 
+		<result property="csz" column="CSZ"/> 
+		<result property="sybz" column="SYBZ"/> 
+		<result property="bz" column="BZ"/> 
+		<result property="cjyh" column="CJYH"/> 
+		<result property="gxyh" column="GXYH"/> 
+		<result property="jlxzsj" column="JLXZSJ"/>
+		<result property="jlxgsj" column="JLXGSJ"/>
+		<result property="jlscsj" column="JLSCSJ"/>
+		<result property="jlyxzt" column="JLYXZT"/>
+	</resultMap>
+	
+	<!-- 查询有效参数清单 -->
+	<select id="queryParaList" parameterType="com.casic27.platform.common.para.entity.Parameter" resultMap="paraMap">
+		select * from TB_CSXX where 1 = 1
+		<if test="csmc != null and csmc != ''">and CSMC like  '%'||#{csmc}||'%'</if>
+		<if test="csdm != null and csdm != ''">and upper(CSDM) like  '%'||upper(#{csdm})||'%'</if>
+		<if test="jlyxzt!=null and jlyxzt!=''">and JLYXZT = #{jlyxzt}</if>
+		<if test="sybz != null and sybz != ''">and SYBZ = #{sybz}</if>
+		<if test="zjId != null and zjId != ''">and ZJID = #{zjId}</if>
+		order by to_number(ZJID)
+	</select>
+	
+	<!-- 查询参数清单 -->
+	<select id="getParaById" parameterType="java.lang.String" resultMap="paraMap">
+		SELECT * FROM TB_CSXX WHERE ZJID = #{zjId}
+	</select>
+	<!-- 查询参数-->
+	<select id="getParaByCsdm" parameterType="java.lang.String" resultMap="paraMap">
+		SELECT * FROM TB_CSXX WHERE CSDM = #{csdm}
+	</select>
+	<!-- 查询参数清单 -->
+	<select id="statisCount" parameterType="com.casic27.platform.common.para.entity.Parameter" resultType="int">
+		SELECT COUNT(1) FROM TB_CSXX WHERE upper(CSDM) = upper(#{csdm})
+		<if test="zjId != null and zjId != ''"> AND ZJID != #{zjId}</if>
+	</select>
+	<!-- 新增 -->
+	<insert id="insert" parameterType="com.casic27.platform.common.para.entity.Parameter">
+		<selectKey   keyProperty="zjId" resultType= "String" order="BEFORE"> 
+			SELECT SEQ_TB_CSXX.NEXTVAL FROM DUAL 
+		</selectKey>
+		insert into TB_CSXX(ZJID, CSMC, CSDM, CSZ, SYBZ, 
+					BZ ,CJYH ,GXYH ,JLXZSJ ,JLXGSJ ,JLSCSJ ,JLYXZT)
+		values( #{zjId,jdbcType=VARCHAR}, #{csmc,jdbcType=VARCHAR}, #{csdm,jdbcType=VARCHAR},
+				#{csz,jdbcType=VARCHAR}, #{sybz,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR} ,
+				#{cjyh,jdbcType=VARCHAR} ,#{gxyh,jdbcType=VARCHAR} ,#{jlxzsj,jdbcType=VARCHAR} ,
+				#{jlxgsj,jdbcType=VARCHAR} ,#{jlscsj,jdbcType=VARCHAR} ,#{jlyxzt,jdbcType=VARCHAR})
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="com.casic27.platform.common.para.entity.Parameter">
+		update TB_CSXX
+		set CSMC = #{csmc,jdbcType=VARCHAR},
+			CSDM = #{csdm,jdbcType=VARCHAR},
+			CSZ = #{csz,jdbcType=VARCHAR},
+			SYBZ = #{sybz,jdbcType=VARCHAR},
+			BZ = #{bz,jdbcType=VARCHAR},
+			JLXGSJ = #{jlxgsj,jdbcType=VARCHAR}
+		where ZJID = #{zjId}
+	</update>
+	
+	
+	<!-- 修改 -->
+	<update id="updateSybz" parameterType="com.casic27.platform.common.para.entity.Parameter">
+		update TB_CSXX set SYBZ = #{sybz} where ZJID = #{zjId}
+	</update>
+	
+	
+	<!-- 逻辑删除 -->
+	<update id="logicDelParam" parameterType="com.casic27.platform.common.para.entity.Parameter">
+		UPDATE TB_CSXX SET JLYXZT = 0 , JLSCSJ=#{jlscsj} WHERE ZJID = #{zjId}
+	</update>
+	
+	<!-- 删除 -->
+	<delete id="delete">
+		delete from TB_CSXX where ZJID = #{zjId}
+	</delete>
+	
+	<update id="addHisOnline">
+		UPDATE TB_CSXX SET CSZ = TO_NUMBER(CSZ)+1 WHERE CSDM = 'HIS_ONLINE'
+	</update>
+</mapper>

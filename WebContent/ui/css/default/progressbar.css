@@ -1,0 +1,16 @@
+.progressbar{
+	background-image: url("images/progressBar.gif");
+    background-repeat: no-repeat;
+    height: 22px;
+    width: 305px;
+	overflow:hidden;
+}
+.progressbar-text{
+	text-align:center;
+	color:#15428b;
+	position:absolute;
+}
+.progressbar-value{
+	border-radius:5px;
+	width:0;
+}

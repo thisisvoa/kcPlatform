@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.casic27.platform.common.role.dao.IRoleMapper">
+	<resultMap id="roleMap" type="com.casic27.platform.common.role.entity.Role">
+		<id property="zjid" column="ZJID" />
+		<result property="jsmc" column="JSMC" />
+		<result property="jslx" column="JSLX" />
+		<result property="jsjb" column="JSJB" />
+		<result property="sybz" column="SYBZ" />
+		<result property="bz" column="BZ" />
+		<result property="cjyh" column="CJYH" />
+		<result property="gxyh" column="GXYH" />
+		<result property="jlxzsj" column="JLXZSJ" />
+		<result property="jlxgsj" column="JLXGSJ" />
+		<result property="jlscsj" column="JLSCSJ" />
+		<result property="jlyxzt" column="JLYXZT" />
+		<result property="jsdm" column="JSDM" />
+	</resultMap>
+
+	<select id="findRole" parameterType="hashmap" resultMap="roleMap">
+		SELECT ZJID, JSMC, JSLX, JSJB, SYBZ, BZ,
+		CJYH,GXYH,JLXZSJ,JLXGSJ,JLSCSJ,
+		JLYXZT,JSDM FROM TB_JSXX
+		WHERE 1=1
+		<if test="zjid !=null and zjid!='' ">
+			and ZJID = #{zjid}
+		</if>
+		<if test="jsmc !=null and jsmc !='' ">
+			and JSMC like '%'||#{jsmc}||'%'
+		</if>
+		<if test="jsdm !=null and jsdm !='' ">
+			and JSDM like '%'||#{jsdm}||'%'
+		</if>
+		<if test="jslx !=null and jslx !='' ">
+			and JSLX = #{jslx}
+		</if>
+		<if test="jsjb !=null and jsjb !='' ">
+			and JSJB >= #{jsjb}
+		</if>
+		<if test="sybz !=null and sybz !='' ">
+			and SYBZ = #{sybz}
+		</if>
+		<if test="bz !=null and bz!='' ">
+			and BZ like '%'||#{bz}||'%'
+		</if>
+		<if test="jlyxzt !=null and jlyxzt!='' ">
+			and JLYXZT=#{jlyxzt}
+		</if>
+		ORDER BY JLXGSJ DESC
+	</select>
+
+	<select id="findRolePaging" parameterType="hashmap" resultMap="roleMap">
+		SELECT ZJID, JSMC, JSLX, JSJB, SYBZ, BZ,
+		CJYH,GXYH,JLXZSJ,JLXGSJ,JLSCSJ,
+		JLYXZT,JSDM FROM TB_JSXX
+		WHERE 1=1
+		<if test="zjid !=null and zjid!='' ">
+			and ZJID = #{zjid}
+		</if>
+		<if test="jsmc !=null and jsmc !='' ">
+			and JSMC like '%'||#{jsmc}||'%'
+		</if>
+		<if test="jsdm !=null and jsdm !='' ">
+			and JSDM like '%'||#{jsdm}||'%'
+		</if>
+		<if test="jslx !=null and jslx !='' ">
+			and JSLX = #{jslx}
+		</if>
+		<if test="jsjb !=null and jsjb !='' ">
+			and JSJB >= #{jsjb}
+		</if>
+		<if test="sybz !=null and sybz !='' ">
+			and SYBZ = #{sybz}
+		</if>
+		<if test="bz !=null and bz!='' ">
+			and BZ like '%'||#{bz}||'%'
+		</if>
+		<if test="jlyxzt !=null and jlyxzt!='' ">
+			and JLYXZT=#{jlyxzt}
+		</if>
+		ORDER BY JLXGSJ DESC
+	</select>
+
+
+
+	<select id="getRoleById" parameterType="String" resultMap="roleMap">
+		SELECT ZJID, JSMC, JSLX, JSJB, SYBZ, BZ,
+		CJYH,GXYH,JLXZSJ,JLXGSJ,JLSCSJ,
+		JLYXZT,JSDM FROM TB_JSXX
+		WHERE ZJID=#{roleId}
+	</select>
+
+	<update id="updateRole" parameterType="com.casic27.platform.common.role.entity.Role">
+		UPDATE TB_JSXX SET ZJID=ZJID
+			,JSMC=#{jsmc,jdbcType=VARCHAR}
+			,JSLX=#{jslx,jdbcType=VARCHAR}
+			,JSDM=#{jsdm,jdbcType=VARCHAR}
+			,JSJB=#{jsjb,jdbcType=VARCHAR}
+			,BZ=#{bz,jdbcType=VARCHAR}
+			,GXYH=#{gxyh,jdbcType=VARCHAR}
+			,JLXGSJ=#{jlxgsj,jdbcType=VARCHAR}
+		WHERE ZJID=#{zjid}
+	</update>
+
+	<insert id="addRole" parameterType="com.casic27.platform.common.role.entity.Role">
+		<selectKey keyProperty="zjid" resultType="String" order="BEFORE">
+			SELECT
+			SEQ_TB_JSXX.NEXTVAL FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_JSXX(ZJID, JSMC, JSLX, 
+							JSJB, SYBZ, BZ,
+							CJYH,GXYH,JLXZSJ,
+							JLXGSJ,JLSCSJ,JLYXZT,JSDM)
+					VALUES(#{zjid,jdbcType=VARCHAR},#{jsmc,jdbcType=VARCHAR},#{jslx,jdbcType=VARCHAR},
+						   #{jsjb,jdbcType=VARCHAR},#{sybz,jdbcType=VARCHAR},#{bz,jdbcType=VARCHAR},
+						   #{cjyh,jdbcType=VARCHAR},#{gxyh,jdbcType=VARCHAR},#{jlxzsj,jdbcType=VARCHAR},
+						   #{jlxgsj,jdbcType=VARCHAR},#{jlscsj,jdbcType=VARCHAR},#{jlyxzt,jdbcType=VARCHAR},
+						   #{jsdm,jdbcType=VARCHAR})
+
+	</insert>
+	
+	<update id="updateRoleSybz" parameterType="com.casic27.platform.common.role.entity.Role">
+		UPDATE TB_JSXX SET 
+			SYBZ=#{sybz},
+			GXYH=#{gxyh,jdbcType=VARCHAR},
+			JLXGSJ=#{jlxgsj,jdbcType=VARCHAR}
+			WHERE ZJID=#{zjid}
+	</update>
+	
+	<update id="updateRoleYxzt" parameterType="com.casic27.platform.common.role.entity.Role">
+		UPDATE TB_JSXX SET 
+			JLYXZT=#{jlyxzt,jdbcType=VARCHAR},
+			JLXGSJ=#{jlxgsj,jdbcType=VARCHAR}
+			WHERE ZJID=#{zjid}
+	</update>
+	
+	<select id="staticsRole" parameterType="hashmap" resultType="int">
+		SELECT COUNT(0) FROM TB_JSXX
+		WHERE JLYXZT = 1
+		<if test="zjid !=null and zjid !='' ">
+			and ZJID != #{zjid}
+		</if>
+		<if test="jsdm !=null and jsdm !='' ">
+			and JSDM = #{jsdm}
+		</if>
+	</select>
+
+	<select id="getRoleByIds" resultMap="roleMap">
+		SELECT ZJID, JSMC, JSLX, JSJB, SYBZ, BZ,
+			CJYH,GXYH,JLXZSJ,JLXGSJ,JLSCSJ,
+			JLYXZT,JSDM FROM TB_JSXX
+			WHERE ZJID IN
+			 <foreach collection="array" item="zjid"  open="(" separator="," close=")">  
+		        #{zjid}
+		     </foreach>
+	</select>
+</mapper>

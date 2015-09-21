@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.casic27.platform.bpm.dao.ITaskSignDataMapper">
+	<resultMap id="taskSignDataMapper" type="com.casic27.platform.bpm.entity.TaskSignData"> 
+			<result property="dataId" column="DATA_ID" />  
+			<result property="actDefId" column="ACT_DEF_ID" />  
+			<result property="actInstId" column="ACT_INST_ID" />  
+			<result property="nodeName" column="NODE_NAME" />  
+			<result property="nodeId" column="NODE_ID" />  
+			<result property="taskId" column="TASK_ID" />  
+			<result property="voteUserId" column="VOTE_USER_ID" />  
+			<result property="voteUserName" column="VOTE_USER_NAME" />  
+			<result property="voteTime" column="VOTE_TIME" />  
+			<result property="isAgree" column="IS_AGREE" />  
+			<result property="content" column="CONTENT" />  
+			<result property="signNums" column="SIGN_NUMS" />  
+			<result property="isCompleted" column="IS_COMPLETED" />  
+			<result property="batch" column="BATCH" />  
+	</resultMap>
+	<!--查询(不分页)-->
+	<select id="findTaskSignData" parameterType="hashmap" resultMap="taskSignDataMapper">
+		SELECT 
+				DATA_ID,
+				ACT_DEF_ID,
+				ACT_INST_ID,
+				NODE_NAME,
+				NODE_ID,
+				TASK_ID,
+				VOTE_USER_ID,
+				VOTE_USER_NAME,
+				VOTE_TIME,
+				IS_AGREE,
+				CONTENT,
+				SIGN_NUMS,
+				IS_COMPLETED,
+				BATCH
+		FROM BPM_TKSIGN_DATA
+		WHERE 1 = 1 
+			<if test="actDefId != null and actDefId != '' ">
+				AND ACT_DEF_ID = #{actDefId}
+			</if>
+			<if test="actInstId != null and actInstId != '' ">
+				AND ACT_INST_ID = #{actInstId}
+			</if>
+			<if test="nodeId != null and nodeId != '' ">
+				AND NODE_ID = #{nodeId}
+			</if>
+			<if test="taskId != null and taskId != '' ">
+				AND TASK_ID = #{taskId}
+			</if>
+	</select>
+	
+	
+	<!--根据Id进行查询-->
+	<select id="getTaskSignDataById" parameterType="String" resultMap="taskSignDataMapper">
+		SELECT 
+				DATA_ID,
+				ACT_DEF_ID,
+				ACT_INST_ID,
+				NODE_NAME,
+				NODE_ID,
+				TASK_ID,
+				VOTE_USER_ID,
+				VOTE_USER_NAME,
+				VOTE_TIME,
+				IS_AGREE,
+				CONTENT,
+				SIGN_NUMS,
+				IS_COMPLETED,
+				BATCH
+		FROM BPM_TKSIGN_DATA
+		WHERE DATA_ID=#{id}
+	</select>
+	
+	<!--新增-->
+	<insert id="addTaskSignData" parameterType="com.casic27.platform.bpm.entity.TaskSignData">
+		INSERT INTO BPM_TKSIGN_DATA(
+				DATA_ID,
+				ACT_DEF_ID,
+				ACT_INST_ID,
+				NODE_NAME,
+				NODE_ID,
+				TASK_ID,
+				VOTE_USER_ID,
+				VOTE_USER_NAME,
+				VOTE_TIME,
+				IS_AGREE,
+				CONTENT,
+				SIGN_NUMS,
+				IS_COMPLETED,
+				BATCH
+		 )
+		values(
+				#{dataId,jdbcType=VARCHAR},
+				#{actDefId,jdbcType=VARCHAR},
+				#{actInstId,jdbcType=VARCHAR},
+				#{nodeName,jdbcType=VARCHAR},
+				#{nodeId,jdbcType=VARCHAR},
+				#{taskId,jdbcType=VARCHAR},
+				#{voteUserId,jdbcType=VARCHAR},
+				#{voteUserName,jdbcType=VARCHAR},
+				#{voteTime,jdbcType=TIMESTAMP},
+				#{isAgree,jdbcType=NUMERIC},
+				#{content,jdbcType=VARCHAR},
+				#{signNums,jdbcType=NUMERIC},
+				#{isCompleted,jdbcType=NUMERIC},
+				#{batch,jdbcType=NUMERIC}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateTaskSignData" parameterType="com.casic27.platform.bpm.entity.TaskSignData">
+		UPDATE BPM_TKSIGN_DATA SET
+			ACT_DEF_ID=#{actDefId,jdbcType=VARCHAR},
+			ACT_INST_ID=#{actInstId,jdbcType=VARCHAR},
+			NODE_NAME=#{nodeName,jdbcType=VARCHAR},
+			NODE_ID=#{nodeId,jdbcType=VARCHAR},
+			TASK_ID=#{taskId,jdbcType=VARCHAR},
+			VOTE_USER_ID=#{voteUserId,jdbcType=VARCHAR},
+			VOTE_USER_NAME=#{voteUserName,jdbcType=VARCHAR},
+			VOTE_TIME=#{voteTime,jdbcType=TIMESTAMP},
+			IS_AGREE=#{isAgree,jdbcType=NUMERIC},
+			CONTENT=#{content,jdbcType=VARCHAR},
+			SIGN_NUMS=#{signNums,jdbcType=NUMERIC},
+			IS_COMPLETED=#{isCompleted,jdbcType=NUMERIC},
+			BATCH=#{batch,jdbcType=NUMERIC}
+		where DATA_ID=#{dataId}
+    </update>
+    
+	<!-- 物理删除 -->
+    <delete id="delById" parameterType="String">
+     	DELETE FROM BPM_TKSIGN_DATA WHERE DATA_ID=#{id}
+    </delete>
+    
+    <!-- 根据任务ID查询 -->
+    <select id="getByTaskId" parameterType="java.lang.String" resultMap="taskSignDataMapper">
+		SELECT * from BPM_TKSIGN_DATA where TASK_ID=#{taskId}
+	</select>
+	
+	<!-- 获取会签人数 -->
+	<select id="getMaxSignNums" resultType="java.lang.Integer">
+		SELECT MAX(SIGN_NUMS) MAXNUMS FROM BPM_TKSIGN_DATA WHERE ACT_INST_ID=#{actInstId} AND NODE_ID=#{nodeId} AND IS_COMPLETED=#{isCompleted}
+		AND BATCH=(SELECT MAX(BATCH)
+		                  FROM BPM_TKSIGN_DATA
+		                 WHERE ACT_INST_ID =#{actInstId}
+		                   AND NODE_ID =#{nodeId})
+	</select>
+	
+	<!-- 获取同意数量 -->
+	<select id="getAgreeVoteCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) TOTALVOTES FROM BPM_TKSIGN_DATA WHERE ACT_INST_ID=#{actInstId} AND NODE_ID=#{nodeId} AND IS_COMPLETED=0 AND IS_AGREE=1
+		AND BATCH=(SELECT MAX(BATCH)
+		                  FROM BPM_TKSIGN_DATA
+		                 WHERE ACT_INST_ID =#{actInstId}
+		                   AND NODE_ID =#{nodeId})
+	</select>
+	
+	<!-- 获取拒绝数量 -->
+	<select id="getRefuseVoteCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) TOTALVOTES FROM BPM_TKSIGN_DATA WHERE ACT_INST_ID=#{actInstId} AND NODE_ID=#{nodeId} AND IS_COMPLETED=0 AND IS_AGREE=2
+		AND BATCH=(SELECT MAX(BATCH)
+		                  FROM BPM_TKSIGN_DATA
+		                 WHERE ACT_INST_ID =#{actInstId}
+		                   AND NODE_ID =#{nodeId})
+	</select>
+	<!-- 获取弃权数量 -->
+	<select id="getAbortVoteCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) TOTALVOTES FROM BPM_TKSIGN_DATA WHERE ACT_INST_ID=#{actInstId} AND NODE_ID=#{nodeId} AND IS_COMPLETED=0  AND IS_AGREE=0
+		AND BATCH=(SELECT MAX(BATCH)
+		                  FROM BPM_TKSIGN_DATA
+		                 WHERE ACT_INST_ID =#{actInstId}
+		                   AND NODE_ID =#{nodeId})
+	</select>
+	
+	<update id="updateCompleted">
+		UPDATE BPM_TKSIGN_DATA SET IS_COMPLETED=1 WHERE ACT_INST_ID=#{actInstId} AND NODE_ID=#{nodeId} AND IS_COMPLETED=0
+		AND BATCH = (SELECT MAX(BATCH)
+		                  FROM BPM_TKSIGN_DATA
+		                 WHERE ACT_INST_ID = #{actInstId}
+		                   AND NODE_ID = #{nodeId})
+	</update>
+	
+	<select id="getUserTaskSign" resultMap="taskSignDataMapper">
+		SELECT * FROM BPM_TKSIGN_DATA WHERE ACT_INST_ID=#{actInstId} AND NODE_ID=#{nodeId}  AND VOTE_USER_ID=#{voteUserId}  AND IS_COMPLETED=0
+		AND BATCH=(SELECT MAX(BATCH)
+		                  FROM BPM_TKSIGN_DATA
+		                 WHERE ACT_INST_ID = #{actInstId}
+		                   AND NODE_ID = #{nodeId})
+		 ORDER BY VOTE_TIME DESC
+	</select>
+	
+	<delete id="delByIdActDefId" parameterType="String">
+		DELETE FROM BPM_TKSIGN_DATA 
+		WHERE
+		ACT_DEF_ID=#{actDefId}
+	</delete>
+	
+	<delete id="delByIdActInstId" parameterType="String">
+		DELETE FROM BPM_TKSIGN_DATA 
+		WHERE
+		ACT_INST_ID=#{actInstId}
+	</delete>
+	
+	
+	<select id="getByNodeAndInstanceId" resultMap="taskSignDataMapper">
+		SELECT *
+		FROM BPM_TKSIGN_DATA
+		WHERE ACT_INST_ID = #{actInstId}
+		AND NODE_ID = #{nodeId}
+		<if test="isComplete != null"> AND IS_COMPLETED  =#{isComplete} </if>
+		AND BATCH = (SELECT MAX(BATCH)
+					FROM BPM_TKSIGN_DATA
+					WHERE ACT_INST_ID = #{actInstId}
+					AND NODE_ID = #{nodeId}) ORDER BY SIGN_NUMS
+	</select>
+	
+	<select id="getMaxBatch" resultType="java.lang.Integer">
+		SELECT MAX(BATCH) BATCH FROM BPM_TKSIGN_DATA
+		                 WHERE ACT_INST_ID = #{actInstId}
+		                   AND NODE_ID = #{nodeId}
+	</select>
+</mapper>

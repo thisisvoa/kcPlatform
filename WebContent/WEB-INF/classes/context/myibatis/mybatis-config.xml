@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<plugins>
+		<!-- 分页 -->
+	   	<plugin interceptor="com.casic27.platform.core.mybatis.plugin.OffsetLimitInterceptor">
+	   	   	<property name="dialectClass" value="com.casic27.platform.core.jdbc.dialect.OracleDialect"/>
+	   	</plugin>
+	   	<plugin interceptor="com.casic27.platform.core.mybatis.plugin.SpecialCharHandleInterceptor">
+	   	</plugin>
+	   	<plugin interceptor="com.casic27.platform.common.log.interceptor.SqlLogInterceptor">
+	   	</plugin>
+	</plugins>
+</configuration>

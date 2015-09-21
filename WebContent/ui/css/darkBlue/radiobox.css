@@ -1,0 +1,34 @@
+.radiowarper{
+	display:inline-block;
+	width:13px;
+	height:13px;
+	background:url("images/radio.gif") no-repeat scroll 0 0 transparent;
+}
+
+.radiowarper-hover{
+	background-position:-13px 0;
+}
+
+.radiowarper-click{
+	background-position:-26px 0;
+}
+
+.radiowarper-checked{
+	background-position:0 -13px;
+}
+
+.radiowarper-checked-hover{
+	background-position:-13px -13px;
+}
+
+.radiowarper-checked-click{
+	background-position:-26px -13px;
+}
+
+.radiowarper-disable{
+	background-position:-39px 0;
+}
+
+.radiowarper-checked-disable{
+	background-position:-39px -13px;
+}

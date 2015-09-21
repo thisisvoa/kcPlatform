@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.casic27.platform.bpm.dao.IBpmNodePrivilegeMapper">
+	<resultMap id="bpmNodePrivilegeMapper" type="com.casic27.platform.bpm.entity.BpmNodePrivilege"> 
+			<result property="privilegeId" column="PRIVILEGE_ID" />  
+			<result property="actDefId" column="ACT_DEF_ID" />  
+			<result property="nodeId" column="NODE_ID" />  
+			<result property="privilegeMode" column="PRIVILEGE_MODE" />  
+			<result property="userType" column="USER_TYPE" />  
+			<result property="cmpNames" column="CMP_NAMES" />  
+			<result property="cmpIds" column="CMP_IDS" />  
+	</resultMap>
+	<!--查询(不分页)-->
+	<select id="getPrivilegesByDefIdAndNodeId" parameterType="hashmap" resultMap="bpmNodePrivilegeMapper">
+		SELECT 
+				PRIVILEGE_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				PRIVILEGE_MODE,
+				USER_TYPE,
+				CMP_NAMES,
+				CMP_IDS
+		FROM BPM_NODE_PRIVILEGE
+		WHERE	ACT_DEF_ID = #{actDefId}
+				AND NODE_ID = #{nodeId}
+	</select>
+	
+	<!--根据Id进行查询-->
+	<select id="getBpmNodePrivilegeById" parameterType="String" resultMap="bpmNodePrivilegeMapper">
+		SELECT 
+				PRIVILEGE_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				PRIVILEGE_MODE,
+				USER_TYPE,
+				CMP_NAMES,
+				CMP_IDS
+		FROM BPM_NODE_PRIVILEGE
+		WHERE PRIVILEGE_ID=#{id}
+	</select>
+	
+	<!--新增-->
+	<insert id="addBpmNodePrivilege" parameterType="com.casic27.platform.bpm.entity.BpmNodePrivilege">
+		INSERT INTO BPM_NODE_PRIVILEGE(
+				PRIVILEGE_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				PRIVILEGE_MODE,
+				USER_TYPE,
+				CMP_NAMES,
+				CMP_IDS
+		 )
+		values(
+				#{privilegeId,jdbcType=VARCHAR},
+				#{actDefId,jdbcType=VARCHAR},
+				#{nodeId,jdbcType=VARCHAR},
+				#{privilegeMode,jdbcType=NUMERIC},
+				#{userType,jdbcType=NUMERIC},
+				#{cmpNames,jdbcType=VARCHAR},
+				#{cmpIds,jdbcType=VARCHAR}
+		 )
+    </insert>
+    
+	<!-- 物理删除 -->
+    <delete id="delByDefIdAndNodeId">
+     	DELETE FROM BPM_NODE_PRIVILEGE WHERE ACT_DEF_ID=#{actDefId} AND NODE_ID=#{nodeId}
+    </delete>
+    
+    <!-- 根据流程定义ID、节点ID、权限模式获取会签特殊权限 -->
+    <select id="getPrivilegesByDefIdAndNodeIdAndMode" resultMap="bpmNodePrivilegeMapper">
+		SELECT * FROM BPM_NODE_PRIVILEGE WHERE ACT_DEF_ID=#{actDefId} and NODE_ID=#{nodeId} AND (PRIVILEGE_MODE=0 or PRIVILEGE_MODE=#{privilegeMode})
+	</select>
+	
+	<!-- 物理删除 -->
+    <delete id="delByActDefId">
+     	DELETE FROM BPM_NODE_PRIVILEGE WHERE ACT_DEF_ID=#{actDefId}
+    </delete>
+</mapper>

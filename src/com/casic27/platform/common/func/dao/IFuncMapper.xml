@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.casic27.platform.common.func.dao.IFuncMapper">
+	<resultMap id="funcMap" type="com.casic27.platform.common.func.entity.Function"> 
+		<id property="zjId" column="ZJID" /> 
+		<result property="gnmc" column="GNMC"/> 
+		<result property="gndm" column="GNDM"/> 
+		<result property="cdxxZjId" column="CDXX_ZJID"/> 
+		<result property="cdxxCdmc" column="CDXX_CDMC"/> 
+		<result property="gnxh" column="GNXH"/> 
+		<result property="sybz" column="SYBZ"/> 
+		<result property="bz" column="BZ"/> 
+		<result property="cjyh" column="CJYH"/> 
+		<result property="gxyh" column="GXYH"/> 
+		<result property="jlxzsj" column="JLXZSJ"/>
+		<result property="jlxgsj" column="JLXGSJ"/>
+		<result property="jlscsj" column="JLSCSJ"/> 
+		<result property="jlyxzt" column="JLYXZT"/> 
+	</resultMap>
+	<resultMap id="menuMap" type="com.casic27.platform.common.menu.entity.Menu"> 
+		<id property="zjId" column="ZJID" /> 
+		<result property="cdmc" column="CDMC"/> 
+		<result property="cdjb" column="CDJB"/> 
+		<result property="cdxh" column="CDXH"/> 
+		<result property="sjcd" column="SJCD"/> 
+	</resultMap>
+	
+	<!-- 查询有效功能清单 -->
+	<select id="queryFuncList" parameterType="com.casic27.platform.common.func.entity.Function" resultMap="funcMap">
+		select G.*, C.CDMC as CDXX_CDMC
+		from TB_GNXX G
+		left join TB_CDXX C on C.ZJID = G.CDXX_ZJID
+		where 1 = 1
+		<if test="zjId != null and zjId != ''">and G.ZJID = #{zjId}</if>
+		<if test="gndm != null and gndm != ''">and upper(G.GNDM) = upper(#{gndm})</if>
+		<if test="cdxxZjId != null and cdxxZjId != ''">and G.CDXX_ZJID = #{cdxxZjId}</if>
+		<if test="sybz != null and sybz != ''">and G.SYBZ = #{sybz}</if>
+		<if test="jlyxzt != null and jlyxzt != ''">and G.JLYXZT = #{jlyxzt}</if>
+		<if test="cdxxCdmc != null and cdxxCdmc != ''">and C.CDMC LIKE '%'||#{cdxxCdmc}||'%'</if>
+		<if test="gnmc != null and gnmc != ''">and G.GNMC LIKE '%'||#{gnmc}||'%'</if>
+		<if test="sybz != null and sybz != ''">and G.SYBZ = #{sybz}</if>
+		order by to_number(G.ZJID)
+	</select>
+	
+	<!-- 查询有效菜单清单 -->
+	<select id="queryMenuList" resultMap="menuMap">
+		select ZJID, CDMC, CDJB, CDXH, SJCD
+		from (select * from tb_cdxx order by to_number(cdxh)) tb_cdxx 
+		connect by prior ZJID = SJCD start with SJCD = '0'
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="insert">
+		<selectKey   keyProperty="zjId" resultType= "String" order="BEFORE"> 
+			SELECT SEQ_TB_GNXX.NEXTVAL FROM DUAL 
+		</selectKey>
+		insert into TB_GNXX(
+					ZJID,
+					GNMC, 
+					GNDM,
+					CDXX_ZJID, 
+					GNXH,
+					SYBZ,
+					BZ,
+					CJYH,
+					GXYH,
+					JLXZSJ,
+					JLXGSJ,
+					JLSCSJ,
+					JLYXZT)
+				VALUES(
+					#{zjId, jdbcType=VARCHAR},
+					#{gnmc, jdbcType=VARCHAR}, 
+					#{gndm, jdbcType=VARCHAR}, 
+					#{cdxxZjId, jdbcType=VARCHAR}, 
+					#{gnxh, jdbcType=VARCHAR}, 
+					#{sybz, jdbcType=VARCHAR},
+					#{bz, jdbcType=VARCHAR},
+					#{cjyh, jdbcType=VARCHAR},
+					#{gxyh, jdbcType=VARCHAR},
+					#{jlxzsj, jdbcType=VARCHAR},
+					#{jlxgsj, jdbcType=VARCHAR},
+					#{jlscsj, jdbcType=VARCHAR},
+					#{jlyxzt, jdbcType=VARCHAR}
+			)
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="update" parameterType="com.casic27.platform.common.func.entity.Function">
+		update TB_GNXX
+		set GNMC = #{gnmc, jdbcType=VARCHAR},
+		GNDM = #{gndm, jdbcType=VARCHAR},
+		CDXX_ZJID = #{cdxxZjId, jdbcType=VARCHAR},
+		GNXH = #{gnxh, jdbcType=VARCHAR},
+		SYBZ = #{sybz, jdbcType=VARCHAR},
+		BZ = #{bz, jdbcType=VARCHAR},
+		JLXZSJ = #{jlxzsj, jdbcType=VARCHAR},
+		JLXGSJ = #{jlxgsj, jdbcType=VARCHAR},
+		JLSCSJ = #{jlscsj, jdbcType=VARCHAR},
+		JLYXZT = #{jlyxzt, jdbcType=VARCHAR}
+		where ZJID = #{zjId}
+	</update>
+	
+	<!-- 删除 -->
+	<delete id="delete">
+		delete from TB_GNXX where ZJID = #{zjId}
+	</delete>
+	
+	
+	<delete id="logicDelByMenuId">
+		UPDATE TB_GNXX SET JLYXZT = '0', JLSCSJ = #{curTime, jdbcType=VARCHAR} 
+			WHERE CDXX_ZJID in 
+				(SELECT ZJID
+		                  FROM TB_CDXX
+		                 START WITH ZJID = #{menuId}
+		                CONNECT BY PRIOR ZJID = SJCD)
+	</delete>
+	
+	<!-- 查询功能 -->
+	<select id="findFuncList" parameterType="com.casic27.platform.common.func.entity.Function" resultMap="funcMap">
+		SELECT ZJID,GNMC,GNDM,CDXX_ZJID,GNXH,SYBZ,BZ,CJYH,GXYH,JLXZSJ,JLXGSJ,JLSCSJ,JLYXZT
+		FROM TB_GNXX WHERE 1=1
+		<if test="zjId!=null and zjId!=''">
+			AND ZJID=#{zjId}
+		</if>
+		<if test="cdxxZjId!=null and cdxxZjId!=''">
+			AND CDXX_ZJID=#{cdxxZjId}
+		</if>
+		<if test="sybz!=null and sybz!=''">
+			AND SYBZ=#{sybz}
+		</if>
+		<if test="cdxxZjId!=null and  cdxxZjId!=''">
+			AND CDXX_ZJID=#{cdxxZjId}
+		</if>
+		<if test="jlyxzt!=null and jlyxzt!=''">
+			AND JLYXZT=#{jlyxzt}
+		</if>
+	</select>
+	
+	<!-- 根绝功能Id查询功能 -->
+	<select id="getFuncById" parameterType="String" resultMap="funcMap">
+		SELECT ZJID,GNMC,GNDM,CDXX_ZJID,GNXH,SYBZ,BZ,CJYH,GXYH,JLXZSJ,JLXGSJ,JLSCSJ,JLYXZT
+		FROM TB_GNXX WHERE ZJID=#{funcId}
+	</select>
+</mapper>

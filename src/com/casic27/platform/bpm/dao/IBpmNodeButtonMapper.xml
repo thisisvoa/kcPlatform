@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.casic27.platform.bpm.dao.IBpmNodeButtonMapper">
+	<resultMap id="nodeButtonMapper" type="com.casic27.platform.bpm.entity.BpmNodeButton"> 
+			<result property="btnId" column="BTN_ID" />  
+			<result property="defId" column="DEF_ID" />
+			<result property="actDefId" column="ACT_DEF_ID" />
+			<result property="nodeId" column="NODE_ID" />
+			<result property="nodeType" column="NODE_TYPE" />
+			<result property="btnName" column="BTN_NAME" />  
+			<result property="type" column="TYPE" />  
+			<result property="beforeHandler" column="BEFORE_HANDLER" />  
+			<result property="afterHandler" column="AFTER_HANDLER" />  
+			<result property="sn" column="SN" />
+	</resultMap>
+	<!--查询(不分页)-->
+	<select id="findNodeButton" parameterType="hashmap" resultMap="nodeButtonMapper">
+		SELECT 
+				BTN_ID,
+				DEF_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				NODE_TYPE,
+				BTN_NAME,
+				TYPE,
+				BEFORE_HANDLER,
+				AFTER_HANDLER,
+				SN
+		FROM BPM_NODE_BUTTON
+		WHERE 1 = 1 
+			<if test="defId != null and defId != '' ">
+				AND DEF_ID = #{defId}
+			</if>
+			<if test="nodeId != null and nodeId != '' ">
+				AND NODE_ID = #{nodeId}
+			</if>
+			<if test="nodeType != null and nodeType != '' ">
+				AND NODE_TYPE = #{nodeType}
+			</if>
+			ORDER BY SN
+	</select>
+	
+	<!--根据Id进行查询-->
+	<select id="getNodeButtonById" parameterType="String" resultMap="nodeButtonMapper">
+		SELECT 
+				BTN_ID,
+				DEF_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				NODE_TYPE,
+				BTN_NAME,
+				TYPE,
+				BEFORE_HANDLER,
+				AFTER_HANDLER,
+				SN
+		FROM BPM_NODE_BUTTON
+		WHERE BTN_ID=#{id}
+	</select>
+	
+	<!--新增-->
+	<insert id="addNodeButton" parameterType="com.casic27.platform.bpm.entity.BpmNodeButton">
+		INSERT INTO BPM_NODE_BUTTON(
+				BTN_ID,
+				DEF_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				NODE_TYPE,
+				BTN_NAME,
+				TYPE,
+				BEFORE_HANDLER,
+				AFTER_HANDLER,
+				SN
+		 )
+		values(
+				#{btnId,jdbcType=VARCHAR},
+				#{defId,jdbcType=VARCHAR},
+				#{actDefId,jdbcType=VARCHAR},
+				#{nodeId,jdbcType=VARCHAR},
+				#{nodeType,jdbcType=VARCHAR},
+				#{btnName,jdbcType=VARCHAR},
+				#{type,jdbcType=VARCHAR},
+				#{beforeHandler,jdbcType=VARCHAR},
+				#{afterHandler,jdbcType=VARCHAR},
+				#{sn,jdbcType=INTEGER}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateNodeButton" parameterType="com.casic27.platform.bpm.entity.BpmNodeButton">
+		UPDATE BPM_NODE_BUTTON SET
+			DEF_ID=#{defId,jdbcType=VARCHAR},
+			ACT_DEF_ID=#{actDefId,jdbcType=VARCHAR},
+			NODE_ID=#{nodeId,jdbcType=VARCHAR},
+			NODE_TYPE=#{nodeType,jdbcType=VARCHAR},
+			BTN_NAME=#{btnName,jdbcType=VARCHAR},
+			TYPE=#{type,jdbcType=VARCHAR},
+			BEFORE_HANDLER=#{beforeHandler,jdbcType=VARCHAR},
+			AFTER_HANDLER=#{afterHandler,jdbcType=VARCHAR},
+			SN = #{sn,jdbcType=INTEGER}
+		where BTN_ID=#{btnId}
+    </update>
+    
+	<!-- 物理删除 -->
+    <delete id="deleteNodeButton" parameterType="String">
+     	DELETE FROM BPM_NODE_BUTTON 
+    		WHERE 1=1
+   			<if test="btnId != null and btnId != '' ">
+				AND BTN_ID = #{btnId}
+			</if>
+   			<if test="defId != null and defId != '' ">
+				AND DEF_ID = #{defId}
+			</if>
+			<if test="nodeId != null and nodeId != '' ">
+				AND NODE_ID = #{nodeId}
+			</if>
+			<if test="nodeType != null and nodeType != '' ">
+				AND NODE_TYPE = #{nodeType}
+			</if>
+    </delete>
+    
+    <!-- 根据条件统计记录数 -->
+	<select id="countNodeButton" parameterType="com.casic27.platform.bpm.entity.BpmNodeButton" resultType="int">
+    	SELECT COUNT(1) FROM BPM_NODE_BUTTON WHERE 1=1
+    	<if test="btnId != null and btnId != ''">
+    		AND	BTN_ID != #{btnId}
+    	</if>
+    	<if test="btnName != null and btnName != ''">
+    		AND	BTN_NAME = #{btnName}
+    	</if>
+    	<if test="defId != null and defId != ''">
+    		AND	DEF_ID = #{defId}
+    	</if>
+    	<if test="nodeId != null and nodeId != ''">
+    		AND	NODE_ID = #{nodeId}
+    	</if>
+    	<if test="nodeType != null and nodeType != ''">
+    		AND	NODE_TYPE = #{nodeType}
+    	</if>
+    	<if test="type != null and type != ''">
+    		AND	TYPE = #{type}
+    	</if>
+    </select>
+    
+    <select id="getMaxSn" resultType="int">
+    	SELECT MAX(SN) FROM BPM_NODE_BUTTON WHERE 1=1
+    		<if test="defId != null and defId != ''">
+	    		AND	DEF_ID = #{defId}
+	    	</if>
+	    	<if test="nodeId != null and nodeId != ''">
+	    		AND	NODE_ID = #{nodeId}
+	    	</if>
+	    	<if test="nodeType != null and nodeType != ''">
+	    		AND	NODE_TYPE = #{nodeType}
+	    	</if>
+    </select>
+    
+    <update id="updateSn">
+    	UPDATE BPM_NODE_BUTTON SET SN = #{sn,jdbcType=INTEGER}
+    	where BTN_ID=#{btnId}
+    </update>
+    <!-- 物理删除 -->
+    <delete id="delByActDefId" parameterType="String">
+     	DELETE FROM BPM_NODE_BUTTON WHERE ACT_DEF_ID=#{actDefId}
+    </delete>
+</mapper>

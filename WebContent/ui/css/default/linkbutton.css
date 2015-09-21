@@ -1,0 +1,72 @@
+a.l-btn{
+	color:#444;
+	background:url('images/btn_bg.jpg') repeat-x 0 0;
+	font-size:12px;
+	text-decoration:none;
+	display:inline-block;
+	zoom:1;
+	height: 22px;
+	line-height: 22px;
+	padding-right:8px;
+	cursor:pointer;
+	outline:none;
+	border: 1px solid #AABBCC;
+}
+a.l-btn-plain{
+	background:transparent;
+	padding-right:5px;
+	border:1px solid transparent;
+	_border:0px solid #efefef;
+	_padding:1px 6px 1px 1px;
+}
+
+a.l-btn-disabled{
+	color:#ccc;
+	opacity:0.8;
+	filter:alpha(opacity=80);
+	cursor:default;
+}
+a.l-btn span.l-btn-left{
+	display:inline-block;
+	padding:2px 0px 2px 8px;
+	line-height:16px;
+	height:16px;
+}
+a.l-btn-plain span.l-btn-left{
+	background:transparent;
+	padding-left:5px;
+}
+
+a.l-btn span span.l-btn-text{
+	display:inline-block;
+	height:16px;
+	line-height:16px;
+	padding:0px;
+}
+a.l-btn span span span.l-btn-empty{
+	display:inline-block;
+	padding:0px;
+	width:16px;
+}
+a:hover.l-btn{
+	background: url("images/btn_bg_hover.jpg") repeat scroll 0 0 transparent;
+    border: 1px solid #AF923F;
+}
+a:hover.l-btn span.l-btn-left{
+}
+
+a:hover.l-btn-plain{
+	border:1px solid #7eabcd;
+	_padding:0px 5px 0px 0px;
+	-moz-border-radius:3px;
+	-webkit-border-radius: 3px;
+}
+a:hover.l-btn-disabled{
+	background-position:top right;
+}
+a:hover.l-btn-disabled span.l-btn-left{
+	background-position:top left;
+}
+a.l-btn .l-btn-focus{
+	outline:#0000FF dotted thin;
+}

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.casic27.platform.common.org.dao.IOrgMapper">
+		<resultMap id="orgMap" type="com.casic27.platform.common.org.entity.Org"> 
+		<id property="zjid" column="ZJID" />
+		<result property="dwbh" column="DWBH" />  
+		<result property="dwmc" column="DWMC" /> 
+		<result property="dwjc" column="DWJC" /> 
+		<result property="dwdh" column="DWDH" /> 
+		<result property="dwyx" column="DWYX" /> 
+		<result property="dwfzr" column="DWFZR" /> 
+		<result property="sjdw_zjid" column="SJDW_ZJID" /> 
+		<result property="dwlx" column="DWLX" /> 
+		<result property="dwjb" column="DWJB" /> 
+		<result property="bz" column="BZ" /> 
+		<result property="cjyh" column="CJYH" /> 
+		<result property="gxyh" column="GXYH" /> 
+		<result property="jlxzsj" column="JLXZSJ" /> 
+		<result property="jlxgsj" column="JLXGSJ" /> 
+		<result property="jlscsj" column="JLSCSJ" /> 
+		<result property="jlyxzt" column="JLYXZT" /> 
+	</resultMap>
+	<select id="findOrg" parameterType="hashmap" resultMap="orgMap">
+		SELECT ZJID,DWBH,DWMC,
+				DWJC,DWDH,DWYX,
+				DWFZR,SJDW_ZJID,DWLX,
+				DWJB,BZ,CJYH,GXYH,
+				JLYXZT,JLXZSJ,JLXGSJ
+		FROM TB_DWXX A
+		WHERE 1 = 1
+		<if test="zjid != null and zjid != '' ">
+			and A.ZJID = #{zjid}
+		</if>
+		<if test="dwbh != null and dwbh != '' ">
+			AND A.DWBH LIKE '%'||#{dwbh}||'%'
+		</if>
+		<if test="dwmc != null and dwmc !='' ">
+			AND A.DWMC LIKE '%'||#{dwmc}||'%'
+		</if>
+		<if test="dwjc != null and dwjc != '' ">
+			AND A.DWJC LIKE '%'||#{dwjc}||'%'
+		</if>
+		<if test="sjdw_zjid != null and sjdw_zjid != '' ">
+			AND A.SJDW_ZJID = #{sjdw_zjid}
+		</if>
+		<if test="dwfzr != null and dwfzr != '' ">
+			AND A.DWFZR LIKE '%'||#{dwfzr}||'%'
+		</if>
+		<if test="jlyxzt != null and jlyxzt != '' ">
+			AND A.JLYXZT = #{jlyxzt}
+		</if>
+		ORDER BY A.DWBH
+	</select>
+	
+	<select id="findOrgPaging" parameterType="hashmap" resultType="hashmap">
+		SELECT A.ZJID,A.DWBH,A.DWMC,A.DWJC,A.DWDH,A.DWYX,A.DWFZR,A.SJDW_ZJID,A.DWLX,A.DWJB,A.BZ,A.CJYH,A.GXYH,A.JLYXZT,
+	      A.JLXZSJ,A.JLXGSJ,B.DWMC SJDWMC
+	    FROM  (SELECT *  
+	      FROM TB_DWXX DW 
+	      WHERE 1=1
+	      	<if test="zjid != null and zjid != '' ">
+	            START WITH DW.ZJID =  #{zjid}
+	            CONNECT BY PRIOR DW.ZJID = DW.SJDW_ZJID
+	        </if>	           
+	      ) A  
+	    LEFT JOIN TB_DWXX B ON A.SJDW_ZJID =  B.ZJID
+	    WHERE 1 = 1
+	    <if test="dwbh != null and dwbh != '' ">
+			AND A.DWBH LIKE '%'||#{dwbh}||'%'
+		</if>	
+		<if test="dwmc != null and dwmc !='' ">
+			AND A.DWMC LIKE '%'||#{dwmc}||'%'
+		</if>	
+		<if test="dwjc != null and dwjc != '' ">
+			AND A.DWJC LIKE '%'||#{dwjc}||'%'
+		</if>	
+		<if test="sjdw_zjid != null and sjdw_zjid != '' ">
+			AND A.SJDW_ZJID = #{sjdw_zjid}
+		</if>
+		<if test="dwfzr != null and dwfzr != '' ">
+			AND A.DWFZR like '%'||#{dwfzr}||'%'
+		</if>		
+		<if test="jlyxzt != null and jlyxzt != '' ">
+			AND A.JLYXZT = #{jlyxzt}
+		</if>
+		ORDER BY A.DWBH
+	</select>
+	
+	<select id="getOrgById" parameterType="String" resultMap="orgMap">
+		SELECT A.ZJID,A.DWBH,A.DWMC,A.DWJC,A.DWDH,A.DWYX,A.DWFZR,A.SJDW_ZJID,A.DWLX,A.DWJB,A.BZ,A.CJYH,A.GXYH,A.JLYXZT,
+	      A.JLXZSJ,A.JLXGSJ
+	    FROM TB_DWXX A  
+	    WHERE A.ZJID =  #{orgId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getOrgByNo" parameterType="String" resultMap="orgMap">
+		SELECT A.ZJID,A.DWBH,A.DWMC,A.DWJC,A.DWDH,A.DWYX,A.DWFZR,A.SJDW_ZJID,A.DWLX,A.DWJB,A.BZ,A.CJYH,A.GXYH,A.JLYXZT,
+	      A.JLXZSJ,A.JLXGSJ
+	    FROM TB_DWXX A  
+	    WHERE A.DWBH =  #{orgNo,jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="addOrg" parameterType="com.casic27.platform.common.org.entity.Org">
+	    <selectKey  keyProperty="zjid" resultType= "String" order="BEFORE"> 
+			SELECT SEQ_TB_DWXX.NEXTVAL FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_DWXX (ZJID, DWBH, DWMC, 
+							 DWJC, DWDH, DWYX, 
+							 DWFZR, SJDW_ZJID, 
+							 DWLX, DWJB, BZ, 
+							 CJYH, GXYH, JLXZSJ, 
+							 JLXGSJ, JLSCSJ, JLYXZT)
+			VALUES(#{zjid,jdbcType=VARCHAR},#{dwbh,jdbcType=VARCHAR},#{dwmc,jdbcType=VARCHAR},
+				   #{dwjc,jdbcType=VARCHAR},#{dwdh,jdbcType=VARCHAR},#{dwyx,jdbcType=VARCHAR},
+				   #{dwfzr,jdbcType=VARCHAR},#{sjdw_zjid,jdbcType=VARCHAR},#{dwlx,jdbcType=VARCHAR},
+				   #{dwjb,jdbcType=VARCHAR},#{bz,jdbcType=VARCHAR},#{cjyh,jdbcType=VARCHAR},
+				   #{gxyh,jdbcType=VARCHAR},#{jlxzsj,jdbcType=VARCHAR},#{jlxgsj,jdbcType=VARCHAR},
+				   #{jlscsj,jdbcType=VARCHAR},#{jlyxzt,jdbcType=VARCHAR})
+    </insert>
+
+	<update id="updateOrg" parameterType="com.casic27.platform.common.org.entity.Org">
+		UPDATE TB_DWXX SET DWBH = #{dwbh,jdbcType=VARCHAR}, DWMC = #{dwmc,jdbcType=VARCHAR},
+						   DWJC = #{dwjc,jdbcType=VARCHAR}, DWDH = #{dwdh,jdbcType=VARCHAR},
+						   DWYX = #{dwyx,jdbcType=VARCHAR}, DWFZR = #{dwfzr,jdbcType=VARCHAR},
+						   SJDW_ZJID = #{sjdw_zjid,jdbcType=VARCHAR}, DWLX = #{dwlx,jdbcType=VARCHAR},
+						   DWJB = #{dwjb,jdbcType=VARCHAR}, BZ = #{bz,jdbcType=VARCHAR}
+		WHERE ZJID = #{zjid}
+    </update>
+    
+	<!-- 查询某个单位的所有上级单位 ，返回值包括自己-->
+	<select id="queryParentOrgList" parameterType="String" resultType="hashmap">
+		SELECT * FROM TB_DWXX
+			CONNECT BY PRIOR SJDW_ZJID=ZJID
+			START WITH ZJID=#{orgId}
+	</select>
+	
+	<select id="getParentOrgList" parameterType="String" resultMap="orgMap">
+		SELECT * FROM TB_DWXX
+			CONNECT BY PRIOR SJDW_ZJID=ZJID
+			START WITH ZJID=#{orgId}
+	</select>
+	
+	<select id="statiscOrg" parameterType="com.casic27.platform.common.org.entity.Org" resultType="int">
+		select count(0) from TB_DWXX
+			where DWBH = #{dwbh}
+		<if test="zjid != null and zjid !='' ">
+			and ZJID != #{zjid}
+		</if>	
+	</select>
+	<update id="updateOrgJlyxzt" parameterType="com.casic27.platform.common.org.entity.Org">
+		UPDATE TB_DWXX SET 
+			JLYXZT = #{jlyxzt},
+			JLSCSJ = #{jlscsj}
+		WHERE ZJID = #{zjid}
+	</update>
+	
+	<select id="isChildOrg" resultType="int">
+		SELECT COUNT(1) FROM TB_DWXX T WHERE ZJID=#{child} 
+				START WITH ZJID = #{parent}
+				CONNECT BY PRIOR ZJID = SJDW_ZJID
+	</select>
+	
+	<select id="getOrgByIds" resultType="hashmap">
+		SELECT * FROM TB_DWXX
+			WHERE ZJID IN
+			 <foreach collection="array" item="zjid"  open="(" separator="," close=")">  
+		        #{zjid}
+		     </foreach>
+	</select>
+	
+</mapper>

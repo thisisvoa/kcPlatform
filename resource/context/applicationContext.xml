@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    ">
+    
+	<!-- KPM核心配置 -->
+	<import resource="classpath:/context/base/kpm-base.xml" />
+	
+	
+	<!-- KPM核心配置 -->
+	<import resource="classpath:/context/base/kpm-common.xml" />
+	
+	<!-- 授权模块配置 -->
+	<import resource="classpath:/context/base/kpm-authorization.xml" />
+	
+	<!-- 任务调度配置 -->
+	<import resource="classpath:/context/base/kpm-job.xml" />
+	
+	<!-- 工作流-->
+	<import resource="classpath:/context/bpm/activiti.cfg.xml" />
+	<import resource="classpath:/context/bpm/kpm-bpm.xml" />
+	
+	<!-- 业务扩展配置，所有业务系统的配置信息应配置在该地方 -->
+	<import resource="classpath:/context/kpm-ext.xml" />
+	
+</beans>

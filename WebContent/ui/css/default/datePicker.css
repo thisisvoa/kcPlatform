@@ -1,0 +1,50 @@
+
+.dateInput {
+	display:inline-block;
+	_display:inline;
+	zoom:1;
+	outline:none;
+	height:20px;
+    background: url("images/textinput_bg.jpg") repeat-x scroll left top #FFFFFF;
+    border: 1px solid #CCCCCC;
+    color: #336699;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+}
+
+.datebox-text{
+	font-size:12px;
+	border:0px;
+	line-height:20px;
+	height:20px;
+	padding:0px;
+	width:114px;
+	*height:18px;
+	*line-height:18px;
+	_height:18px;
+	_line-height:18px;
+	background:transparent;
+}
+
+.datebox_hover{
+	border: 1px solid #96b5fa;
+}
+
+.datebox_click{
+	border: 1px solid #fbd45c;
+}
+
+.combo-arrow-date{
+	cursor: pointer;
+    display: inline-block;
+    height: 20px;
+    opacity: 0.6;
+    overflow: hidden;
+    vertical-align: top;
+    width: 18px;
+    background: url("images/datebox_arrow.png") no-repeat scroll center center transparent;
+    opacity:0.6;
+	filter:alpha(opacity=60);
+}

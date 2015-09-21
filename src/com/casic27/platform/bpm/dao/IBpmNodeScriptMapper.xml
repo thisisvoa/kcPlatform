@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.casic27.platform.bpm.dao.IBpmNodeScriptMapper">
+	<resultMap id="nodeScriptMapper" type="com.casic27.platform.bpm.entity.BpmNodeScript"> 
+			<result property="scriptId" column="SCRIPT_ID" />  
+			<result property="defId" column="DEF_ID" />  
+			<result property="actDefId" column="ACT_DEF_ID" />  
+			<result property="nodeId" column="NODE_ID" />  
+			<result property="scriptType" column="SCRIPT_TYPE" />  
+			<result property="script" column="SCRIPT" />  
+			<result property="remark" column="REMARK" />  
+	</resultMap>
+	<!--查询(不分页)-->
+	<select id="findNodeScript" parameterType="hashmap" resultMap="nodeScriptMapper">
+		SELECT 
+				SCRIPT_ID,
+				DEF_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				SCRIPT_TYPE,
+				SCRIPT,
+				REMARK
+		FROM BPM_NODE_SCRIPT
+		WHERE 1 = 1 
+			<if test="defId != null and defId != '' ">
+				AND DEF_ID = #{defId}
+			</if>
+			<if test="actDefId != null and actDefId != '' ">
+				AND ACT_DEF_ID = #{actDefId}
+			</if>
+			<if test="nodeId != null and nodeId != '' ">
+				AND NODE_ID = #{nodeId}
+			</if>
+			<if test="scriptType != null and scriptType != '' ">
+				AND SCRIPT_TYPE = #{scriptType}
+			</if>
+	</select>
+	
+	<!--根据Id进行查询-->
+	<select id="getNodeScriptById" parameterType="String" resultMap="nodeScriptMapper">
+		SELECT 
+				SCRIPT_ID,
+				DEF_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				SCRIPT_TYPE,
+				SCRIPT,
+				REMARK
+		FROM BPM_NODE_SCRIPT
+		WHERE SCRIPT_ID=#{id}
+	</select>
+	
+	<!--新增-->
+	<insert id="addNodeScript" parameterType="com.casic27.platform.bpm.entity.BpmNodeScript">
+		INSERT INTO BPM_NODE_SCRIPT(
+				SCRIPT_ID,
+				DEF_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				SCRIPT_TYPE,
+				SCRIPT,
+				REMARK
+		 )
+		values(
+				#{scriptId,jdbcType=VARCHAR},
+				#{defId,jdbcType=VARCHAR},
+				#{actDefId,jdbcType=VARCHAR},
+				#{nodeId,jdbcType=VARCHAR},
+				#{scriptType,jdbcType=VARCHAR},
+				#{script,jdbcType=VARCHAR},
+				#{remark,jdbcType=VARCHAR}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateNodeScript" parameterType="com.casic27.platform.bpm.entity.BpmNodeScript">
+		UPDATE BPM_NODE_SCRIPT SET
+				DEF_ID=#{defId,jdbcType=VARCHAR},
+				ACT_DEF_ID=#{actDefId,jdbcType=VARCHAR},
+				NODE_ID=#{nodeId,jdbcType=VARCHAR},
+				SCRIPT_TYPE=#{scriptType,jdbcType=VARCHAR},
+				SCRIPT=#{script,jdbcType=VARCHAR},
+				REMARK=#{remark,jdbcType=VARCHAR}
+			where SCRIPT_ID=#{scriptId}
+    </update>
+    
+	<!-- 物理删除 -->
+    <delete id="deleteNodeScript" parameterType="String">
+     	DELETE FROM BPM_NODE_SCRIPT WHERE SCRIPT_ID=#{id}
+    </delete>
+    
+    <delete id="deleteByNodeId">
+     	DELETE FROM BPM_NODE_SCRIPT WHERE 
+     			NODE_ID=#{nodeId} AND DEF_ID = #{defId}
+    </delete>
+    
+    <delete id="delByActDefId" parameterType="String">
+     	DELETE FROM BPM_NODE_SCRIPT WHERE ACT_DEF_ID=#{actDefId}
+    </delete>
+</mapper>

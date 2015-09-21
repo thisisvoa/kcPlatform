@@ -1,0 +1,41 @@
+#top{
+    background:url(main/top_bg.jpg);
+    height:65px;
+    margin:0 auto;
+    padding:0;
+    font-size:12px;}
+
+#top_logo{
+	background:url(main/jw_bg.jpg) no-repeat;float:left;
+	width:594px;
+	height:65px;
+}
+
+#top_left{
+	/*background:url(images/top_left.jpg);*/
+    float:left;
+	width:594px;
+	height:65px;}
+
+#toppiz{
+    float:right;
+	width:400px;
+	height:65px;}
+	
+.huanying{
+    margin-top:8px;
+	margin-right:15px;
+	color:#FFFFFF;
+	float:right;
+	display:inline;
+    height:30px;}
+	
+.anniu{
+	padding-top:13px;
+	padding-right:12px;
+}	
+
+.bb{ float:right;}
+.bb a{display:block; width:80px; height:25px; float:right; display:inline;}
+.bb .xiugai{background:url(main/xiugai.jpg) no-repeat; }
+.bb .tuichu{background:url(main/tuichu.jpg) no-repeat;}

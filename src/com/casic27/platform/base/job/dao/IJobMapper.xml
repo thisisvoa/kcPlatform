@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.casic27.platform.base.job.dao.IJobMapper">
+	<resultMap id="jobMapper" type="com.casic27.platform.base.job.entity.Job"> 
+			<result property="jobId" column="JOB_ID" />  
+			<result property="jobGroupName" column="JOB_GROUP_NAME" />  
+			<result property="jobName" column="JOB_NAME" />  
+			<result property="title" column="TITLE" />  
+			<result property="startTime" column="START_TIME" />  
+			<result property="endTime" column="END_TIME" />  
+			<result property="triggerParam" column="TRIGGER_PARAM" />  
+			<result property="createTime" column="CREATE_TIME" />  
+			<result property="updateTime" column="UPDATE_TIME" />  
+			<result property="lastActiveTime" column="LAST_ACTIVE_TIME" />  
+			<result property="remark" column="REMARK" />  
+			<result property="activeStatus" column="ACTIVE_STATUS" />  
+			<result property="released" column="RELEASED" />  
+	</resultMap>
+	
+	<!--查询(不分页)-->
+	<select id="findJob" parameterType="hashmap" resultMap="jobMapper">
+		SELECT 
+				JOB_ID,
+				JOB_GROUP_NAME,
+				JOB_NAME,
+				TITLE,
+				START_TIME,
+				END_TIME,
+				TRIGGER_PARAM,
+				CREATE_TIME,
+				UPDATE_TIME,
+				LAST_ACTIVE_TIME,
+				REMARK,
+				ACTIVE_STATUS,
+				RELEASED
+		FROM TB_JOB
+		WHERE 1 = 1 
+			<if test="jobGroupName != null and jobGroupName != '' ">
+				AND JOB_GROUP_NAME LIKE '%'||#{jobGroupName}||'%'
+			</if>
+			<if test="jobName != null and jobName != '' ">
+				AND JOB_NAME LIKE '%'||#{jobName}||'%'
+			</if>
+			<if test="title != null and title != '' ">
+				AND TITLE LIKE '%'||#{title}||'%'
+			</if>
+			<if test="activeStatus != null and activeStatus != '' ">
+				AND ACTIVE_STATUS = #{activeStatus}
+			</if>
+			<if test="released != null and released != '' ">
+				AND RELEASED = #{released}
+			</if>
+		ORDER BY UPDATE_TIME
+	</select>
+	
+	<!--查询(分页)-->
+	<select id="findJobPaging" parameterType="hashmap" resultMap="jobMapper">
+		SELECT 
+				JOB_ID,
+				JOB_GROUP_NAME,
+				JOB_NAME,
+				TITLE,
+				START_TIME,
+				END_TIME,
+				TRIGGER_PARAM,
+				CREATE_TIME,
+				UPDATE_TIME,
+				LAST_ACTIVE_TIME,
+				REMARK,
+				ACTIVE_STATUS,
+				RELEASED
+		FROM TB_JOB
+		WHERE 1 = 1 
+			<if test="jobGroupName != null and jobGroupName != '' ">
+				AND JOB_GROUP_NAME LIKE '%'||#{jobGroupName}||'%'
+			</if>
+			<if test="jobName != null and jobName != '' ">
+				AND JOB_NAME LIKE '%'||#{jobName}||'%'
+			</if>
+			<if test="title != null and title != '' ">
+				AND TITLE LIKE '%'||#{title}||'%'
+			</if>
+			<if test="activeStatus != null and activeStatus != '' ">
+				AND ACTIVE_STATUS = #{activeStatus}
+			</if>
+			<if test="released != null and released != '' ">
+				AND RELEASED = #{released}
+			</if>
+		ORDER BY UPDATE_TIME
+	</select>
+	
+	<!--根据Id进行查询-->
+	<select id="getJobById" parameterType="String" resultMap="jobMapper">
+		SELECT 
+				JOB_ID,
+				JOB_GROUP_NAME,
+				JOB_NAME,
+				TITLE,
+				START_TIME,
+				END_TIME,
+				TRIGGER_PARAM,
+				CREATE_TIME,
+				UPDATE_TIME,
+				LAST_ACTIVE_TIME,
+				REMARK,
+				ACTIVE_STATUS,
+				RELEASED
+		FROM TB_JOB
+		WHERE JOB_ID=#{id}
+	</select>
+	
+	<!-- 根据任务分组及任务名称获取对应的Job -->
+	<select id="getJobByFullName" parameterType="com.casic27.platform.base.job.entity.Job" resultMap="jobMapper">
+		SELECT 
+				JOB_ID,
+				JOB_GROUP_NAME,
+				JOB_NAME,
+				TITLE,
+				START_TIME,
+				END_TIME,
+				TRIGGER_PARAM,
+				CREATE_TIME,
+				UPDATE_TIME,
+				LAST_ACTIVE_TIME,
+				REMARK,
+				ACTIVE_STATUS,
+				RELEASED
+		FROM TB_JOB
+		WHERE JOB_GROUP_NAME=#{jobGroupName}
+			AND JOB_NAME=#{jobName}
+	</select>
+	
+	<!--新增-->
+	<insert id="addJob" parameterType="com.casic27.platform.base.job.entity.Job">
+		INSERT INTO TB_JOB(
+				JOB_ID,
+				JOB_GROUP_NAME,
+				JOB_NAME,
+				TITLE,
+				START_TIME,
+				END_TIME,
+				TRIGGER_PARAM,
+				CREATE_TIME,
+				UPDATE_TIME,
+				LAST_ACTIVE_TIME,
+				REMARK,
+				ACTIVE_STATUS,
+				RELEASED
+		 )
+		values(
+				#{jobId,jdbcType=VARCHAR},
+				#{jobGroupName,jdbcType=VARCHAR},
+				#{jobName,jdbcType=VARCHAR},
+				#{title,jdbcType=VARCHAR},
+				#{startTime,jdbcType=VARCHAR},
+				#{endTime,jdbcType=VARCHAR},
+				#{triggerParam,jdbcType=VARCHAR},
+				SYSDATE,
+				SYSDATE,
+				#{lastActiveTime,jdbcType=DATE},
+				#{remark,jdbcType=VARCHAR},
+				#{activeStatus,jdbcType=VARCHAR},
+				#{released,jdbcType=VARCHAR}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateJob" parameterType="com.casic27.platform.base.job.entity.Job">
+		UPDATE TB_JOB SET
+			JOB_GROUP_NAME=#{jobGroupName,jdbcType=VARCHAR},
+			JOB_NAME=#{jobName,jdbcType=VARCHAR},
+			TITLE=#{title,jdbcType=VARCHAR},
+			START_TIME=#{startTime,jdbcType=VARCHAR},
+			END_TIME=#{endTime,jdbcType=VARCHAR},
+			TRIGGER_PARAM=#{triggerParam,jdbcType=VARCHAR},
+			UPDATE_TIME=SYSDATE,
+			REMARK=#{remark,jdbcType=VARCHAR},
+			ACTIVE_STATUS=#{activeStatus,jdbcType=VARCHAR},
+			RELEASED=#{released,jdbcType=VARCHAR}
+			WHERE JOB_ID=#{jobId}
+    </update>
+    
+    <update id="updateLastActiveTime" parameterType="com.casic27.platform.base.job.entity.Job">
+    	UPDATE TB_JOB SET
+    		LAST_ACTIVE_TIME=SYSDATE
+    		WHERE JOB_NAME=#{jobName} 
+    			AND JOB_GROUP_NAME=#{jobGroupName}
+    </update>
+	<!-- 物理删除 -->
+    <delete id="deleteJob" parameterType="String">
+     	DELETE FROM TB_JOB WHERE JOB_ID=#{id}
+    </delete>
+    
+    <!-- 根据条件统计记录数 -->
+	<select id="countJob" parameterType="com.casic27.platform.base.job.entity.Job" resultType="int">
+    	SELECT COUNT(1) FROM TB_JOB WHERE 1=1
+    	<if test="jobId != null and jobId != ''">
+    		AND	JOB_ID != #{jobId}
+    	</if>
+    	<if test="title != null and title != ''">
+    		AND	TITLE = #{title}
+    	</if>
+    	<if test="jobName!=null and jobName!=''">
+    		AND	JOB_NAME = #{jobName}
+    	</if>
+    	<if test="groupName!=null and groupName!=''">
+    		AND	JOB_GROUP_NAME = #{jobGroupName}
+    	</if>
+    </select>
+    
+    <select id="getCurrDbDate" resultType="java.util.Date">
+    	SELECT SYSDATE FROM DUAL
+    </select>
+</mapper>

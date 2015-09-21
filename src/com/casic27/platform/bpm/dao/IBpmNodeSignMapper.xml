@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.casic27.platform.bpm.dao.IBpmNodeSignMapper">
+	<resultMap id="nodeSignMapper" type="com.casic27.platform.bpm.entity.BpmNodeSign"> 
+			<result property="signId" column="SIGN_ID" />  
+			<result property="actDefId" column="ACT_DEF_ID" />  
+			<result property="nodeId" column="NODE_ID" />  
+			<result property="voteAmount" column="VOTE_AMOUNT" />  
+			<result property="decideType" column="DECIDE_TYPE" />  
+			<result property="voteType" column="VOTE_TYPE" />  
+			<result property="flowMode" column="FLOW_MODE" />  
+	</resultMap>
+	<!--查询(不分页)-->
+	<select id="findNodeSign" parameterType="hashmap" resultMap="nodeSignMapper">
+		SELECT 
+				SIGN_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				VOTE_AMOUNT,
+				DECIDE_TYPE,
+				VOTE_TYPE,
+				FLOW_MODE
+		FROM BPM_NODE_SIGN
+		WHERE 1 = 1 
+			<if test="actDefId!=null and actDefId!=''">
+				AND ACT_DEF_ID = #{actDefId}
+			</if>
+			<if test="nodeId!=null and nodeId!=''">
+				AND NODE_ID = #{nodeId}
+			</if>
+	</select>
+	
+	<!--根据Id进行查询-->
+	<select id="getNodeSignById" parameterType="String" resultMap="nodeSignMapper">
+		SELECT 
+				SIGN_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				VOTE_AMOUNT,
+				DECIDE_TYPE,
+				VOTE_TYPE,
+				FLOW_MODE
+		FROM BPM_NODE_SIGN
+		WHERE SIGN_ID=#{id}
+	</select>
+	
+	<!--新增-->
+	<insert id="addNodeSign" parameterType="com.casic27.platform.bpm.entity.BpmNodeSign">
+		INSERT INTO BPM_NODE_SIGN(
+				SIGN_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				VOTE_AMOUNT,
+				DECIDE_TYPE,
+				VOTE_TYPE,
+				FLOW_MODE
+		 )
+		values(
+				#{signId,jdbcType=VARCHAR},
+				#{actDefId,jdbcType=VARCHAR},
+				#{nodeId,jdbcType=VARCHAR},
+				#{voteAmount,jdbcType=INTEGER},
+				#{decideType,jdbcType=NUMERIC},
+				#{voteType,jdbcType=NUMERIC},
+				#{flowMode,jdbcType=NUMERIC}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateNodeSign" parameterType="com.casic27.platform.bpm.entity.BpmNodeSign">
+		UPDATE BPM_NODE_SIGN SET
+			ACT_DEF_ID=#{actDefId,jdbcType=VARCHAR},
+			NODE_ID=#{nodeId,jdbcType=VARCHAR},
+			VOTE_AMOUNT=#{voteAmount,jdbcType=INTEGER},
+			DECIDE_TYPE=#{decideType,jdbcType=NUMERIC},
+			VOTE_TYPE=#{voteType,jdbcType=NUMERIC},
+			FLOW_MODE=#{flowMode,jdbcType=NUMERIC}
+		WHERE SIGN_ID=#{signId}
+    </update>
+    
+	<!-- 物理删除 -->
+    <delete id="deleteNodeSign" parameterType="String">
+     	DELETE FROM BPM_NODE_SIGN WHERE SIGN_ID=#{id}
+    </delete>
+    
+    <!--根据流程定义ID和节点ID查询会签设置-->
+	<select id="getByDefIdAndNodeId" parameterType="String" resultMap="nodeSignMapper">
+		SELECT 
+				SIGN_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				VOTE_AMOUNT,
+				DECIDE_TYPE,
+				VOTE_TYPE,
+				FLOW_MODE
+		FROM BPM_NODE_SIGN
+		WHERE ACT_DEF_ID=#{actDefId} AND NODE_ID=#{nodeId}
+	</select>
+	
+	<delete id="delByActDefId" parameterType="String">
+     	DELETE FROM BPM_NODE_SIGN WHERE ACT_DEF_ID=#{actDefId}
+    </delete>
+</mapper>

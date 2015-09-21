@@ -1,0 +1,59 @@
+*{
+	margin:0px;
+	padding:0px;
+	scrollbar-face-color:#e2eafa;
+	scrollbar-highlight-color:#FFF;
+	scrollbar-shadow-color:#b1c3d5;
+	scrollbar-3dlight-color:#b1c3d5;
+	scrollbar-arrow-color:#7080a0;
+	scrollbar-track-color:#EEE;
+	scrollbar-darkshadow-color:#DEF;
+}
+
+body{
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-size:12px;
+	position:relative;
+}
+.formTable{
+    border-collapse: collapse;
+    width: 100%;
+    position:relative;
+}
+.formTable td{
+	color: #333333;
+    height: 24px;
+    border: medium none;
+    padding: 3px 1px 3px 1px;
+}
+
+.formTable .label{
+	text-align: right;
+}
+.star{
+	color:red;
+}
+
+.tableView {
+    background-color: White;
+    border-collapse: collapse;
+    width: 100%;
+    border-top: 1px solid #8DC2E3;
+    border-left: 1px solid #8DC2E3;
+}
+
+.tableView td{
+	color: #333333;
+    height: 24px;
+    padding: 2px;
+    border-bottom: 1px solid #8DC2E3;
+    border-right: 1px solid #8DC2E3;
+    border-top: none;
+    border-left: none;
+}
+
+.tableView .label{
+	text-align: right;
+	background-color:#EDF6FC;
+	width:100px;
+}

@@ -1,0 +1,38 @@
+.spinner{
+	display:inline-block;
+	white-space:nowrap;
+	font-size:12px;
+	margin:0;
+	padding:0;
+	border:1px solid #A4BED4;
+}
+.spinner-text{
+	font-size:12px;
+	border:0px;
+	line-height:20px;
+	height:16px;
+	padding:0px;
+	*height:14px;
+	*line-height:14px;
+	_height:14px;
+	_line-height:14px;
+}
+.spinner-arrow{
+	display:inline-block;
+	vertical-align:top;
+	margin:0;
+	padding:0;
+}
+.spinner-arrow-up,.spinner-arrow-down{
+	display:block;
+	background:url("images/img.gif") no-repeat scroll -32px -16px transparent;
+	font-size:1px;
+	width:13px;
+	height:8px;
+}
+.spinner-arrow-down{
+	background:url("images/img.gif") no-repeat scroll -48px -16px transparent;
+}
+.spinner-arrow-hover{
+	background-color:#ECF9F9;
+}

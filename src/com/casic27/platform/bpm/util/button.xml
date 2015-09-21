@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpm>
+	<buttons>
+		<!-- operatortype表示按钮的操作类型 ； script表示是否可添加脚本， 0不添加，1添加；  text为按钮名称 ； init表示是否默认初始化，0不初始化，1初始化  -->
+		<!-- type=0代表起始节点 -->
+		<button start="1" first="1" common="0" sign="0" operatortype="1" script="1" init="1" text="提交" />
+		<button start="1" first="1" common="1" sign="0" operatortype="2" script="1" init="1" text="保存表单" />
+		<button start="0" first="0" common="1" sign="0" operatortype="3" script="1" init="1" text="同意" />
+		<button start="0" first="0" common="0" sign="0" operatortype="4" script="1" init="1" text="反对" />
+		<button start="0" first="0" common="1" sign="0" operatortype="5" script="1" init="1" text="驳回" />
+		<button start="0" first="0" common="1" sign="0" operatortype="6" script="1" init="1" text="驳回到发起人" />
+		<button start="1" first="1" common="1" sign="0" operatortype="7" script="0" init="1" text="流程图" />
+		<button start="0" first="1" common="1" sign="0" operatortype="8" script="0" init="1" text="审批历史" />
+		<button start="0" first="0" common="0" sign="1" operatortype="9" script="1" init="1" text="弃权" />
+		<button start="0" first="0" common="0" sign="1" operatortype="10" script="1" init="1" text="补签" />
+	</buttons>
+</bpm>

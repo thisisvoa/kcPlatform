@@ -1,0 +1,273 @@
+.Uploader {
+	font: 12px Arial, Helvetica, sans-serif;
+	overflow: hidden;
+	margin: 0px;
+	background-color:#EFF5FB;
+	position: relative;
+	padding: 1px;
+}
+
+.Uploader .total_bg {
+	width: 100%;
+	height: 100%;
+}
+
+.Uploader .oper {
+	height: 20px;
+	margin: 0px auto;
+	padding-top: 2px;
+	overflow: hidden;
+}
+
+.Uploader .oper .upload_btn {
+	float: left;
+	height: 20px;
+	width: 68px;
+	cursor: pointer;
+	position: relative;
+}
+
+.Uploader .oper .upload_btn object {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+}
+
+.Uploader .oper .upload_btn div {
+	height: 20px;
+	float: left;
+}
+
+.Uploader .oper .upload_btn .left {
+	background: url(images/bg_upload_btn.gif) repeat-x 0px 0px;
+	width: 4px;
+}
+
+.Uploader .oper .upload_btn .right {
+	background: url(images/bg_upload_btn.gif) repeat-x 0px -40px;
+	width: 4px;
+	float: right;
+}
+
+.Uploader .oper .upload_btn div b {
+	display: block;
+	font-weight: normal;
+	text-align: center;
+	text-indent: 16px;
+	clear: both;
+	line-height: 20px;
+	line-height: 20px;
+	height: 20px;
+	width: 100%;
+	overflow: hidden;
+}
+
+.Uploader .oper .upload_btn a:link {
+    cursor: pointer;
+    outline: medium none;
+    text-decoration: none;
+    color: #1E5494;
+}
+
+
+.Uploader .oper .upload_btn a:visited{
+    color: #1E5494;
+   text-decoration: none;
+}
+.Uploader .oper .upload_btn a:hover{
+    color: #1E5494;
+    text-decoration: underline;
+}
+.Uploader .oper .upload_btn a:active{
+    color: #1E5494;
+    text-decoration: underline;
+}
+
+
+
+.Uploader .oper .add {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -511px;
+}
+
+.Uploader .oper .upload {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -18px;
+}
+
+.Uploader .oper .clean {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -36px;
+}
+
+.Uploader .oper .cancel {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -159px;
+}
+
+.Uploader .content {
+	color: #666666;
+	background-color: #E0ECF9;
+	overflow: auto;
+	border-top: #99BBE8 1px dashed;
+	overflow-x: hidden;
+}
+
+.Uploader .content li {
+	list-style: none;
+	list-style-position: outside;
+	display: block;
+	border-bottom: #999999 1px dashed;
+	height: 28px;
+	*height:26px;
+	_height:26px;
+	overflow: hidden;
+}
+
+.Uploader .content li b {
+	display: block;
+	width: 16px;
+	height: 24px;
+	margin: 3px;
+	float: left
+}
+
+.Uploader .content li .book {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -336px;
+}
+
+.Uploader .content li .zip {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -446px;
+}
+
+.Uploader .content li .swf {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -248px;
+}
+
+.Uploader .content li .dvd {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -313px;
+}
+
+.Uploader .content li .doc {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -424px;
+}
+
+.Uploader .content li .ppt {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -402px;
+}
+
+.Uploader .content li .xls {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -291px;
+}
+
+.Uploader .content li .exe {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -380px;
+}
+
+.Uploader .content li .scr {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -182px;
+}
+
+.Uploader .content li .img {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -204px;
+}
+
+.Uploader .content li .htm {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -270px;
+}
+
+.Uploader .content li .txt {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -226px;
+}
+
+.Uploader .content li .mp3 {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -359px;
+}
+
+.Uploader .content li .oth {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -469px;
+}
+
+.Uploader .content li .cfg {
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -492px;
+}
+
+.Uploader .content li .labe {
+	float: left;
+	width: 142px;
+	padding-top:4px;
+}
+
+.Uploader .content li .bar {
+	width: 140px;
+	height: 6px;
+	overflow: hidden;
+	background: url(images/bg_upload_btn.gif) repeat-x 0px -61px;
+	float: left;
+	border: #A8A8B0 1px solid;
+}
+
+.Uploader .content li .bar div {
+	background: #E0ECF9;
+	width: 100%;
+	height: 100%;
+	float: right;
+}
+
+.Uploader .content li .unbar {
+	width: 142px;
+	height: 8px;
+	background-color: #E0ECF9
+}
+
+.Uploader .content li .file {
+	height: 14px;
+	line-height: 14px;
+	margin: 2px 0px;
+	float: left;
+	overflow: hidden
+}
+
+.Uploader .content li span {
+	display: block;
+	color: #999999;
+	float: left;
+	height: 14px;
+	margin-top: 14px;
+}
+
+.Uploader .content li .op_up {
+	float: right;
+	margin: 3px 1px;
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -93px;
+	cursor: pointer;
+	display: none
+}
+
+.Uploader .content li .op_del {
+	float: right;
+	margin: 3px 1px;
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -73px;
+	cursor: pointer;
+	display: none
+}
+
+.Uploader .content li .op_ok {
+	float: right;
+	margin: 3px 1px;
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -113px;
+	cursor: pointer;
+	display: none
+}
+
+.Uploader .content li .op_no {
+	float: right;
+	margin: 3px 1px;
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -134px;
+	cursor: pointer;
+	display: none
+}
+
+.Uploader .content li .op_fail {
+	float: right;
+	margin: 3px 1px;
+	background: url(images/icon_upload_btn.gif) no-repeat 0px -55px;
+	cursor: pointer;
+	display: none
+}

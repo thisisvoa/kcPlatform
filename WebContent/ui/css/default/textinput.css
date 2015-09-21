@@ -1,0 +1,38 @@
+.textinput {
+	width: 132px;
+	font-size: 12px;
+	background: url(images/textinput_bg.jpg) repeat-x scroll left top #fff;
+	border: 1px solid #ccc;
+	color: #369;
+	height: 20px;
+}
+
+.textinput_hover {
+	background: url(images/textinput_bg.jpg) repeat-x scroll left top #fff;
+	border: 1px solid #96b5fa;
+}
+
+.textinput_click {
+	background: url(images/textinput_bg.jpg) repeat-x scroll left top transparent;
+	border: 1px solid #fbd45c;
+}
+
+.watermark {
+	position:absolute;
+    color: #999999 !important;
+    left:0px;
+    top:0px;
+    padding-top:2px;
+    _padding-top:3px;
+    *padding-top:3px
+}
+
+.text_clear_button {
+    background: url("images/clear_cross.png") no-repeat scroll left top transparent;
+    cursor: pointer;
+    height: 11px;
+    position: absolute;
+    width: 11px;
+    top:5px;
+    right:3px;
+}

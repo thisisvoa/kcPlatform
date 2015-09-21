@@ -1,0 +1,5 @@
+.toolbar {
+	background: url("images/tab-strip-bg.gif") repeat-x scroll 0 0 transparent;
+	border:1px solid #99BBE8;
+	padding:2px;
+}

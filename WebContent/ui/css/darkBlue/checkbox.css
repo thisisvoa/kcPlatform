@@ -1,0 +1,32 @@
+.checkwarper{
+	display:inline-block;
+	width:13px;
+	height:13px;
+	background:url("images/checkbox.gif") no-repeat scroll 0 0 transparent;
+}
+
+.checkwarper-hover{
+	background-position:-13px 0;
+}
+.checkwarper-click{
+	background-position:-26px 0;
+}
+
+.checkwarper-checked{
+	background-position:0 -13px;
+}
+
+.checkwarper-checked-hover{
+	background-position:-13px -13px;
+}
+
+.checkwarper-checked-click{
+	background-position:-26px -13px;
+}
+
+.checkwarper-disable{
+	background-position:-39px 0;
+}
+.checkwarper-checked-disable{
+	background-position:-39px -13px;
+}

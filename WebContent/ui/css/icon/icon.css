@@ -1,0 +1,177 @@
+.icon-blank{
+	background:url('images/blank.gif') no-repeat;
+}
+.icon-add{
+	background:url('images/add.gif') no-repeat;
+}
+.icon-attach{
+	background:url('images/attach.gif') no-repeat;
+}
+.icon-edit{
+	background:url('images/pencil.gif') no-repeat;
+}
+.icon-remove{
+	background:url('images/delete.gif') no-repeat;
+}
+.icon-close{
+	background:url('images/cancel.gif') no-repeat;
+}
+.icon-view{
+	background:url('images/view2.gif') no-repeat;
+}
+.icon-save{
+	background:url('images/filesave.gif') no-repeat;
+}
+.icon-cut{
+	background:url('images/cut.gif') no-repeat;
+}
+.icon-ok{
+	background:url('images/ok.gif') no-repeat;
+}
+.icon-no{
+	background:url('images/no.gif') no-repeat;
+}
+.icon-cancel{
+	background:url('images/cancel.gif') no-repeat;
+}
+.icon-reload{
+	background:url('images/reload.gif') no-repeat;
+}
+.icon-search{
+	background:url('images/search.gif') no-repeat;
+}
+.icon-print{
+	background:url('images/print.gif') no-repeat;
+}
+.icon-help{
+	background:url('images/help.gif') no-repeat;
+}
+.icon-undo{
+	background:url('images/undo.gif') no-repeat;
+}
+.icon-redo{
+	background:url('images/redo.gif') no-repeat;
+}
+.icon-back{
+	background:url('images/back.gif') no-repeat;
+}
+.icon-sum{
+	background:url('images/sum.gif') no-repeat;
+}
+.icon-tip{
+	background:url('images/tip.gif') no-repeat;
+}
+.icon-key{
+	background:url('images/key.gif') no-repeat;
+}
+.icon-mini-add{
+	background:url('images/mini_add.gif') no-repeat 2px 2px;
+}
+.icon-mini-edit{
+	background:url('images/mini_edit.gif') no-repeat 2px 2px;
+}
+.icon-mini-refresh{
+	background:url('images/mini_refresh.gif') no-repeat 3px 2px;
+}
+.icon-dialog{
+	background:url('images/icon_dialog.gif') no-repeat;
+}
+.icon-tab{
+	background:url('images/list.gif') no-repeat
+}
+.icon-home{
+	background:url('images/home.gif') no-repeat
+}
+.icon-user{
+	background:url('images/user.gif') no-repeat
+}
+.icon-user-off{
+	background:url('images/user_off.gif') no-repeat
+}
+.icon_xxzy{
+	background-image: url("images/folder.gif");
+    background-repeat: no-repeat;
+    display: block;
+    height: 18px;
+    left: 2px;
+    position: absolute;
+    top: 3px;
+    width: 18px;
+}
+.icon-qbzc{
+	background:url('images/dhtb.gif') no-repeat;
+}
+
+.icon-start{
+	background:url('images/start.gif') no-repeat;
+}
+
+.icon-stop{
+	background:url('images/stop.gif') no-repeat;
+}
+
+.icon-job-relase{
+	background:url('images/job-relase.gif') no-repeat;
+}
+
+.icon-swith{
+	background:url('images/swith.gif') no-repeat;
+}
+.icon-img{
+	background:url('images/img.gif') no-repeat;
+}
+.icon-xls{
+	background:url('images/xls.gif') no-repeat;
+}
+.icon-expand{
+	background:url('images/swith.gif') no-repeat;
+}
+.icon-expand{
+	background:url('images/folder_open.gif') no-repeat;
+}
+.icon-close{
+	background:url('images/folder.gif') no-repeat;
+}
+.icon-flowDesign{
+	background:url('images/flow_design.png') no-repeat;
+}
+.icon-upload{
+	background:url('images/upload.png') no-repeat;
+}
+.icon-refresh{
+	background:url('images/reload.png') no-repeat;
+}
+.icon-code{
+	background:url('images/code.gif') no-repeat;
+}
+.icon-moveup{
+	background:url('images/moveup.png') no-repeat;
+}
+.icon-movedown{
+	background:url('images/movedown.png') no-repeat;
+}
+.icon-run{
+	background:url('images/run.png') no-repeat;
+}
+.icon-message{
+	background:url('images/message.gif') no-repeat;
+}
+.icon-giveup{
+	background:url('images/giveup.gif') no-repeat;
+}
+.icon-giveup{
+	background:url('images/giveup.gif') no-repeat;
+}
+.icon-reject{
+	background:url('images/reject.gif') no-repeat;
+}
+.icon-rejectToStart{
+	background:url('images/rejectToStart.gif') no-repeat;
+}
+.icon-userAdd{
+	background:url('images/user_add.gif') no-repeat;
+}
+.icon-detail{
+	background:url('images/icons_detail.png') no-repeat;
+}
+

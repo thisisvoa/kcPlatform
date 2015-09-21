@@ -1,0 +1,21 @@
+.textarea {
+	background: url("images/textarea_bg.jpg") repeat-x scroll left top #FFFFFF;
+	border: 1px solid #CCCCCC;
+	color:#336699;
+	font-size: 12px;
+	height: 80px;
+	overflow: auto;
+	width: 250px;
+}
+
+.textarea_hover {
+	border:1px solid #96b5fa;
+}
+
+.textarea_click {
+	border: 1px solid #fbd45c;
+}
+
+.maxNum {
+    color: black;
+}
