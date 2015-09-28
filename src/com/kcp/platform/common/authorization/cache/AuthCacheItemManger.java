@@ -13,7 +13,6 @@ import com.kcp.platform.base.cache.itemmanager.AbstractCacheItemManager;
  * </pre>
  * <pre>
  * </pre>
- * @author 林斌树(linbinshu@kcp.com)
  */
 @Component("authCacheItemManger")
 public class AuthCacheItemManger extends AbstractCacheItemManager {

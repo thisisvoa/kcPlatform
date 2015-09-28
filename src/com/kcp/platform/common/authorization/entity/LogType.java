@@ -6,7 +6,6 @@ package com.kcp.platform.common.authorization.entity;
  * </pre>
  * <pre>
  * </pre>
- * @author 林斌树(linbinshu@kcp.com)
  */
 public enum LogType {
 	/**

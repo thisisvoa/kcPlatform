@@ -4,7 +4,6 @@ package com.kcp.platform.core.exception;
 *
 *类描述：若某个业务操作出异常时候，在Controller不进行拦截，直接抛出异常
 * 
-*@Author： 林斌树(linbinshu@kcp.com)
 *@Version：1.0
 */
 public class NotInterceptException extends BaseException {

@@ -91,8 +91,6 @@ public class SysLogInterceptor {
 	/**
 	 * 方法日志注解上下文对象，用于解析缓存注解中定义的信息，生成缓存KEY
 	 * 
-	 * @author 林斌树 (linbinshu@kcp.com)
-	 * @version Revision: 1.00 Date: Nov 23, 2011
 	 */
 	protected class LogOperationContext {
 		

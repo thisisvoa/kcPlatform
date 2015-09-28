@@ -1,7 +1,6 @@
 package com.kcp.platform.common.authorization.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -16,7 +15,6 @@ import com.kcp.platform.common.role.entity.Role;
  * </pre>
  * <pre>
  * </pre>
- * @author 林斌树(linbinshu@kcp.com)
  */
 @Repository
 public interface IAuthoriztationMapper {

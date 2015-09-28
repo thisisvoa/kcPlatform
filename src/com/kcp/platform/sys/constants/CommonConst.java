@@ -13,27 +13,27 @@ public class CommonConst {
 	/**
      * 登陆用户信息保存在session中的key
      */
-    public static final String SESSION_USER_KEY = "$casic_user$";
+    public static final String SESSION_USER_KEY = "$kcp_user$";
     
     /**
      * 登陆用户部门信息保存在session中的key
      */
-    public static final String SESSION_ORG_KEY = "$casic_org$";
+    public static final String SESSION_ORG_KEY = "$kcp_org$";
     
     /**
      * 登录客户端IP
      */
-    public static final String SESSION_REMOTE_IP_KEY = "$casic_clientIp$";
+    public static final String SESSION_REMOTE_IP_KEY = "$kcp_clientIp$";
     
     /**
      * 登录客户端IP
      */
-    public static final String SESSION_ID = "$casic_sessionId$";
+    public static final String SESSION_ID = "$kcp_sessionId$";
     
     /**
      * 当前登录用户角色
      */
-    public static final String SESSION_ROLE_LIST_KEY = "$casic_roleList$";
+    public static final String SESSION_ROLE_LIST_KEY = "$kcp_roleList$";
     
     public static final String AJAX_REQUEST_FLAG = "_ajax_request_flag_";
     

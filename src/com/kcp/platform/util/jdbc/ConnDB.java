@@ -21,7 +21,6 @@ import com.kcp.platform.util.jdbc.dbType.Oracle;
  * 
  * 类描述：
  * 
- * @Author： 宗斌(zongbin@kcp.com)
  * @Version：1.0
  */
 public class ConnDB

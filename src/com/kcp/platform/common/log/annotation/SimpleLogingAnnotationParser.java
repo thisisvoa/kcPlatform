@@ -12,7 +12,6 @@ import com.kcp.platform.common.log.interceptor.MethodSysLogDefinition;
  *<pre>类描述：</pre><br>
  *<pre>
  *</pre> 
- *@Author： 林斌树(linbinshu@kcp.com)
  *@Version：1.0
  */
 @SuppressWarnings("serial")

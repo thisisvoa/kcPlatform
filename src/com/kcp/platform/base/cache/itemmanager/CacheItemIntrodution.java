@@ -1,26 +1,8 @@
-/**
- * @(#)com.kcp.platform.base.cache.itemmanager.CacheItemIntrodution.java
- * 版权声明 亿力科技, 版权所有 违者必究
- *
- *<br> Copyright:： Copyright (c) 2011
- *<br> Company： 亿力科技
- *<br> Author： 林斌树(lin_binshu@sgcc.com.cn)
- *<br> Date：Dec 5, 2011
- *<br> Version：3.0
- *————————————————————————————————————
- *修改记录
- *    修改者：
- *    修改时间：
- *    修改原因：
- *—————————————————————————————————————
- */
 package com.kcp.platform.base.cache.itemmanager;
 
 /**
  * 缓存项描述信息
  * 
- * @author 林斌树 (linbinshu@kcp.com)
- * @version Revision: 1.00 Date: Dec 5, 2011
  */
 public interface CacheItemIntrodution {
 	/**

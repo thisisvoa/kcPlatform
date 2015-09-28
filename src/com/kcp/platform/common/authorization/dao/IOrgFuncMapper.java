@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
  * </pre>
  * <pre>
  * </pre>
- * @author 林斌树(linbinshu@kcp.com)
  */
 @Repository
 public interface IOrgFuncMapper {

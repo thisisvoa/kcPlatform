@@ -7,7 +7,6 @@ import java.util.Map;
  *
  *类描述：
  * 
- *@Author： 宗斌(zongbin@kcp.com)
  *@Version：1.0
  */
 public class CollectionUtils {

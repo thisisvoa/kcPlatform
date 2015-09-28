@@ -6,7 +6,6 @@ import net.sf.json.JSONObject;
  *
  *类描述：
  * 
- *@Author： 宗斌(zongbin@kcp.com)
  *@Version：1.0
  */
 public class DBUrl

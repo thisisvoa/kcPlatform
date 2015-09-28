@@ -9,7 +9,6 @@ import java.util.List;
  *
  *类描述：
  * 实现Orderable接口的比较器
- *@Author： 林斌树(linbinshu@kcp.com)
  *@Version：1.0
  */
 public class OrderableComparator implements Comparator {

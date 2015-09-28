@@ -37,7 +37,6 @@ import com.kcp.platform.util.StringUtils;
  * </pre>
  * <pre>
  * </pre>
- * @author 林斌树(linbinshu@kcp.com)
  */
 @Controller
 @RequestMapping("/userFunc")

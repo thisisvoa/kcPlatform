@@ -15,7 +15,6 @@ import com.kcp.platform.common.log.annotation.OperateLogType;
  * </pre>
  * <pre>
  * </pre>
- * @author 林斌树(linbinshu@kcp.com)
  */
 @Repository
 public interface IUserRoleMapper {

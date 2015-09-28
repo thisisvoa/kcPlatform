@@ -10,7 +10,6 @@ import com.kcp.platform.util.StringUtils;
  * </pre>
  * <pre>
  * </pre>
- * @author 林斌树(linbinshu@kcp.com)
  */
 public class DefaultMenuTreeHTMLBuilder implements MenuTreeHTMLBuilder {
 	/**
