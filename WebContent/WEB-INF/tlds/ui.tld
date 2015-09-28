@@ -8,7 +8,7 @@
 	<!--  LayOut(布局)-->
 	<tag>
 		<name>LayoutContainer</name>
-		<tagclass>com.casic27.platform.ui.layout.LayoutContainerTag</tagclass>
+		<tagclass>com.kcp.platform.ui.layout.LayoutContainerTag</tagclass>
 		<attribute>
 			<name>id</name>
 			<required>false</required>
@@ -27,7 +27,7 @@
 	</tag>
 	<tag>
 		<name>Layout</name>
-		<tagclass>com.casic27.platform.ui.layout.LayoutTag</tagclass>
+		<tagclass>com.kcp.platform.ui.layout.LayoutTag</tagclass>
 		<attribute>
 			<name>id</name>
 			<required>false</required>
@@ -83,7 +83,7 @@
 	<!--  Panel(布局)-->
 	<tag>
 		<name>Panel</name>
-		<tagclass>com.casic27.platform.ui.layout.PanelTag</tagclass>
+		<tagclass>com.kcp.platform.ui.layout.PanelTag</tagclass>
 		<attribute>
 			<name>id</name>
 			<required>false</required>
@@ -201,7 +201,7 @@
 	<!--  Tab(布局)-->
 	<tag>
 		<name>TabNavigator</name>
-		<tagclass>com.casic27.platform.ui.nav.TabNavigatorTag</tagclass>
+		<tagclass>com.kcp.platform.ui.nav.TabNavigatorTag</tagclass>
 		<attribute>
 			<name>id</name>
 			<required>false</required>
@@ -246,7 +246,7 @@
 	
 	<tag>
 		<name>Tab</name>
-		<tagclass>com.casic27.platform.ui.nav.TabTag</tagclass>
+		<tagclass>com.kcp.platform.ui.nav.TabTag</tagclass>
 		<attribute>
 			<name>id</name>
 			<required>true</required>
@@ -312,7 +312,7 @@
 	<!-- Combobox -->
 	<tag>
 		<name>Combobox</name>
-		<tagclass>com.casic27.platform.ui.form.combobox.ComboboxTag</tagclass>
+		<tagclass>com.kcp.platform.ui.form.combobox.ComboboxTag</tagclass>
 		<attribute>
 			<name>id</name>
 			<required>true</required>
@@ -412,7 +412,7 @@
 	
 	<tag>
 		<name>Option</name>
-		<tagclass>com.casic27.platform.ui.form.combobox.OptionTag</tagclass>
+		<tagclass>com.kcp.platform.ui.form.combobox.OptionTag</tagclass>
 		<attribute>
 			<name>value</name>
 			<required>true</required>
@@ -429,7 +429,7 @@
 	<!-- Grid -->
 	<tag>
 		<name>Grid</name>
-		<tagclass>com.casic27.platform.ui.list.grid.GridTag</tagclass>
+		<tagclass>com.kcp.platform.ui.list.grid.GridTag</tagclass>
 		<attribute>
 			<name>id</name>
 			<required>true</required>
@@ -650,7 +650,7 @@
 	
 	<tag>
 		<name>Column</name>
-		<tagclass>com.casic27.platform.ui.list.grid.ColumnTag</tagclass>
+		<tagclass>com.kcp.platform.ui.list.grid.ColumnTag</tagclass>
 		<attribute>
 			<name>header</name>
 			<required>false</required>

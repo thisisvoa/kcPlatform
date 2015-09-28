@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcp.platform.common.user.dao.IUserGroupMapper">
+	<resultMap id="userGroupMap" type="com.kcp.platform.common.user.entity.UserGroup">
+		<id property="zjid" column="ZJID" />
+		<result property="yhzmc" column="YHZMC" />  
+		<result property="yhzlx" column="YHZLX" /> 
+		<result property="yhzjb" column="YHZJB" /> 
+		<result property="sybz" column="SYBZ" /> 
+		<result property="bz" column="BZ" /> 
+		<result property="cjyh" column="CJYH" /> 
+		<result property="gxyh" column="GXYH" /> 
+		<result property="jlxzsj" column="JLXZSJ" /> 
+		<result property="jlxgsj" column="JLXGSJ" /> 
+		<result property="jlscsj" column="JLSCSJ" /> 
+		<result property="jlyxzt" column="JLYXZT" /> 
+	</resultMap>
+
+	<resultMap id="userMap" type="com.kcp.platform.common.user.entity.User">
+		<id property="zjid" column="ZJID" />
+		<result property="yhmc" column="YHMC" />  
+		<result property="yhdlzh" column="YHDLZH" /> 
+		<result property="yhdlmm" column="YHDLMM" /> 
+		<result property="ssdw_zjid" column="SSDW_ZJID" /> 
+		<result property="lxdh" column="LXDH" /> 
+		<result property="yddh" column="YDDH" /> 
+		<result property="dzyx" column="DZYX" /> 
+		<result property="yhlx" column="YHLX" /> 
+		<result property="yhjb" column="YHJB" /> 
+		<result property="sybz" column="SYBZ" /> 
+		<result property="bz" column="BZ" /> 
+		<result property="cjyh" column="CJYH" /> 
+		<result property="gxyh" column="GXYH" /> 
+		<result property="jlxzsj" column="JLXZSJ" /> 
+		<result property="jlxgsj" column="JLXGSJ" /> 
+		<result property="jlscsj" column="JLSCSJ" /> 
+		<result property="jlyxzt" column="JLYXZT" />
+	</resultMap>
+	
+	<update id="updateUserGroup" parameterType="com.kcp.platform.common.user.entity.UserGroup">
+		update TB_YHZXX set ZJID=ZJID
+		<if test="yhzmc != null and yhzmc != ''"> 
+			,YHZMC = #{yhzmc}
+		</if>
+		<if test="yhzlx != null and yhzlx != ''"> 
+			,YHZLX = #{yhzlx}
+		</if>
+		<if test="yhzjb != null and yhzjb != ''"> 
+			,YHZJB = #{yhzjb}
+		</if>
+		<if test="sybz != null and sybz != ''">
+			,SYBZ = #{sybz}
+		</if>
+		<if test="bz != null and bz != ''"> 
+			,BZ = #{bz}
+		</if>
+		<if test="gxyh != null and gxyh != ''"> 
+			,GXYH = #{gxyh}
+		</if>
+		<if test="jlxgsj != null and jlxgsj != ''"> 
+			,JLXGSJ = #{jlxgsj}
+		</if>
+		<if test="jlscsj != null and jlscsj != ''"> 
+			,JLSCSJ = #{jlscsj} 
+		</if>
+		<if test=" jlyxzt != null and  jlyxzt != ''"> 
+			,JLYXZT = #{jlyxzt}
+		</if>			
+		where ZJID = #{zjid}
+    </update>
+    	<update id="updateUserGroupMap" parameterType="java.util.HashMap">
+		update TB_YHZXX set ZJID=ZJID
+		<if test="yhzmc != null and yhzmc != ''"> 
+			,YHZMC = #{yhzmc}
+		</if>
+		<if test="yhzlx != null and yhzlx != ''"> 
+			,YHZLX = #{yhzlx}
+		</if>
+		<if test="yhzjb != null and yhzjb != ''"> 
+			,YHZJB = #{yhzjb}
+		</if>
+		<if test="sybz != null and sybz != ''">
+			,SYBZ = #{sybz}
+		</if>
+		<if test="bz != null and bz != ''"> 
+			,BZ = #{bz}
+		</if>
+		<if test="gxyh != null and gxyh != ''"> 
+			,GXYH = #{gxyh}
+		</if>
+		<if test="jlxgsj != null and jlxgsj != ''"> 
+			,JLXGSJ = #{jlxgsj}
+		</if>
+		<if test="jlscsj != null and jlscsj != ''"> 
+			,JLSCSJ = #{jlscsj} 
+		</if>
+		<if test=" jlyxzt != null and  jlyxzt != ''"> 
+			,JLYXZT = #{jlyxzt}
+		</if>			
+		where ZJID = #{zjid}
+    </update>
+    
+	<insert id="insertUserGroup" parameterType="com.kcp.platform.common.user.entity.UserGroup">
+    	<selectKey   keyProperty="zjid" resultType= "String" order="BEFORE"> 
+			SELECT SEQ_TB_YHZXX.NEXTVAL FROM DUAL 
+		</selectKey>
+		insert into TB_YHZXX (
+			ZJID,YHZMC,YHZLX,YHZJB,SYBZ,JLYXZT
+			<if test="bz != null and bz != ''">,BZ</if>
+			<if test="cjyh != null and cjyh != ''">,CJYH</if>
+			<if test="gxyh != null and gxyh != ''">,GXYH</if>
+			<if test="jlxzsj != null and jlxzsj != ''">,JLXZSJ</if>
+			<if test="jlxgsj != null and jlxgsj != ''">,JLXGSJ</if>
+			<if test="jlscsj != null and jlscsj != ''">,JLSCSJ</if>	
+		)values (
+			#{zjid},#{yhzmc},#{yhzlx},#{yhzjb},#{sybz},#{jlyxzt}
+			<if test="bz != null and bz != ''">,#{bz}</if>
+			<if test="cjyh != null and cjyh != ''">,#{cjyh}</if>
+			<if test="gxyh != null and gxyh != ''">,#{gxyh}</if>
+			<if test="jlxzsj != null and jlxzsj != ''">,#{jlxzsj}</if>
+			<if test="jlxgsj != null and jlxgsj != ''">,#{jlxgsj}</if>
+			<if test="jlscsj != null and jlscsj != ''">,#{jlscsj}</if>				
+		)
+    </insert>
+    
+    <insert id="insertUserGroupMap" parameterType="java.util.HashMap">
+    	<selectKey   keyProperty="zjid" resultType= "String" order="BEFORE"> 
+			SELECT SEQ_TB_YHZXX.NEXTVAL FROM DUAL 
+		</selectKey>
+		insert into TB_YHZXX (
+			ZJID,YHZMC,YHZLX,YHZJB,SYBZ,JLYXZT
+			<if test="bz != null and bz != ''">,BZ</if>
+			<if test="cjyh != null and cjyh != ''">,CJYH</if>
+			<if test="gxyh != null and gxyh != ''">,GXYH</if>
+			<if test="jlxzsj != null and jlxzsj != ''">,JLXZSJ</if>
+			<if test="jlxgsj != null and jlxgsj != ''">,JLXGSJ</if>
+			<if test="jlscsj != null and jlscsj != ''">,JLSCSJ</if>	
+		)values (
+			#{zjid},#{yhzmc},#{yhzlx},#{yhzjb},#{sybz},#{jlyxzt}
+			<if test="bz != null and bz != ''">,#{bz}</if>
+			<if test="cjyh != null and cjyh != ''">,#{cjyh}</if>
+			<if test="gxyh != null and gxyh != ''">,#{gxyh}</if>
+			<if test="jlxzsj != null and jlxzsj != ''">,#{jlxzsj}</if>
+			<if test="jlxgsj != null and jlxgsj != ''">,#{jlxgsj}</if>
+			<if test="jlscsj != null and jlscsj != ''">,#{jlscsj}</if>				
+		)
+    </insert>
+	
+	<select id="queryUserByUserGroup" parameterType="String" resultMap="userMap">
+		SELECT T1.ZJID,T1.YHMC,T1.YHDLZH,T1.YHDLMM,T1.JYBH,
+		       T1.SSDW_ZJID,T1.XB,T1.LXDH,T1.YDDH,T1.DZYX,
+		       T1.YHLX,T1.YHJB,T1.SYBZ,T1.BZ,T1.CJYH,T1.GXYH,
+		       T1.JLXZSJ,T1.JLXGSJ,T1.JLSCSJ,T1.JLYXZT
+		  FROM TB_YHXX T1, TB_YHZXX_R_YHXX T2
+		 WHERE T1.ZJID = T2.YHXX_ZJID
+		   AND T2.YHZXX_ZJID = #{groupId}
+	</select>
+	
+	<select id="queryUserGroupByEntity" parameterType="com.kcp.platform.common.user.entity.UserGroup" resultType="java.util.HashMap">
+		SELECT a.ZJID,a.YHZMC,a.YHZMC||'（'||count(b.YHXX_ZJID)||'人）' YHZYHCOUNT,0 PARENTNODEID
+		FROM TB_YHZXX a LEFT JOIN TB_YHZXX_R_YHXX b on a.ZJID = b.YHZXX_ZJID  
+		WHERE 1=1
+		<if test="zjid != null and zjid != ''"> 
+			AND a.ZJID = #{zjid}
+		</if>
+		<if test="yhzmc != null and yhzmc != ''"> 
+			AND a.YHZMC LIKE '%'||#{yhzmc}||'%'
+		</if>
+		<if test="yhzlx != null and yhzlx != ''"> 
+			AND a.YHZLX = #{yhzlx}
+		</if>
+		<if test="yhzjb != null and yhzjb != ''"> 
+			AND a.YHZJB = #{yhzjb}
+		</if>
+		<if test="sybz != null and sybz != ''"> 
+			AND a.SYBZ = #{sybz}
+		</if>
+		<if test="bz != null and bz != ''"> 
+			AND a.BZ LIKE '%'||#{bz}||'%'
+		</if>
+		<if test="jlyxzt != null and jlyxzt != ''">
+			AND a.JLYXZT = #{jlyxzt}
+		</if>
+		GROUP BY a.ZJID,a.YHZMC	
+	</select>
+	
+	<select id="queryUserGroupByMap" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT a.ZJID,a.YHZMC,a.YHZMC||'（'||count(b.YHXX_ZJID)||'人）' YHZYHCOUNT,0 PARENTNODEID
+		FROM TB_YHZXX a LEFT JOIN TB_YHZXX_R_YHXX b on a.ZJID = b.YHZXX_ZJID  
+		WHERE 1=1
+		<if test="zjid != null and zjid != ''"> 
+			AND a.ZJID = #{zjid}
+		</if>
+		<if test="yhzmc != null and yhzmc != ''"> 
+			AND a.YHZMC LIKE '%'||#{yhzmc}||'%'
+		</if>
+		<if test="yhzlx != null and yhzlx != ''"> 
+			AND a.YHZLX = #{yhzlx}
+		</if>
+		<if test="yhzjb != null and yhzjb != ''"> 
+			AND a.YHZJB = #{yhzjb}
+		</if>
+		<if test="sybz != null and sybz != ''"> 
+			AND a.SYBZ = #{sybz}
+		</if>
+		<if test="bz != null and bz != ''"> 
+			AND a.BZ LIKE '%'||#{bz}||'%'
+		</if>
+		<if test="jlyxzt != null and jlyxzt != ''">
+			AND a.JLYXZT = #{jlyxzt}
+		</if>		
+		GROUP BY a.ZJID,a.YHZMC	
+	</select>
+	
+	<select id="queryUserGroup" parameterType="java.util.HashMap" resultMap="userGroupMap">
+		SELECT a.ZJID,a.YHZMC,a.YHZLX,a.YHZJB,a.SYBZ,a.BZ,a.CJYH,a.GXYH,a.JLXZSJ,a.JLXGSJ,a.JLSCSJ,a.JLYXZT
+		FROM TB_YHZXX a 
+		WHERE 1=1
+		<if test="zjid != null and zjid != ''"> 
+			AND a.ZJID = #{zjid}
+		</if>
+		<if test="yhzmc != null and yhzmc != ''"> 
+			AND a.YHZMC LIKE '%'||#{yhzmc}||'%'
+		</if>
+		<if test="yhzlx != null and yhzlx != ''"> 
+			AND a.YHZLX = #{yhzlx}
+		</if>
+		<if test="yhzjb != null and yhzjb != ''"> 
+			AND a.YHZJB = #{yhzjb}
+		</if>
+		<if test="sybz != null and sybz != ''"> 
+			AND a.SYBZ = #{sybz}
+		</if>
+		<if test="bz != null and bz != ''"> 
+			AND a.BZ LIKE '%'||#{bz}||'%'
+		</if>
+		<if test="jlyxzt != null and jlyxzt != ''">
+			AND a.JLYXZT = #{jlyxzt}
+		</if>
+	</select>
+	
+	<select id="queryUserGroupList" parameterType="com.kcp.platform.common.user.entity.UserGroup" resultMap="userGroupMap">
+		SELECT ZJID,YHZMC,YHZLX,YHZJB,SYBZ,BZ,CJYH,GXYH,JLXZSJ,JLXGSJ,JLSCSJ,JLYXZT
+		FROM TB_YHZXX WHERE 1=1
+		<if test="yhzmc != null and yhzmc != ''"> 
+			AND YHZMC LIKE '%'||#{yhzmc}||'%'
+		</if>
+		<if test="yhzlx != null and yhzlx != ''">
+			AND YHZLX = #{yhzlx}
+		</if>
+		<if test="yhzjb != null and yhzjb != ''">
+			AND YHZJB = #{yhzjb}
+		</if>
+		<if test="sybz != null and sybz != ''">
+			AND SYBZ = #{sybz}
+		</if>
+		<if test="bz != null and bz != ''"> 
+			And BZ LIKE '%'||#{bz}||'%'
+		</if>
+		<if test="jlyxzt!=null and jlyxzt!=''">
+			AND JLYXZT = #{jlyxzt}
+		</if>
+	</select>
+	
+	<select id="queryAlloteUserByUserGroupMap" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		<if test="allot == null or allot == ''">
+		select * from (
+			select b.ZJID YHID,b.YHMC,b.YHDLZH,b.YHDLMM,b.JYBH,b.SSDW_ZJID,b.XB,b.LXDH,b.YDDH,
+			b.DZYX,b.YHLX,b.YHJB,b.SYBZ,b.BZ,b.CJYH,b.GXYH,
+			b.JLXZSJ,b.JLXGSJ,b.JLSCSJ,b.JLYXZT,
+			1 ISALLOTE
+			from TB_YHXX b inner join TB_YHZXX_R_YHXX a on b.ZJID = a.YHXX_ZJID
+			where a.YHZXX_ZJID = #{zjid}
+				<if test="yhmc != null and yhmc != ''">
+					AND B.YHMC LIKE #{yhmc}||'%'
+				</if>
+			union
+			select  yhxx.ZJID YHID,yhxx.YHMC,yhxx.YHDLZH,yhxx.YHDLMM,yhxx.JYBH,yhxx.SSDW_ZJID,yhxx.XB,yhxx.LXDH,yhxx.YDDH,
+			yhxx.DZYX,yhxx.YHLX,yhxx.YHJB,yhxx.SYBZ,yhxx.BZ,yhxx.CJYH,yhxx.GXYH,
+			yhxx.JLXZSJ,yhxx.JLXGSJ,yhxx.JLSCSJ,yhxx.JLYXZT,
+			0 ISALLOTE
+			from TB_YHXX yhxx where yhxx.ZJID not in(
+				select yh.ZJID from TB_YHXX yh inner join TB_YHZXX_R_YHXX yhzyh on yh.ZJID = yhzyh.YHXX_ZJID
+				where yhzyh.YHZXX_ZJID = #{zjid}
+			)
+			<if test="yhmc != null and yhmc != ''">
+				AND B.YHMC LIKE #{yhmc}||'%'
+			</if>
+		) ug
+		order by ug.JLXZSJ
+		</if>
+		<if test="allot != null and allot == 'true'">
+			select b.ZJID YHID,b.YHMC,b.YHDLZH,b.YHDLMM,b.JYBH,b.SSDW_ZJID,b.XB,b.LXDH,b.YDDH,
+			b.DZYX,b.YHLX,b.YHJB,b.SYBZ,b.BZ,b.CJYH,b.GXYH,
+			b.JLXZSJ,b.JLXGSJ,b.JLSCSJ,b.JLYXZT,
+			1 ISALLOTE
+			from TB_YHXX b inner join TB_YHZXX_R_YHXX a on b.ZJID = a.YHXX_ZJID
+			where a.YHZXX_ZJID = #{zjid}
+			order by b.JLXZSJ
+			<if test="yhmc != null and yhmc != ''">
+				AND B.YHMC LIKE #{yhmc}||'%'
+			</if>
+		</if>
+		<if test="allot != null and allot == 'false'">
+			select  b.ZJID YHID,b.YHMC,b.YHDLZH,b.YHDLMM,b.JYBH,b.SSDW_ZJID,b.XB,b.LXDH,b.YDDH,
+			b.DZYX,b.YHLX,b.YHJB,b.SYBZ,b.BZ,b.CJYH,b.GXYH,
+			b.JLXZSJ,b.JLXGSJ,b.JLSCSJ,b.JLYXZT,
+			0 ISALLOTE
+			from TB_YHXX b where b.ZJID not in(
+				select yh.ZJID from TB_YHXX yh inner join TB_YHZXX_R_YHXX yhzyh on yh.ZJID = yhzyh.YHXX_ZJID
+				where yhzyh.YHZXX_ZJID = #{zjid}
+			)
+			<if test="yhmc != null and yhmc != ''">
+				AND B.YHMC LIKE #{yhmc}||'%'
+			</if>
+			order by b.JLXZSJ
+		</if>
+	</select>
+	
+	<delete id="deleteUserGroup_R_User" parameterType="java.util.List">
+		delete from TB_YHZXX_R_YHXX WHERE YHXX_ZJID in
+		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		<if test="yhzid != null and yhzid != ''"> 
+			And YHZXX_ZJID = #{yhzid}
+		</if>
+	</delete>
+	<insert id="insertUserGroup_R_User" parameterType="java.util.HashMap">
+    	<selectKey  keyProperty="zjid" resultType= "String" order="BEFORE"> 
+			SELECT SEQ_TB_YHZXX_R_YHXX.NEXTVAL FROM DUAL 
+		</selectKey>
+		insert into TB_YHZXX_R_YHXX(ZJID,YHZXX_ZJID,YHXX_ZJID)
+		values (#{zjid},#{yhzid},#{yhid})
+    </insert>
+	
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcp.platform.common.log.dao.IGdqdMapper">
+	<resultMap id="gdqdMapper" type="com.kcp.platform.common.log.entity.Gdqd"> 
+			<result property="zjid" column="ZJID" />  
+			<result property="gdpzZjid" column="GDPZ_ZJID" />  
+			<result property="gdbmc" column="GDBMC" />  
+			<result property="gdhbmc" column="GDHBMC" />  
+			<result property="gdsjKssj" column="GDSJ_KSSJ" />  
+			<result property="gdsjJssj" column="GDSJ_JSSJ" />  
+			<result property="gdjls" column="GDJLS" />  
+			<result property="jlcjsj" column="JLCJSJ" />
+			<result property="gdmc" column="GDMC" />  
+	</resultMap>
+	<!--查询(不分页)-->
+	<select id="findGdqd" parameterType="hashmap" resultMap="gdqdMapper">
+		SELECT t1.*,t2.GDMC GDMC
+		FROM TB_GDQD t1
+		LEFT JOIN TB_GDPZ t2 ON t1.GDPZ_ZJID = t2.ZJID
+		WHERE 1 = 1 
+			<if test="gdbmc != null and gdbmc != '' ">
+				AND upper(t1.GDBMC) = upper(#{gdbmc})
+			</if>
+			<if test="gdhbmc != null and gdhbmc != '' ">
+				AND upper(t1.GDHBMC) = upper(#{gdhbmc})
+			</if>
+			<if test="gdmc != null and gdmc != '' ">
+				AND t2.GDMC = #{gdmc}
+			</if>
+		ORDER BY t1.JLCJSJ DESC
+	</select>
+	
+	<!--查询(分页)-->
+	<select id="findGdqdPaging" parameterType="hashmap" resultMap="gdqdMapper">
+		SELECT t1.*,t2.GDMC GDMC
+		FROM TB_GDQD t1
+		LEFT JOIN TB_GDPZ t2 ON t1.GDPZ_ZJID = t2.ZJID
+		WHERE 1 = 1 
+			<if test="gdbmc != null and gdbmc != '' ">
+				AND upper(t1.GDBMC) like '%' || upper(#{gdbmc}) || '%'
+			</if>
+			<if test="gdhbmc != null and gdhbmc != '' ">
+				AND upper(t1.GDHBMC) like '%' || upper(#{gdhbmc}) || '%'
+			</if>
+			<if test="gdmc != null and gdmc != '' ">
+				AND t2.GDMC like '%' || #{gdmc} || '%'
+			</if>
+		ORDER BY t1.JLCJSJ DESC
+	</select>
+	
+	<!--根据Id进行查询-->
+	<select id="getGdqdById" parameterType="String" resultMap="gdqdMapper">
+		SELECT t1.*,t2.GDMC GDMC
+		FROM TB_GDQD t1
+		LEFT JOIN TB_GDPZ t2 ON t1.GDPZ_ZJID = t2.ZJID
+		WHERE t1.ZJID=#{id}
+	</select>
+	
+	<!--新增-->
+	<insert id="addGdqd" parameterType="com.kcp.platform.common.log.entity.Gdqd">
+		INSERT INTO TB_GDQD(
+				ZJID,
+				GDPZ_ZJID,
+				GDBMC,
+				GDHBMC,
+				GDSJ_KSSJ,
+				GDSJ_JSSJ,
+				GDJLS,
+				JLCJSJ
+		 )
+		values(
+				#{zjid,jdbcType=VARCHAR},
+				#{gdpzZjid,jdbcType=VARCHAR},
+				#{gdbmc,jdbcType=VARCHAR},
+				#{gdhbmc,jdbcType=VARCHAR},
+				#{gdsjKssj,jdbcType=TIMESTAMP},
+				#{gdsjJssj,jdbcType=TIMESTAMP},
+				#{gdjls,jdbcType=INTEGER},
+				#{jlcjsj,jdbcType=TIMESTAMP}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateGdqd" parameterType="com.kcp.platform.common.log.entity.Gdqd">
+		UPDATE TB_GDQD SET
+		GDPZ_ZJID=#{gdpzZjid,jdbcType=VARCHAR},
+		GDBMC=#{gdbmc,jdbcType=VARCHAR},
+		GDHBMC=#{gdhbmc,jdbcType=VARCHAR},
+		GDSJ_KSSJ=#{gdsjKssj,jdbcType=TIMESTAMP},
+		GDSJ_JSSJ=#{gdsjJssj,jdbcType=TIMESTAMP},
+		GDJLS=#{gdjls,jdbcType=INTEGER},
+		JLCJSJ=#{jlcjsj,jdbcType=TIMESTAMP}
+		where ZJID=#{zjid}
+    </update>
+    
+	<!-- 物理删除 -->
+    <delete id="deleteGdqd" parameterType="String">
+     	DELETE FROM TB_GDQD WHERE ZJID=#{id}
+    </delete>
+    
+    <!-- 根据条件统计记录数 -->
+	<select id="countGdqd" parameterType="com.kcp.platform.common.log.entity.Gdqd" resultType="int">
+    	SELECT COUNT(1) FROM TB_GDQD WHERE 1=1
+    	<if test="zjid != null and zjid != ''">
+    		AND	ZJID != #{zjid}
+    	</if>
+    </select>
+    
+</mapper>

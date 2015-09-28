@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcp.platform.bpm.dao.ITaskOpinionMapper">
+	<resultMap id="taskOpinionMapper" type="com.kcp.platform.bpm.entity.TaskOpinion"> 
+			<result property="opinionId" column="OPINION_ID" />  
+			<result property="actDefId" column="ACT_DEF_ID" />  
+			<result property="taskName" column="TASK_NAME" />  
+			<result property="taskKey" column="TASK_KEY" />  
+			<result property="taskId" column="TASK_ID" />  
+			<result property="taskToken" column="TASK_TOKEN" />  
+			<result property="actInstId" column="ACT_INST_ID" />  
+			<result property="startTime" column="START_TIME" />  
+			<result property="endTime" column="END_TIME" />  
+			<result property="durTime" column="DUR_TIME" />  
+			<result property="exeUserId" column="EXE_USER_ID" />  
+			<result property="exeUserName" column="EXE_USER_NAME" />  
+			<result property="opinion" column="OPINION" />  
+			<result property="checkStatus" column="CHECK_STATUS" />  
+			<result property="formDefId" column="FORM_DEF_ID" />  
+			<result property="fieldName" column="FIELD_NAME" />  
+			<result property="superExecution" column="SUPER_EXECUTION" />  
+	</resultMap>
+	<!--根据Id进行查询-->
+	<select id="getTaskOpinionById" parameterType="String" resultMap="taskOpinionMapper">
+		SELECT 
+				OPINION_ID,
+				ACT_DEF_ID,
+				TASK_NAME,
+				TASK_KEY,
+				TASK_ID,
+				TASK_TOKEN,
+				ACT_INST_ID,
+				START_TIME,
+				END_TIME,
+				DUR_TIME,
+				EXE_USER_ID,
+				EXE_USER_NAME,
+				OPINION,
+				CHECK_STATUS,
+				FORM_DEF_ID,
+				FIELD_NAME,
+				SUPER_EXECUTION
+		FROM BPM_TASK_OPINION
+		WHERE OPINION_ID=#{id}
+	</select>
+	
+	<!--根据Id进行查询-->
+	<select id="getTaskOpinionByTaskId" parameterType="String" resultMap="taskOpinionMapper">
+		SELECT 
+				OPINION_ID,
+				ACT_DEF_ID,
+				TASK_NAME,
+				TASK_KEY,
+				TASK_ID,
+				TASK_TOKEN,
+				ACT_INST_ID,
+				START_TIME,
+				END_TIME,
+				DUR_TIME,
+				EXE_USER_ID,
+				EXE_USER_NAME,
+				OPINION,
+				CHECK_STATUS,
+				FORM_DEF_ID,
+				FIELD_NAME,
+				SUPER_EXECUTION
+		FROM BPM_TASK_OPINION
+		WHERE TASK_ID=#{taskId} AND  CHECK_STATUS=-1
+	</select>
+	
+	<!--新增-->
+	<insert id="addTaskOpinion" parameterType="com.kcp.platform.bpm.entity.TaskOpinion">
+		INSERT INTO BPM_TASK_OPINION(
+				OPINION_ID,
+				ACT_DEF_ID,
+				TASK_NAME,
+				TASK_KEY,
+				TASK_ID,
+				TASK_TOKEN,
+				ACT_INST_ID,
+				START_TIME,
+				END_TIME,
+				DUR_TIME,
+				EXE_USER_ID,
+				EXE_USER_NAME,
+				OPINION,
+				CHECK_STATUS,
+				FORM_DEF_ID,
+				FIELD_NAME,
+				SUPER_EXECUTION
+		 )
+		values(
+				#{opinionId,jdbcType=VARCHAR},
+				#{actDefId,jdbcType=VARCHAR},
+				#{taskName,jdbcType=VARCHAR},
+				#{taskKey,jdbcType=VARCHAR},
+				#{taskId,jdbcType=VARCHAR},
+				#{taskToken,jdbcType=VARCHAR},
+				#{actInstId,jdbcType=VARCHAR},
+				#{startTime,jdbcType=TIMESTAMP},
+				#{endTime,jdbcType=TIMESTAMP},
+				#{durTime,jdbcType=NUMERIC},
+				#{exeUserId,jdbcType=VARCHAR},
+				#{exeUserName,jdbcType=VARCHAR},
+				#{opinion,jdbcType=VARCHAR},
+				#{checkStatus,jdbcType=NUMERIC},
+				#{formDefId,jdbcType=VARCHAR},
+				#{fieldName,jdbcType=VARCHAR},
+				#{superExecution,jdbcType=VARCHAR}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateTaskOpinion" parameterType="com.kcp.platform.bpm.entity.TaskOpinion">
+		UPDATE BPM_TASK_OPINION SET
+			ACT_DEF_ID=#{actDefId,jdbcType=VARCHAR},
+			TASK_NAME=#{taskName,jdbcType=VARCHAR},
+			TASK_KEY=#{taskKey,jdbcType=VARCHAR},
+			TASK_ID=#{taskId,jdbcType=VARCHAR},
+			TASK_TOKEN=#{taskToken,jdbcType=VARCHAR},
+			ACT_INST_ID=#{actInstId,jdbcType=VARCHAR},
+			START_TIME=#{startTime,jdbcType=TIMESTAMP},
+			END_TIME=#{endTime,jdbcType=TIMESTAMP},
+			DUR_TIME=#{durTime,jdbcType=NUMERIC},
+			EXE_USER_ID=#{exeUserId,jdbcType=VARCHAR},
+			EXE_USER_NAME=#{exeUserName,jdbcType=VARCHAR},
+			OPINION=#{opinion,jdbcType=VARCHAR},
+			CHECK_STATUS=#{checkStatus,jdbcType=NUMERIC},
+			FORM_DEF_ID=#{formDefId,jdbcType=VARCHAR},
+			FIELD_NAME=#{fieldName,jdbcType=VARCHAR},
+			SUPER_EXECUTION=#{superExecution,jdbcType=VARCHAR}
+		where OPINION_ID=#{opinionId}
+    </update>
+    
+	<!-- 物理删除 -->
+    <delete id="deleteTaskOpinion" parameterType="String">
+     	DELETE FROM BPM_TASK_OPINION WHERE OPINION_ID=#{id}
+    </delete>
+    
+    <select id="getByActInstIdTaskKey" resultMap="taskOpinionMapper">
+		SELECT * FROM BPM_TASK_OPINION where ACT_INST_ID=#{actInstId} and TASK_KEY=#{taskKey} order by END_TIME desc
+	</select>
+	
+	<!-- 查询根据流程实例ID查询流程意见 -->
+	<select id="getByActInstId" resultMap="taskOpinionMapper">
+		SELECT * FROM BPM_TASK_OPINION WHERE OPINION_ID IN (
+			SELECT OPINION_ID FROM BPM_TASK_OPINION WHERE CHECK_STATUS!=28 AND ACT_INST_ID IN 
+			<foreach collection="actInstIds" index="index" item="item" open="(" separator="," close=")">
+	            #{item}
+	        </foreach>
+	        UNION 
+	        SELECT OPINION_ID FROM BPM_TASK_OPINION WHERE CHECK_STATUS!=28 AND SUPER_EXECUTION IN 
+			<foreach collection="actInstIds" index="index" item="item" open="(" separator="," close=")">  
+	            #{item}
+	        </foreach>
+        )
+        <if test="isAsc==true">
+			ORDER BY START_TIME
+		</if>
+       <if test="isAsc==false">
+			ORDER BY START_TIME DESC
+		</if>
+	</select>
+	
+	<!-- 获取保存任务的意见 -->
+	<select id="getOpinionByTaskId" resultMap="taskOpinionMapper">
+		select * FROM BPM_TASK_OPINION  WHERE TASK_ID=#{taskId,jdbcType=VARCHAR} and EXE_USER_ID=#{userId,jdbcType=VARCHAR} AND CHECK_STATUS=28  ORDER BY START_TIME DESC
+	</select>
+	
+	<!-- 删除 -->
+	 <delete id="delByActDefId" parameterType="String">
+     	DELETE FROM BPM_TASK_OPINION WHERE ACT_DEF_ID=#{actDefId}
+    </delete>
+    
+	 <delete id="delByActInstId" parameterType="String">
+     	DELETE FROM BPM_TASK_OPINION WHERE ACT_INST_ID=#{actInstId}
+    </delete>
+    
+    <select id="getCheckOpinionByInstId" resultMap="taskOpinionMapper">
+		SELECT * FROM BPM_TASK_OPINION  WHERE ACT_INST_ID=#{actInstId} AND CHECK_STATUS=-1
+	</select>
+	
+	<select id="getByActInstIdExeUserId" resultMap="taskOpinionMapper">
+		SELECT * FROM BPM_TASK_OPINION where ACT_INST_ID=#{actInstId} and EXE_USER_ID=#{exeUserId} and CHECK_STATUS!=7 and END_TIME IS NOT NULL ORDER BY END_TIME DESC
+	</select>
+	
+	<select id="getByActInstIdTaskKeyStatus" resultMap="taskOpinionMapper">
+		SELECT * FROM BPM_TASK_OPINION where ACT_INST_ID=#{actInstId} and TASK_KEY=#{taskKey} and CHECK_STATUS=#{checkStatus} and END_TIME is null
+	</select>
+	
+	<select id="getByTaskId" resultMap="taskOpinionMapper">
+		SELECT * FROM BPM_TASK_OPINION W WHERE W.TASK_ID=#{taskId} AND W.CHECK_STATUS = -1
+	</select>
+</mapper>

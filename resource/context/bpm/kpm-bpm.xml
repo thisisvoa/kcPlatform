@@ -8,7 +8,7 @@
     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
     http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
-	<context:component-scan base-package="com.casic27.platform.bpm" >
+	<context:component-scan base-package="com.kcp.platform.bpm" >
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
@@ -20,7 +20,7 @@
 	
 	<bean id="templateLoader" class="freemarker.cache.StringTemplateLoader"></bean>
 	<!-- freemaker引擎 -->
-	<bean id="freemarkEngine" class="com.casic27.platform.core.engine.FreemarkEngine">
+	<bean id="freemarkEngine" class="com.kcp.platform.core.engine.FreemarkEngine">
 		<property name="configuration" ref="freemarkerConfiguration"/>
 	</bean>
 </beans>

@@ -11,12 +11,12 @@
      http://www.springframework.org/schema/util/spring-util-3.0.xsd" 
 	default-lazy-init="true">
 	
-	<context:component-scan base-package="com.casic27.platform.sys.security" >
+	<context:component-scan base-package="com.kcp.platform.sys.security" >
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
 	<!-- 用户权限缓存客户端 -->
-	<bean id="authCacheClient" class="com.casic27.platform.base.cache.client.CacheClientFactoryBean">
+	<bean id="authCacheClient" class="com.kcp.platform.base.cache.client.CacheClientFactoryBean">
 		<property name="cacheManager" ref="cacheManager"></property>
 		<property name="cacheName" value="authCache"/>
 	</bean>
@@ -35,7 +35,7 @@
 		</property>
 		<!-- 
 		<property name="filterChainDefinitionMap">
-			<bean class="com.casic27.platform.sys.security.FilterChainDefinitionFactoryBean"></bean>
+			<bean class="com.kcp.platform.sys.security.FilterChainDefinitionFactoryBean"></bean>
 		</property>
 		 -->
 		 <property name="filterChainDefinitions">

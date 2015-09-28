@@ -1,7 +1,7 @@
 <!-- 
 	文件上传标签
  -->
-<%@tag import="com.casic27.platform.util.StringUtils"%>
+<%@tag import="com.kcp.platform.util.StringUtils"%>
 <%@ tag pageEncoding="UTF-8"%>
 <%@ attribute name="id" type="java.lang.String" required="true"  description="控件ID"%>
 <%@ attribute name="name" type="java.lang.String" required="true"  description="名称"%>

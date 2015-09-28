@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcp.platform.bpm.dao.IBpmAgentDefMapper">
+	<resultMap id="bpmAgentDefMapper" type="com.kcp.platform.bpm.entity.BpmAgentDef"> 
+			<result property="id" column="ID" />  
+			<result property="settingId" column="SETTING_ID" />  
+			<result property="flowKey" column="FLOW_KEY" />  
+			<result property="flowName" column="FLOW_NAME" />  
+	</resultMap>
+	<!--查询(不分页)-->
+	<select id="findBpmAgentDef" parameterType="hashmap" resultMap="bpmAgentDefMapper">
+		SELECT 
+				ID,
+				SETTING_ID,
+				FLOW_KEY,
+				FLOW_NAME
+		FROM BPM_AGENT_DEF
+		WHERE 1 = 1 
+			<if test="settingId != null and settingId != '' ">
+				AND SETTING_ID = #{settingId}
+			</if>
+	
+	</select>
+	
+	<!--查询(分页)-->
+	<select id="findBpmAgentDefPaging" parameterType="hashmap" resultMap="bpmAgentDefMapper">
+		SELECT 
+				ID,
+				SETTING_ID,
+				FLOW_KEY,
+				FLOW_NAME
+		FROM BPM_AGENT_DEF
+		WHERE 1 = 1 
+			<if test="settingId != null and settingId != '' ">
+				AND SETTING_ID = #{settingId}
+			</if>
+	</select>
+	
+	<!--根据Id进行查询-->
+	<select id="getBpmAgentDefById" parameterType="String" resultMap="bpmAgentDefMapper">
+		SELECT 
+				ID,
+				SETTING_ID,
+				FLOW_KEY,
+				FLOW_NAME
+		FROM BPM_AGENT_DEF
+		WHERE ID=#{id}
+	</select>
+	
+	<!--新增-->
+	<insert id="addBpmAgentDef" parameterType="com.kcp.platform.bpm.entity.BpmAgentDef">
+		INSERT INTO BPM_AGENT_DEF(
+				ID,
+				SETTING_ID,
+				FLOW_KEY,
+				FLOW_NAME
+		 )
+		values(
+				#{id,jdbcType=VARCHAR},
+				#{settingId,jdbcType=VARCHAR},
+				#{flowKey,jdbcType=VARCHAR},
+				#{flowName,jdbcType=VARCHAR}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateBpmAgentDef" parameterType="com.kcp.platform.bpm.entity.BpmAgentDef">
+		UPDATE BPM_AGENT_DEF SET
+			SETTING_ID=#{settingId,jdbcType=VARCHAR},
+			FLOW_KEY=#{flowKey,jdbcType=VARCHAR},
+			FLOW_NAME=#{flowName,jdbcType=VARCHAR}
+		where ID=#{id}
+    </update>
+    
+	<!-- 物理删除 -->
+    <delete id="deleteById" parameterType="String">
+     	DELETE FROM BPM_AGENT_DEF WHERE ID=#{id}
+    </delete>
+    
+    <!-- 物理删除 -->
+    <delete id="deleteBySettingId" parameterType="String">
+     	DELETE FROM BPM_AGENT_DEF WHERE SETTING_ID=#{settingId}
+    </delete>
+    
+    <!-- 根据条件统计记录数 -->
+	<select id="countBpmAgentDef" parameterType="com.kcp.platform.bpm.entity.BpmAgentDef" resultType="int">
+    	SELECT COUNT(1) FROM BPM_AGENT_DEF WHERE 1=1
+    	<if test="id != null and id != ''">
+    		AND	ID != #{id}
+    	</if>
+    </select>
+    
+</mapper>

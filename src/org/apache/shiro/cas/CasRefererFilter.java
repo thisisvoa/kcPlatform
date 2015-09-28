@@ -11,7 +11,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import com.casic27.platform.sys.constants.CommonConst;
+import com.kcp.platform.sys.constants.CommonConst;
 
 public class CasRefererFilter implements Filter {
 

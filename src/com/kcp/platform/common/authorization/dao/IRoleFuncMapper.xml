@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcp.platform.common.authorization.dao.IRoleFuncMapper">
+	<!-- 查询树形功能树 -->
+	<select id="queryFuncTreeList" parameterType="String" resultType="hashmap">
+		SELECT *
+		  FROM (SELECT 0 ISCHECK,
+		               ZJID AS NODEID,
+		               CDMC AS LABEL,
+		               SJCD AS PARENTNODEID,
+		               'MENU' TYPE,
+		               CDXH AS XH
+		          FROM TB_CDXX
+		         WHERE TB_CDXX.SYBZ = 1
+		           AND TB_CDXX.JLYXZT = 1
+		        UNION
+		        SELECT 1 ISCHECK,
+		               ZJID AS NODEID,
+		               GNMC AS LABEL,
+		               CDXX_ZJID AS PARENTNODEID,
+		               'FUNC' TYPE,
+		               GNXH AS XH
+		          FROM TB_GNXX T1
+		         WHERE T1.Sybz = 1
+		           AND T1.JLYXZT = 1
+		           AND T1.CDXX_ZJID IN (SELECT ZJID FROM TB_CDXX WHERE TB_CDXX.SYBZ = '1' AND TB_CDXX.JLYXZT = '1')
+		           and EXISTS (SELECT T2.GNXX_ZJID
+		                  FROM TB_JSXX_R_GNXX T2
+		                 WHERE T1.ZJID = T2.GNXX_ZJID
+		                   AND T2.JSXX_ZJID = #{roleId})
+		        UNION
+		        SELECT 0 ISCHECK,
+		               ZJID AS NODEID,
+		               GNMC AS LABEL,
+		               CDXX_ZJID AS PARENTNODEID,
+		               'FUNC' TYPE,
+		               GNXH AS XH
+		          FROM TB_GNXX T1
+		         WHERE T1.Sybz = 1
+		           AND T1.JLYXZT = 1
+		           AND T1.CDXX_ZJID IN (SELECT ZJID FROM TB_CDXX WHERE TB_CDXX.SYBZ = 1 AND TB_CDXX.JLYXZT = '1')
+		           and NOT EXISTS (SELECT T2.GNXX_ZJID
+		                  FROM TB_JSXX_R_GNXX T2
+		                 WHERE T1.ZJID = T2.GNXX_ZJID
+		                   AND T2.JSXX_ZJID = #{roleId})) A
+		 order by XH ASC
+	</select>
+	
+	<delete id="deleteRoleFuncByRoleId" parameterType="String">
+		DELETE FROM TB_JSXX_R_GNXX WHERE JSXX_ZJID=#{roleId}
+	</delete>
+	
+	<insert id= "insertRoleFunc" parameterType="hashmap">     
+		<selectKey   keyProperty="id" resultType= "String" order="BEFORE"> 
+			SELECT SEQ_TB_JSXX_R_GNXX.NEXTVAL FROM DUAL 
+		</selectKey>
+		
+		INSERT INTO TB_JSXX_R_GNXX(ZJID,JSXX_ZJID,GNXX_ZJID) VALUES 
+		(#{id},#{roleId},#{funcId})
+	</insert> 
+	
+	<!-- 查询树形角色树,需关联角色功能信息表 -->
+	<select id="getAssignedRoleList" parameterType="String" resultType="hashmap">
+		  SELECT T1.ZJID AS ZJID,
+		               T1.JSMC AS JSMC,
+		               T1.JSDM AS JSDM,
+		               T1.JLXGSJ AS JLXGSJ
+		          FROM TB_JSXX T1
+		         WHERE T1.Sybz = 1
+		           AND T1.JLYXZT = 1
+		           and EXISTS (SELECT ZJID
+		                  FROM TB_JSXX_R_GNXX T2
+		                 WHERE T2.JSXX_ZJID = T1.ZJID
+		                   AND T2.GNXX_ZJID = #{funcId})
+	</select>
+	
+	<!-- 根绝FuncId删除角色功能关系 -->
+	<delete id="deleteRoleFuncByFuncId" parameterType="String">
+		DELETE FROM TB_JSXX_R_GNXX WHERE GNXX_ZJID=#{funcId}
+	</delete>
+</mapper>

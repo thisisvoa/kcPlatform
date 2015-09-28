@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcp.platform.common.code.dao.ICodeMapper">
+	<resultMap id="codeMap" type="com.kcp.platform.common.code.entity.Code"> 
+		<id property="zjid" column="ZJID" /> 
+		<result property="dmmc" column="DMMC"/> 
+		<result property="dmjc" column="DMJC"/> 
+		<result property="sfdmx" column="SFDMX"/> 
+		<result property="dmx_bh" column="DMX_BH"/> 
+		<result property="dmx_mc" column="DMX_MC"/> 
+		<result property="pxh" column="PXH"/>
+		<result property="sybz" column="SYBZ"/> 
+		<result property="bz" column="BZ"/> 
+		<result property="cjyh" column="CJYH"/> 
+		<result property="gxyh" column="GXYH"/> 
+		<result property="jlxzsj" column="JLXZSJ"/>
+		<result property="jlxgsj" column="JLXGSJ"/>
+		<result property="jlscsj" column="JLSCSJ"/> 
+		<result property="jlyxzt" column="JLYXZT"/> 
+	</resultMap>
+	
+	<select id="findCodeList" parameterType="String" resultMap="codeMap">
+		SELECT DM.ZJID,DM.DMMC,DM.DMJC,DM.DMX_BH,DM.DMX_MC,DM.SFDMX,DM.SYBZ,DM.PXH,DM.BZ,TO_CHAR(TO_DATE(DM.JLXGSJ,'YYYYMMDDHH24MISS'),'YYYY-MM-DD HH24:MI:SS')JLXGSJ
+	    FROM TB_DMXX DM
+	    WHERE 1=1
+	    <if test="dmjc != null and dmjc != ''">and dm.DMJC like '%'|| #{dmjc}||'%'</if>
+	    <if test="sfdmx != null and sfdmx != ''">and DM.SFDMX = #{sfdmx}</if>
+	    <if test="sybz != null and sybz != ''">and DM.SYBZ = #{sybz}</if>
+	    <if test="jlyxzt != null and jlyxzt != ''">and DM.JLYXZT = #{jlyxzt}</if>
+	    order by to_number(dm.pxh)
+	</select>
+	<!-- 根据Id获取 -->
+	<select id="getCodeById" parameterType="String" resultMap="codeMap">
+		select dm.zjid,dm.dmmc,dm.dmjc,dm.dmx_bh,dm.dmx_mc,dm.sfdmx,dm.sybz,dm.pxh,dm.bz,to_char(to_date(dm.jlxgsj,'yyyyMMddHH24miss'),'yyyy-MM-dd HH24:mi:ss')jlxgsj
+	    from TB_DMXX dm
+		where dm.ZJID = #{codeId}  AND dm.JLYXZT = 1
+	</select>
+	<!-- 根据JC获取该简称下的最大排序号 +1-->
+	<select id="getMaxPxh" parameterType="com.kcp.platform.common.code.entity.Code" resultType="String" >
+		select  max(to_number(dm.pxh))+1 as maxpxh 
+		from TB_DMXX dm
+		where 1=1
+		<if test="dmjc != null and dmjc != ''">and dm.DMJC  = #{dmjc}</if>	
+		<if test="sfdmx != null and sfdmx != ''">and dm.SFDMX = #{sfdmx}</if>
+	    AND dm.SYBZ = 1
+	    AND dm.JLYXZT = 1
+	</select>
+	<!-- 精确查询 -->
+	<select id="queryCodeListByCode" parameterType="com.kcp.platform.common.code.entity.Code" resultMap="codeMap">
+		select dm.zjid,dm.dmmc,dm.dmjc,dm.dmx_bh,dm.dmx_mc,dm.sfdmx,dm.sybz,dm.pxh,dm.bz,to_char(to_date(dm.jlxgsj,'yyyyMMddHH24miss'),'yyyy-MM-dd HH24:mi:ss')jlxgsj
+		from TB_DMXX dm
+		where 1 = 1
+		<if test="zjid != null and zjid != ''">and dm.ZJID = #{zjid}</if>
+		<if test="dmmc != null and dmmc != ''">and dm.DMMC = #{dmmc}</if>
+		<if test="dmjc != null and dmjc != ''">and upper(dm.DMJC)  = upper(#{dmjc})</if>		
+		<if test="sfdmx != null and sfdmx != ''">and dm.SFDMX = #{sfdmx}</if>
+		<if test="dmx_bh != null and dmx_bh != ''">and upper(dm.DMX_BH) LIKE '%'||upper(#{dmx_bh}) ||'%'</if>
+		<if test="dmx_mc != null and dmx_mc != ''">and dm.DMX_MC LIKE '%'||#{dmx_mc} ||'%'</if>		
+		<if test="pxh != null and pxh != ''">and dm.PXH = #{pxh}</if>
+		<if test="sybz != null and sybz != ''">and dm.SYBZ = #{sybz}</if>		
+		<if test="cjyh != null and cjyh != ''">and dm.CJYH = #{cjyh}</if>
+		<if test="gxyh != null and gxyh != ''">and dm.GXYH = #{gxyh}</if>		
+		<if test="jlyxzt != null and jlyxzt != ''">and dm.JLYXZT = #{jlyxzt}</if>		  
+		order by to_number(dm.pxh)
+	</select>
+	<!-- 模糊查询 -->
+	<select id="queryCodeListByParamMap" parameterType="java.util.HashMap" resultMap="codeMap">
+		select dm.zjid,dm.dmmc,dm.dmjc,dm.dmx_bh,dm.dmx_mc,dm.sfdmx,dm.sybz,dm.pxh,dm.bz,to_char(to_date(dm.jlxgsj,'yyyyMMddHH24miss'),'yyyy-MM-dd HH24:mi:ss')jlxgsj
+		from TB_DMXX dm
+		where 1 = 1
+		<if test="dmmc != null and dmmc != ''">and dm.DMMC  like '%'||#{dmmc}||'%'</if>
+		<if test="dmjc != null and dmjc != ''">and upper(dm.DMJC)  like '%'||upper(#{dmjc})||'%'</if>		
+		<if test="dmx_bh != null and dmx_bh != ''">and upper(dm.DMX_BH) like '%'||upper(#{dmx_bh})||'%'</if>
+		<if test="dmx_mc != null and dmx_mc != ''">and dm.DMX_MC like '%'||#{dmx_mc}||'%'</if>		
+		<if test="pxh != null and pxh != ''">and dm.PXH like '%'||#{pxh}||'%'</if>			
+		<if test="sybz != null and sybz != ''">and dm.SYBZ = #{sybz}</if>
+		<if test="sfdmx != null and sfdmx != ''">and dm.SFDMX = #{sfdmx}</if>
+		<if test="jlyxzt != null and jlyxzt != ''">and dm.JLYXZT = #{jlyxzt}</if>
+		order by to_number(dm.pxh)
+	</select>
+	<!-- 精确查询 -->
+	<select id="queryCodeMapListByCode" parameterType="com.kcp.platform.common.code.entity.Code" resultType="java.util.HashMap">
+		select dm.* 
+		from TB_DMXX dm
+		where 1 = 1
+		<if test="zjid != null and zjid != ''">and dm.ZJID = #{zjid}</if>
+		<if test="dmmc != null and dmmc != ''">and dm.DMMC = #{dmmc}</if>
+		<if test="dmjc != null and dmjc != ''">and dm.DMJC  = #{dmjc}</if>		
+		<if test="sfdmx != null and sfdmx != ''">and dm.SFDMX = #{sfdmx}</if>
+		<if test="dmx_bh != null and dmx_bh != ''">and dm.DMX_BH = #{dmx_bh}</if>
+		<if test="dmx_mc != null and dmx_mc != ''">and dm.DMX_MC = #{dmx_mc}</if>		
+		<if test="pxh != null and pxh != ''">and dm.PXH = #{pxh}</if>
+		<if test="sybz != null and sybz != ''">and dm.SYBZ = #{sybz}</if>		
+		<if test="cjyh != null and cjyh != ''">and dm.CJYH = #{cjyh}</if>
+		<if test="gxyh != null and gxyh != ''">and dm.GXYH = #{gxyh}</if>		
+		<if test="bz != null and bz != ''">and dm.BZ = #{bz}</if>
+		<if test="jlyxzt != null and jlyxzt != ''">and dm.JLYXZT = #{jlyxzt}</if>		
+	</select>
+	<insert id="insertCode" parameterType="com.kcp.platform.common.code.entity.Code">
+		<selectKey   keyProperty="zjid" resultType= "String" order="BEFORE"> 
+			SELECT SEQ_TB_DMXX.NEXTVAL FROM DUAL 
+		</selectKey>
+		insert into TB_DMXX(ZJID,DMMC,DMJC,SFDMX,SYBZ,PXH,JLYXZT
+				<if test="dmx_bh != null and dmx_bh != ''"> ,DMX_BH </if>
+				<if test="dmx_mc != null and dmx_mc != ''"> ,DMX_MC </if>
+				<if test="bz != null and bz != ''"> ,BZ </if>
+				<if test="cjyh != null and cjyh != ''"> ,CJYH </if>
+				<if test="gxyh != null and gxyh != ''"> ,GXYH </if>
+				<if test="jlxzsj != null and jlxzsj != ''"> ,JLXZSJ </if>
+				<if test="jlxgsj != null and jlxgsj != ''"> ,JLXGSJ </if>
+				<if test="jlscsj != null and jlscsj != ''"> ,JLSCSJ </if>		
+			)
+		values (#{zjid},#{dmmc},#{dmjc},#{sfdmx},#{sybz},#{pxh},#{jlyxzt}
+				<if test="dmx_bh != null and dmx_bh != ''"> ,#{dmx_bh} </if>
+				<if test="dmx_mc != null and dmx_mc != ''"> , #{dmx_mc} </if>
+				<if test="bz != null and bz != ''"> , #{bz} </if>
+				<if test="cjyh != null and cjyh != ''"> , #{cjyh} </if>
+				<if test="gxyh != null and gxyh != ''"> , #{gxyh} </if>
+				<if test="jlxzsj != null and jlxzsj != ''"> ,#{jlxzsj} </if>
+				<if test="jlxgsj != null and jlxgsj != ''"> ,#{jlxgsj} </if>
+				<if test="jlscsj != null and jlscsj != ''"> ,#{jlscsj} </if>	
+			)
+	</insert>
+	
+	<update id="updateCode" parameterType="com.kcp.platform.common.code.entity.Code">
+		update TB_DMXX
+		set ZJID = ZJID
+		<if test="dmmc != null and dmmc != ''">,DMMC = #{dmmc}</if>
+		<if test="dmjc != null and dmjc != ''">,DMJC  = #{dmjc}</if>		
+		<if test="sfdmx != null and sfdmx != ''">,SFDMX = #{sfdmx}</if>
+		<if test="dmx_bh != null and dmx_bh != ''">,DMX_BH = #{dmx_bh}</if>
+		<if test="dmx_mc != null and dmx_mc != ''">,DMX_MC = #{dmx_mc}</if>		
+		<if test="pxh != null and pxh != ''">,PXH = #{pxh}</if>
+		<if test="sybz != null and sybz != ''">,SYBZ = #{sybz}</if>
+		<if test="bz != null and bz != ''"> ,BZ = #{bz}</if>
+		<if test="bz == null or bz == ''"> ,BZ = ''</if>
+		<if test="jlyxzt != null and jlyxzt != ''">,JLYXZT = #{jlyxzt}</if>	
+		<if test="cjyh != null and cjyh != ''">,CJYH = #{cjyh}</if>
+		<if test="gxyh != null and gxyh != ''"> ,GXYH = #{gxyh}</if>		
+		<if test="jlxzsj != null and jlxzsj != ''">,JLXZSJ = #{jlxzsj} </if>
+		<if test="jlxgsj != null and jlxgsj != ''"> ,JLXGSJ = #{jlxgsj} </if>
+		<if test="jlscsj != null and jlscsj != ''"> ,JLSCSJ = #{jlscsj} </if>
+		where ZJID = #{zjid}
+	</update>
+	
+	<!-- 根据代码简称获取代码项目列表 -->
+	<select id="getCodeItemList" parameterType="String" resultMap="codeMap">
+		SELECT T.*
+		  FROM TB_DMXX T
+		 WHERE T.DMJC = #{dmjc}
+		   AND T.SFDMX = 1
+		   AND T.SYBZ = 1
+		   AND T.JLYXZT = 1 ORDER BY TO_NUMBER(PXH)
+	</select>
+	
+	<!-- 判断代码项是否存在 -->
+	<select id="staticCode" parameterType="com.kcp.platform.common.code.entity.Code" resultType="int">
+		select count(1)
+		from TB_DMXX dm
+		where 1 = 1
+		<if test="zjid != null and zjid != ''">and dm.ZJID != #{zjid}</if>
+		<if test="dmjc != null and dmjc != ''">and upper(dm.DMJC) = upper(#{dmjc})</if>		
+		<if test="dmx_bh != null and dmx_bh != ''">and upper(dm.DMX_BH) = upper(#{dmx_bh})</if>
+		<if test="sfdmx != null and sfdmx != ''">and dm.SFDMX = #{sfdmx}</if>
+	</select>
+</mapper>

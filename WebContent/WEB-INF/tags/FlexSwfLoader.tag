@@ -1,5 +1,5 @@
 
-<%@ tag import="com.casic27.platform.util.StringUtils" %>
+<%@ tag import="com.kcp.platform.util.StringUtils" %>
 <%@ tag pageEncoding="UTF-8" %>
 
 <%@ attribute name="id" required="true" rtexprvalue="true" description="组件id" %>

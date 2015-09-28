@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcp.platform.base.job.dao.IJobSchedulerMapper">
+	<resultMap id="jobSchedulerMapper" type="com.kcp.platform.base.job.entity.JobScheduler"> 
+			<result property="jobSchedulerId" column="JOB_SCHEDULER_ID" />  
+			<result property="hostUrl" column="HOST_URL" />  
+			<result property="priority" column="PRIORITY" />  
+			<result property="mountStatus" column="MOUNT_STATUS" />  
+			<result property="activeStatus" column="ACTIVE_STATUS" />  
+			<result property="createTime" column="CREATE_TIME" />  
+			<result property="updateTime" column="UPDATE_TIME" />  
+			<result property="lastActiveTime" column="LAST_ACTIVE_TIME" />  
+			<result property="currScheduler" column="CURR_SCHEDULER" />  
+			<result property="remark" column="REMARK" />  
+			<result property="version" column="VERSION" />  
+	</resultMap>
+	<!--查询(不分页)-->
+	<select id="findJobScheduler" parameterType="hashmap" resultMap="jobSchedulerMapper">
+		SELECT 
+				JOB_SCHEDULER_ID,
+				HOST_URL,
+				PRIORITY,
+				MOUNT_STATUS,
+				ACTIVE_STATUS,
+				CREATE_TIME,
+				UPDATE_TIME,
+				LAST_ACTIVE_TIME,
+				CURR_SCHEDULER,
+				REMARK,
+				VERSION
+		FROM TB_JOB_SCHEDULER
+		WHERE 1 = 1 
+			<if test="hostUrl != null and hostUrl != '' ">
+				AND HOST_URL = #{hostUrl}
+			</if>
+			<if test="priority != null and priority != '' ">
+				AND PRIORITY = #{priority}
+			</if>
+			<if test="mountStatus != null and mountStatus != '' ">
+				AND MOUNT_STATUS = #{mountStatus}
+			</if>
+			<if test="activeStatus != null and activeStatus != '' ">
+				AND ACTIVE_STATUS = #{activeStatus}
+			</if>
+			<if test="currScheduler != null and currScheduler != '' ">
+				AND CURR_SCHEDULER = #{currScheduler}
+			</if>
+			ORDER BY TO_NUMBER(PRIORITY)
+	</select>
+	<!-- 根据ip和port查询JobScheduler -->
+	<select id="getJobSchedulerByHostUrl" resultMap="jobSchedulerMapper">
+		SELECT 
+				JOB_SCHEDULER_ID,
+				HOST_URL,
+				PRIORITY,
+				MOUNT_STATUS,
+				ACTIVE_STATUS,
+				CREATE_TIME,
+				UPDATE_TIME,
+				LAST_ACTIVE_TIME,
+				CURR_SCHEDULER,
+				REMARK,
+				VERSION
+		FROM TB_JOB_SCHEDULER
+		WHERE HOST_URL IN 
+			<foreach item="hostUrl" index="index" collection="list" open="(" separator="," close=")">
+            	#{hostUrl}
+    		</foreach>
+	</select>
+	
+	<!-- 获取优先级最高的任务调度管理器 -->
+	<select id="getHighestPriorityJobScheduler" resultMap="jobSchedulerMapper">
+		SELECT 
+				JOB_SCHEDULER_ID,
+				HOST_URL,
+				PRIORITY,
+				MOUNT_STATUS,
+				ACTIVE_STATUS,
+				CREATE_TIME,
+				UPDATE_TIME,
+				LAST_ACTIVE_TIME,
+				CURR_SCHEDULER,
+				REMARK,
+				VERSION
+		FROM TB_JOB_SCHEDULER
+		 WHERE PRIORITY = (SELECT MAX(PRIORITY) FROM TB_JOB_SCHEDULER)
+	</select>
+	
+	<select id="getHighestPriorityActiveJobScheduler" resultMap="jobSchedulerMapper">
+		SELECT 
+				JOB_SCHEDULER_ID,
+				HOST_URL,
+				PRIORITY,
+				MOUNT_STATUS,
+				ACTIVE_STATUS,
+				CREATE_TIME,
+				UPDATE_TIME,
+				LAST_ACTIVE_TIME,
+				CURR_SCHEDULER,
+				REMARK,
+				VERSION
+		FROM TB_JOB_SCHEDULER
+		 WHERE PRIORITY = (SELECT MAX(PRIORITY) FROM TB_JOB_SCHEDULER WHERE ACTIVE_STATUS ='1')
+	</select>
+	<!--根据Id进行查询-->
+	<select id="getJobSchedulerById" parameterType="String" resultMap="jobSchedulerMapper">
+		SELECT 
+				JOB_SCHEDULER_ID,
+				HOST_URL,
+				PRIORITY,
+				MOUNT_STATUS,
+				ACTIVE_STATUS,
+				CREATE_TIME,
+				UPDATE_TIME,
+				LAST_ACTIVE_TIME,
+				CURR_SCHEDULER,
+				REMARK,
+				VERSION
+		FROM TB_JOB_SCHEDULER
+		WHERE JOB_SCHEDULER_ID=#{id}
+	</select>
+	
+	<!--新增-->
+	<insert id="addJobScheduler" parameterType="com.kcp.platform.base.job.entity.JobScheduler">
+		INSERT INTO TB_JOB_SCHEDULER(
+				JOB_SCHEDULER_ID,
+				HOST_URL,
+				PRIORITY,
+				MOUNT_STATUS,
+				ACTIVE_STATUS,
+				CREATE_TIME,
+				UPDATE_TIME,
+				LAST_ACTIVE_TIME,
+				CURR_SCHEDULER,
+				REMARK,
+				VERSION
+		 )
+		values(
+				#{jobSchedulerId,jdbcType=VARCHAR},
+				#{hostUrl,jdbcType=VARCHAR},
+				#{priority,jdbcType=INTEGER},
+				#{mountStatus,jdbcType=VARCHAR},
+				#{activeStatus,jdbcType=VARCHAR},
+				SYSDATE,
+				SYSDATE,
+				#{lastActiveTime,jdbcType=DATE},
+				#{currScheduler,jdbcType=VARCHAR},
+				#{remark,jdbcType=VARCHAR},
+				#{version,jdbcType=INTEGER}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateJobScheduler" parameterType="com.kcp.platform.base.job.entity.JobScheduler">
+		UPDATE TB_JOB_SCHEDULER SET
+			HOST_URL=#{hostUrl,jdbcType=VARCHAR},
+			PRIORITY=#{priority,jdbcType=INTEGER},
+			MOUNT_STATUS=#{mountStatus,jdbcType=VARCHAR},
+			ACTIVE_STATUS=#{activeStatus,jdbcType=VARCHAR},
+			UPDATE_TIME=SYSDATE,
+			CURR_SCHEDULER=#{currScheduler,jdbcType=VARCHAR},
+			REMARK=#{remark,jdbcType=VARCHAR},
+			VERSION=#{version,jdbcType=INTEGER}
+		WHERE JOB_SCHEDULER_ID=#{jobSchedulerId}
+    </update>
+    
+    <update id="updateLastActiveTime" parameterType="hashmap">
+    	UPDATE TB_JOB_SCHEDULER SET
+    		LAST_ACTIVE_TIME=SYSDATE
+    		WHERE HOST_URL IN
+    		<foreach item="hostUrl" index="index" collection="hostUrlList" open="(" separator="," close=")">
+            	#{hostUrl}
+    		</foreach>
+    </update>
+    
+    <!-- 将hostUrl设置当前的任务调度服务状态的值 -->
+    <update id="makeCurrent">
+    	UPDATE TB_JOB_SCHEDULER SET
+    		CURR_SCHEDULER = '1',
+    		MOUNT_STATUS = '1',
+    		ACTIVE_STATUS = '1'
+    		WHERE HOST_URL IN
+    		<foreach item="hostUrl" index="index" collection="list" open="(" separator="," close=")">
+            	#{hostUrl}
+    		</foreach>
+    </update>
+    
+    <!-- 将除hostUrl之外的其它记录设置非当前的任务调度服务状态的值 -->
+    <update id="makeNotCurrentWhenOther">
+    	UPDATE TB_JOB_SCHEDULER SET
+    		CURR_SCHEDULER='0'
+    		WHERE HOST_URL NOT IN
+    		<foreach item="hostUrl" index="index" collection="list" open="(" separator="," close=")">
+            	#{hostUrl}
+    		</foreach>
+    </update>
+    
+    <!-- 只保持最高优先级的为当前全局，其它的设置为非当前全局 -->
+    <update id="keepCurrentOnlyHighestPriority">
+    	UPDATE TB_JOB_SCHEDULER SET
+    		CURR_SCHEDULER='0'
+    		WHERE PRIORITY &lt;(SELECT MAX(PRIORITY) FROM TB_JOB_SCHEDULER WHERE CURR_SCHEDULER='1')
+    </update>
+    
+    <!-- 将超过指定时间非活动的任务调度服务解装载 -->
+    <update id="unmountUnactiveJobScheduler">
+    	UPDATE TB_JOB_SCHEDULER SET
+			CURR_SCHEDULER = '0',
+			MOUNT_STATUS = '1',
+			ACTIVE_STATUS = '0'
+           	WHERE LAST_ACTIVE_TIME &lt;(SYSDATE - #{unactiveTimeInSeconds}/(24*60*60))
+    </update>
+    
+	<!-- 物理删除 -->
+    <delete id="deleteJobScheduler" parameterType="String">
+     	DELETE FROM TB_JOB_SCHEDULER WHERE JOB_SCHEDULER_ID=#{id}
+    </delete>
+    
+    <!-- 根据条件统计记录数 -->
+	<select id="countJobScheduler" parameterType="com.kcp.platform.base.job.entity.JobScheduler" resultType="int">
+    	SELECT COUNT(1) FROM TB_JOB_SCHEDULER WHERE 1=1
+    	<if test="jobSchedulerId != null and jobSchedulerId != ''">
+    		AND	JOB_SCHEDULER_ID != #{jobSchedulerId}
+    	</if>
+    	<if test="hostUrl!=null and hostUrl!=''">
+    		AND	HOST_URL = #{hostUrl}
+    	</if>
+    	<if test="priority!=null and priority!=''">
+    		AND	PRIORITY = #{priority}
+    	</if>
+    	<if test="currScheduler!=null and currScheduler!=''">
+    		AND	CURR_SCHEDULER = #{currScheduler}
+    	</if>
+    	<if test="activeStatus!=null and activeStatus!=''">
+    		AND ACTIVE_STATUS = #{activeStatus}
+    	</if>
+    </select>
+    
+</mapper>

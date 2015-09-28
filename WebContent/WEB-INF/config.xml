@@ -74,7 +74,7 @@
 	<plugins>
 		<plugin>
 			<name>imageresize</name>
-			<class>com.casic27.platform.ui.form.ckfinder.connector.plugins.ImageResize</class>
+			<class>com.kcp.platform.ui.form.ckfinder.connector.plugins.ImageResize</class>
 			<params>
 				<param name="smallThumb" value="90x90"></param>
 				<param name="mediumThumb" value="120x120"></param>
@@ -83,10 +83,10 @@
 		</plugin>
 		<plugin>
 			<name>fileeditor</name>
-			<class>com.casic27.platform.ui.form.ckfinder.connector.plugins.FileEditor</class>
+			<class>com.kcp.platform.ui.form.ckfinder.connector.plugins.FileEditor</class>
 			<params></params>
 		</plugin>
 	</plugins>
 	 -->
-	<basePathBuilderImpl>com.casic27.platform.ui.form.ckfinder.connector.configuration.ConfigurationPathBuilder</basePathBuilderImpl>
+	<basePathBuilderImpl>com.kcp.platform.ui.form.ckfinder.connector.configuration.ConfigurationPathBuilder</basePathBuilderImpl>
 </config>

@@ -10,7 +10,7 @@
 		<property name="messageConverters">
 			<list>
 				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />  
-                <bean class="com.casic27.platform.core.web.StringHttpMessageConverter" />  
+                <bean class="com.kcp.platform.core.web.StringHttpMessageConverter" />  
                 <bean class="org.springframework.http.converter.ResourceHttpMessageConverter" />  
                 <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />  
                 <bean class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter" />  
@@ -25,7 +25,7 @@
 
 	<!-- 分页拦截 -->
 	<mvc:interceptors>
-		<bean class="com.casic27.platform.core.page.PageHandlerInterceptor"></bean>
+		<bean class="com.kcp.platform.core.page.PageHandlerInterceptor"></bean>
 	</mvc:interceptors>
 	
 	<!-- bundle a message resource -->
@@ -75,7 +75,7 @@
 	
 	<bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller" />
 	
-	<context:component-scan base-package="com.casic27.platform.base">
+	<context:component-scan base-package="com.kcp.platform.base">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository" />
 	</context:component-scan>

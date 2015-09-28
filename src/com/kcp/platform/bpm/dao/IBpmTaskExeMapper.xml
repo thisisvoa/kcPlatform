@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcp.platform.bpm.dao.IBpmTaskExeMapper">
+	<resultMap id="bpmTaskExeMapper" type="com.kcp.platform.bpm.entity.BpmTaskExe"> 
+			<result property="id" column="ID" />  
+			<result property="taskId" column="TASK_ID" />  
+			<result property="assigneeId" column="ASSIGNEE_ID" />  
+			<result property="assigneeName" column="ASSIGNEE_NAME" />  
+			<result property="ownerId" column="OWNER_ID" />  
+			<result property="ownerName" column="OWNER_NAME" />  
+			<result property="subject" column="SUBJECT" />  
+			<result property="status" column="STATUS" />  
+			<result property="memo" column="MEMO" />  
+			<result property="createTime" column="CREATE_TIME" />  
+			<result property="actInstId" column="ACT_INST_ID" />  
+			<result property="taskName" column="TASK_NAME" />  
+			<result property="taskDefKey" column="TASK_DEF_KEY" />  
+			<result property="exeTime" column="EXE_TIME" />  
+			<result property="exeUserId" column="EXE_USER_ID" />  
+			<result property="exeUserName" column="EXE_USER_NAME" />  
+			<result property="assignType" column="ASSIGN_TYPE" />  
+			<result property="runId" column="RUN_ID" />  
+			<result property="typeId" column="TYPE_ID" />
+			<result property="processName" column="PROCESS_NAME" />
+			<result property="creatorId" column="CREATOR_ID" />
+			<result property="creator" column="CREATOR" />
+	</resultMap>
+	
+	<!--根据Id进行查询-->
+	<select id="getBpmTaskExeById" parameterType="String" resultMap="bpmTaskExeMapper">
+		SELECT 
+				ID,
+				TASK_ID,
+				ASSIGNEE_ID,
+				ASSIGNEE_NAME,
+				OWNER_ID,
+				OWNER_NAME,
+				SUBJECT,
+				STATUS,
+				MEMO,
+				CREATE_TIME,
+				ACT_INST_ID,
+				TASK_NAME,
+				TASK_DEF_KEY,
+				EXE_TIME,
+				EXE_USER_ID,
+				EXE_USER_NAME,
+				ASSIGN_TYPE,
+				RUN_ID,
+				TYPE_ID
+		FROM BPM_TASK_EXE
+		WHERE ID=#{id}
+	</select>
+	
+	<!--新增-->
+	<insert id="addBpmTaskExe" parameterType="com.kcp.platform.bpm.entity.BpmTaskExe">
+		INSERT INTO BPM_TASK_EXE(
+				ID,
+				TASK_ID,
+				ASSIGNEE_ID,
+				ASSIGNEE_NAME,
+				OWNER_ID,
+				OWNER_NAME,
+				SUBJECT,
+				STATUS,
+				MEMO,
+				CREATE_TIME,
+				ACT_INST_ID,
+				TASK_NAME,
+				TASK_DEF_KEY,
+				EXE_TIME,
+				EXE_USER_ID,
+				EXE_USER_NAME,
+				ASSIGN_TYPE,
+				RUN_ID,
+				TYPE_ID
+		 )
+		values(
+				#{id,jdbcType=VARCHAR},
+				#{taskId,jdbcType=VARCHAR},
+				#{assigneeId,jdbcType=VARCHAR},
+				#{assigneeName,jdbcType=VARCHAR},
+				#{ownerId,jdbcType=VARCHAR},
+				#{ownerName,jdbcType=VARCHAR},
+				#{subject,jdbcType=VARCHAR},
+				#{status,jdbcType=NUMERIC},
+				#{memo,jdbcType=VARCHAR},
+				#{createTime,jdbcType=TIMESTAMP},
+				#{actInstId,jdbcType=VARCHAR},
+				#{taskName,jdbcType=VARCHAR},
+				#{taskDefKey,jdbcType=VARCHAR},
+				#{exeTime,jdbcType=TIMESTAMP},
+				#{exeUserId,jdbcType=VARCHAR},
+				#{exeUserName,jdbcType=VARCHAR},
+				#{assignType,jdbcType=NUMERIC},
+				#{runId,jdbcType=VARCHAR},
+				#{typeId,jdbcType=VARCHAR}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateBpmTaskExe" parameterType="com.kcp.platform.bpm.entity.BpmTaskExe">
+		UPDATE BPM_TASK_EXE SET
+			TASK_ID=#{taskId,jdbcType=VARCHAR},
+			ASSIGNEE_ID=#{assigneeId,jdbcType=VARCHAR},
+			ASSIGNEE_NAME=#{assigneeName,jdbcType=VARCHAR},
+			OWNER_ID=#{ownerId,jdbcType=VARCHAR},
+			OWNER_NAME=#{ownerName,jdbcType=VARCHAR},
+			SUBJECT=#{subject,jdbcType=VARCHAR},
+			STATUS=#{status,jdbcType=NUMERIC},
+			MEMO=#{memo,jdbcType=VARCHAR},
+			CREATE_TIME=#{createTime,jdbcType=TIMESTAMP},
+			ACT_INST_ID=#{actInstId,jdbcType=VARCHAR},
+			TASK_NAME=#{taskName,jdbcType=VARCHAR},
+			TASK_DEF_KEY=#{taskDefKey,jdbcType=VARCHAR},
+			EXE_TIME=#{exeTime,jdbcType=TIMESTAMP},
+			EXE_USER_ID=#{exeUserId,jdbcType=VARCHAR},
+			EXE_USER_NAME=#{exeUserName,jdbcType=VARCHAR},
+			ASSIGN_TYPE=#{assignType,jdbcType=NUMERIC},
+			RUN_ID=#{runId,jdbcType=VARCHAR},
+			TYPE_ID=#{typeId,jdbcType=VARCHAR}
+		where ID=#{id}
+    </update>
+    
+    <!-- 根据任务ID和状态获取代理 -->
+	<select id="getByTaskIdStatus" resultMap="bpmTaskExeMapper">
+		SELECT *
+			FROM BPM_TASK_EXE
+			WHERE
+			TASK_ID=#{taskId} and STATUS =#{status}
+	</select>
+	
+	<!-- 查询任务的代理列表 -->
+	<select id="getByTaskId" resultMap="bpmTaskExeMapper">
+		SELECT *
+			FROM BPM_TASK_EXE
+			WHERE
+			TASK_ID=#{taskId}
+	</select>
+	<!-- 转办事宜 -->
+	<select id="accordingMattersList" resultMap="bpmTaskExeMapper">
+		SELECT TE.ID,
+		       TE.TASK_ID,
+		       TE.ASSIGNEE_ID,
+		       TE.ASSIGNEE_NAME,
+		       TE.OWNER_ID,
+		       TE.OWNER_NAME,
+		       TE.SUBJECT,
+		       TE.STATUS,
+		       TE.MEMO,
+		       TE.CREATE_TIME,
+		       TE.ACT_INST_ID,
+		       TE.TASK_NAME,
+		       TE.TASK_DEF_KEY,
+		       TE.EXE_TIME,
+		       TE.EXE_USER_ID,
+		       TE.EXE_USER_NAME,
+		       TE.ASSIGN_TYPE,
+		       TE.RUN_ID,
+		       TE.TYPE_ID,
+		       RUN.PROCESS_NAME,
+		       RUN.CREATOR_ID,
+		       RUN.CREATOR
+		  FROM BPM_TASK_EXE TE
+		  JOIN BPM_PRO_RUN RUN ON TE.RUN_ID = RUN.RUN_ID
+		  LEFT JOIN BPM_DEFINITION DEF ON RUN.DEF_ID = DEF.DEF_ID
+		<where>
+			<if test="assigneeId!=null and assigneeId!=''"> AND te.ASSIGNEE_ID  =#{assigneeId} </if>
+			<if test="ownerId!=null and ownerId!=''"> AND te.OWNER_ID = #{ownerId} </if>
+			<if test="subject!=null and subject!=''"> AND te.SUBJECT LIKE '%'||#{subject}||'%'  </if>
+			<if test="status!=-1"> AND te.STATUS  =#{status} </if>
+			<if test="beginCreateTime"> AND te.CREATE_TIME  >=#{beginCreateTime,jdbcType=TIMESTAMP} </if>
+			<if test="endCreateTime"> AND te.CREATE_TIME <![CDATA[ <=#{endCreateTime,jdbcType=TIMESTAMP}]]> </if>
+			<if test="assignType!=-1"> AND te.ASSIGN_TYPE  =#{assignType} </if>
+			<if test="runId!=null and runId!=''"> AND te.RUN_ID  =#{runId} </if>	
+			<if test="processName!=null and processName!=''">AND RUN.PROCESS_NAME LIKE '%'||#{processName}||'%' </if>
+			<if test="creatorId!=null and creatorId!=''">AND run.creatorId = #{creatorId} </if>
+		</where>
+		ORDER BY CREATE_TIME DESC
+	</select>
+	
+	<select id="getByIsAssign" resultType="int">
+		SELECT COUNT(*) AMOUNT FROM BPM_TASK_EXE WHERE TASK_ID=#{taskId} AND STATUS=0
+	</select>
+	
+	<delete id="delByRunId">
+		DELETE FROM BPM_TASK_EXE WHERE RUN_ID = #{runId}
+	</delete>
+	
+	<select id="getByRunId" resultMap="bpmTaskExeMapper">
+		SELECT * FROM BPM_TASK_EXE WHERE TASK_ID=#{taskId}
+	</select>
+	
+	<delete id="delById">
+		DELETE FROM BPM_TASK_EXE WHERE ID = #{id}
+	</delete>
+</mapper>

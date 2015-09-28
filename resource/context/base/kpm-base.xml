@@ -20,7 +20,7 @@
 	<import resource="classpath:/context/base/kpm-base-ds.xml" />
 	
 	<!-- 定义受环境影响易变的变量 -->
-	<bean id="propertyConfigurer" class="com.casic27.platform.sys.config.PropertyConfigurer" factory-method="getInstance" lazy-init="false">
+	<bean id="propertyConfigurer" class="com.kcp.platform.sys.config.PropertyConfigurer" factory-method="getInstance" lazy-init="false">
 		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
 		<property name="ignoreResourceNotFound" value="true" />
 		<property name="locations">
@@ -34,7 +34,7 @@
 	</bean>
 	
 	<!-- 定义异常配置信息文件 -->
-	<bean id="expMsgHolder" class="com.casic27.platform.core.exception.ExpMsgHolder" factory-method="getInstance" lazy-init="false">
+	<bean id="expMsgHolder" class="com.kcp.platform.core.exception.ExpMsgHolder" factory-method="getInstance" lazy-init="false">
 		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
 		<property name="ignoreResourceNotFound" value="true" />
 		<property name="locations">
@@ -46,7 +46,7 @@
 	</bean>
 	
 		<!-- 获取spring对象工具类 -->
-	<bean class="com.casic27.platform.sys.context.SpringContextHolder"/>
+	<bean class="com.kcp.platform.sys.context.SpringContextHolder"/>
 	
 	
 	<!-- Mybatis配置-->
@@ -58,7 +58,7 @@
 	</bean>
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.casic27" />
+		<property name="basePackage" value="com.kcp" />
 		<property name="annotationClass"
 			value="org.springframework.stereotype.Repository" />
 	</bean>
@@ -67,12 +67,12 @@
 		<constructor-arg index="0" ref="sqlSessionFactory" />
 	</bean>
 	
-	<bean id="baseMyBatisDao" class="com.casic27.platform.core.dao.BaseMyBatisDao">
+	<bean id="baseMyBatisDao" class="com.kcp.platform.core.dao.BaseMyBatisDao">
 		<property name="sqlSession" ref="sqlSession"></property>
 	</bean>
 	
 	<!-- jdbc配置 -->
-	<bean id="baseJdbcDao" class="com.casic27.platform.core.dao.BaseJdbcDao">
+	<bean id="baseJdbcDao" class="com.kcp.platform.core.dao.BaseJdbcDao">
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
 	
@@ -88,14 +88,14 @@
 	<tx:advice id="txAdvice" transaction-manager="txManager">
 		<tx:attributes>
 			<tx:method name="*" 
-				no-rollback-for="com.casic27.platform.core.exception.NotRollbackException" />
+				no-rollback-for="com.kcp.platform.core.exception.NotRollbackException" />
 		</tx:attributes>
 	</tx:advice>
 	
 	<!-- AOP拦截器设置 -->
 	<aop:config proxy-target-class="true">
 		<aop:advisor order="1"
-			pointcut="execution(* com.casic27*..*Service.*(..))"
+			pointcut="execution(* com.kcp*..*Service.*(..))"
 			advice-ref="txAdvice" />
 	</aop:config>
 	
@@ -106,27 +106,27 @@
 	</bean>
 	
 	<!-- 默认缓存客户端 -->
-	<bean id="defaultCacheClient" class="com.casic27.platform.base.cache.client.CacheClientFactoryBean">
+	<bean id="defaultCacheClient" class="com.kcp.platform.base.cache.client.CacheClientFactoryBean">
 		<property name="cacheManager" ref="cacheManager"></property>
 		<property name="cacheName" value="defaultCache"/>
 	</bean>
 	
 	
 	<!-- 获取spring对象工具类 -->
-	<bean class="com.casic27.platform.sys.context.SpringContextHolder"/>
+	<bean class="com.kcp.platform.sys.context.SpringContextHolder"/>
 	
 	<!-- 系统初始化 -->
-	<bean class="com.casic27.platform.sys.initialize.SysInitializer" init-method="initialize" />
+	<bean class="com.kcp.platform.sys.initialize.SysInitializer" init-method="initialize" />
 	
 	
 	<!-- 支持上传文件 -->   
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
       
     <!-- 脚本引擎 -->
-    <bean id="scriptEngine" class="com.casic27.platform.core.engine.GroovyScriptEngine"></bean>
+    <bean id="scriptEngine" class="com.kcp.platform.core.engine.GroovyScriptEngine"></bean>
     
     <!-- 扫描标记了注解的类 -->
-	<context:component-scan base-package="com.casic27.platform.base" >
+	<context:component-scan base-package="com.kcp.platform.base" >
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 </beans>

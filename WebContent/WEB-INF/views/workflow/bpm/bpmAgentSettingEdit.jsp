@@ -1,5 +1,5 @@
 
-<%@page import="com.casic27.platform.util.DateUtils"%>
+<%@page import="com.kcp.platform.util.DateUtils"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcp.platform.common.log.dao.IGdpzMapper">
+	<resultMap id="gdpzMapper" type="com.kcp.platform.common.log.entity.Gdpz"> 
+			<result property="zjid" column="ZJID" />  
+			<result property="gdmc" column="GDMC" />  
+			<result property="gdbmc" column="GDBMC" />  
+			<result property="sjclm" column="SJCLM" />  
+			<result property="sjclSjlx" column="SJCL_SJLX" />  
+			<result property="sjclGs" column="SJCL_GS" />  
+			<result property="gdzq" column="GDZQ" />  
+			<result property="gdzqDw" column="GDZQ_DW" />  
+			<result property="ycsj" column="YCSJ" />  
+			<result property="zxsj" column="ZXSJ" />  
+			<result property="sybz" column="SYBZ" />  
+			<result property="bz" column="BZ" />  
+			<result property="zhzxsj" column="ZHZXSJ" />  
+			<result property="jlcjsj" column="JLCJSJ" />  
+			<result property="jlcjyh" column="JLCJYH" />  
+			<result property="jlgxsj" column="JLGXSJ" />  
+			<result property="jlgxyh" column="JLGXYH" />  
+	</resultMap>
+	<!--查询(不分页)-->
+	<select id="findGdpz" parameterType="hashmap" resultMap="gdpzMapper">
+		SELECT 
+				ZJID,
+				GDMC,
+				GDBMC,
+				SJCLM,
+				SJCL_SJLX,
+				SJCL_GS,
+				GDZQ,
+				GDZQ_DW,
+				YCSJ,
+				ZXSJ,
+				SYBZ,
+				BZ,
+				ZHZXSJ,
+				JLCJSJ,
+				JLCJYH,
+				JLGXSJ,
+				JLGXYH
+		FROM TB_GDPZ
+		WHERE 1 = 1 
+			<if test="gdmc != null and gdmc != '' ">
+				AND GDMC = #{gdmc}
+			</if>
+			<if test="gdbmc != null and gdbmc != '' ">
+				AND upper(GDBMC) = upper(#{gdbmc})
+			</if>
+			<if test="sjclm != null and sjclm != '' ">
+				AND SJCLM = #{sjclm}
+			</if>
+			<if test="sybz != null and sybz != '' ">
+				AND SYBZ = #{sybz}
+			</if>
+		ORDER BY JLCJSJ
+	</select>
+	
+	<!--查询(分页)-->
+	<select id="findGdpzPaging" parameterType="hashmap" resultMap="gdpzMapper">
+		SELECT 
+				ZJID,
+				GDMC,
+				GDBMC,
+				SJCLM,
+				SJCL_SJLX,
+				SJCL_GS,
+				GDZQ,
+				GDZQ_DW,
+				YCSJ,
+				ZXSJ,
+				SYBZ,
+				BZ,
+				ZHZXSJ,
+				JLCJSJ,
+				JLCJYH,
+				JLGXSJ,
+				JLGXYH
+		FROM TB_GDPZ
+		WHERE 1 = 1 
+			<if test="gdmc != null and gdmc != '' ">
+				AND GDMC like '%' || #{gdmc} || '%'
+			</if>
+			<if test="gdbmc != null and gdbmc != '' ">
+				AND upper(GDBMC) like '%' || upper(#{gdbmc}) || '%'
+			</if>
+			<if test="sjclm != null and sjclm != '' ">
+				AND upper(SJCLM) like '%' || upper(#{sjclm}) || '%'
+			</if>
+		ORDER BY JLCJSJ
+	</select>
+	
+	<!--根据Id进行查询-->
+	<select id="getGdpzById" parameterType="String" resultMap="gdpzMapper">
+		SELECT 
+				ZJID,
+				GDMC,
+				GDBMC,
+				SJCLM,
+				SJCL_SJLX,
+				SJCL_GS,
+				GDZQ,
+				GDZQ_DW,
+				YCSJ,
+				ZXSJ,
+				SYBZ,
+				BZ,
+				ZHZXSJ,
+				JLCJSJ,
+				JLCJYH,
+				JLGXSJ,
+				JLGXYH
+		FROM TB_GDPZ
+		WHERE ZJID=#{id}
+	</select>
+	
+	<!--新增-->
+	<insert id="addGdpz" parameterType="com.kcp.platform.common.log.entity.Gdpz">
+		INSERT INTO TB_GDPZ(
+				ZJID,
+				GDMC,
+				GDBMC,
+				SJCLM,
+				SJCL_SJLX,
+				SJCL_GS,
+				GDZQ,
+				GDZQ_DW,
+				YCSJ,
+				ZXSJ,
+				SYBZ,
+				BZ,
+				ZHZXSJ,
+				JLCJSJ,
+				JLCJYH,
+				JLGXSJ,
+				JLGXYH
+		 )
+		values(
+				#{zjid,jdbcType=VARCHAR},
+				#{gdmc,jdbcType=VARCHAR},
+				#{gdbmc,jdbcType=VARCHAR},
+				#{sjclm,jdbcType=VARCHAR},
+				#{sjclSjlx,jdbcType=VARCHAR},
+				#{sjclGs,jdbcType=VARCHAR},
+				#{gdzq,jdbcType=INTEGER},
+				#{gdzqDw,jdbcType=VARCHAR},
+				#{ycsj,jdbcType=INTEGER},
+				#{zxsj,jdbcType=VARCHAR},
+				#{sybz,jdbcType=VARCHAR},
+				#{bz,jdbcType=VARCHAR},
+				#{zhzxsj,jdbcType=TIMESTAMP},
+				#{jlcjsj,jdbcType=TIMESTAMP},
+				#{jlcjyh,jdbcType=VARCHAR},
+				#{jlgxsj,jdbcType=TIMESTAMP},
+				#{jlgxyh,jdbcType=VARCHAR}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateGdpz" parameterType="com.kcp.platform.common.log.entity.Gdpz">
+		UPDATE TB_GDPZ SET
+			GDMC=#{gdmc,jdbcType=VARCHAR},
+			GDBMC=#{gdbmc,jdbcType=VARCHAR},
+			SJCLM=#{sjclm,jdbcType=VARCHAR},
+			SJCL_SJLX=#{sjclSjlx,jdbcType=VARCHAR},
+			SJCL_GS=#{sjclGs,jdbcType=VARCHAR},
+			GDZQ=#{gdzq,jdbcType=INTEGER},
+			GDZQ_DW=#{gdzqDw,jdbcType=VARCHAR},
+			YCSJ=#{ycsj,jdbcType=INTEGER},
+			ZXSJ=#{zxsj,jdbcType=VARCHAR},
+			SYBZ=#{sybz,jdbcType=VARCHAR},
+			BZ=#{bz,jdbcType=VARCHAR},
+			ZHZXSJ=#{zhzxsj,jdbcType=TIMESTAMP},
+			JLCJSJ=#{jlcjsj,jdbcType=TIMESTAMP},
+			JLCJYH=#{jlcjyh,jdbcType=VARCHAR},
+			JLGXSJ=#{jlgxsj,jdbcType=TIMESTAMP},
+			JLGXYH=#{jlgxyh,jdbcType=VARCHAR}
+		where ZJID=#{zjid}
+    </update>
+    
+	<!-- 物理删除 -->
+    <delete id="deleteGdpz" parameterType="String">
+     	DELETE FROM TB_GDPZ WHERE ZJID=#{id}
+    </delete>
+    
+    <!-- 根据条件统计记录数 -->
+	<select id="countGdpz" parameterType="com.kcp.platform.common.log.entity.Gdpz" resultType="int">
+    	SELECT COUNT(1) FROM TB_GDPZ WHERE 1=1
+    	<if test="zjid != null and zjid != ''">
+    		AND	ZJID != #{zjid}
+    	</if>
+    	<if test="gdbmc != null and gdbmc != ''">
+    		AND	GDBMC = #{gdbmc}
+    	</if>
+    </select>
+    
+</mapper>

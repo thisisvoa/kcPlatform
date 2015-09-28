@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcp.platform.common.authorization.dao.IUserFuncMapper">
+	<!-- 查询用户用户的功能权限状况-->
+	<select id="queryUserFucList" parameterType="String" resultType="hashmap">
+				SELECT *
+				  FROM (SELECT 0 ISCHECK,
+				               ZJID AS NODEID,
+				               CDMC AS LABEL,
+				               SJCD AS PARENTNODEID,
+				               'MENU' TYPE,
+				               CDXH AS XH
+				          FROM TB_CDXX
+				         WHERE TB_CDXX.Sybz = 1
+				           and TB_CDXX.Jlyxzt = 1
+				        UNION
+				        SELECT 1 ISCHECK,
+				               ZJID AS NODEID,
+				               GNMC AS LABEL,
+				               CDXX_ZJID AS PARENTNODEID,
+				               'FUNC' TYPE,
+				               GNXH AS XH
+				          FROM TB_GNXX T1
+				         WHERE T1.Sybz = 1
+				           and t1.jlyxzt = 1
+				           and EXISTS (SELECT T2.GNXX_ZJID
+				                  FROM TB_YHXX_R_GNXX T2
+				                 WHERE T1.ZJID = T2.GNXX_ZJID
+				                   AND T2.YHXX_ZJID = #{userId})
+				        UNION
+				        SELECT 0 ISCHECK,
+				               ZJID AS NODEID,
+				               GNMC AS LABEL,
+				               CDXX_ZJID AS PARENTNODEID,
+				               'FUNC' TYPE,
+				               GNXH AS XH
+				          FROM TB_GNXX T1
+				         WHERE T1.Sybz = 1
+				           and t1.jlyxzt = 1
+				           and NOT EXISTS (SELECT T2.GNXX_ZJID
+				                  FROM TB_YHXX_R_GNXX T2
+				                 WHERE T1.ZJID = T2.GNXX_ZJID
+				                   AND T2.YHXX_ZJID = #{userId})) A
+				 ORDER by XH
+				
+	</select>
+	
+	<delete id="deleteUserFuncByUserId" parameterType="String">
+		DELETE FROM TB_YHXX_R_GNXX WHERE YHXX_ZJID=#{userId}
+	</delete>
+	
+	<insert id= "insertUserFunc" parameterType="hashmap">     
+		<selectKey   keyProperty="id" resultType= "String" order="BEFORE"> 
+			SELECT SEQ_TB_YHXX_R_GNXX.NEXTVAL FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_YHXX_R_GNXX(ZJID,YHXX_ZJID,GNXX_ZJID) VALUES 
+		(#{id},#{userId},#{funcId})
+	</insert>
+	
+	<select id="queryAssignedUserByFunc" resultType="hashmap">
+		SELECT T1.ZJID, T1.YHMC,T3.DWMC
+			  FROM TB_YHXX T1, TB_YHXX_R_GNXX T2,TB_DWXX T3
+			 WHERE T1.ZJID = T2.YHXX_ZJID AND T1.SSDW_ZJID=T3.ZJID
+			   AND T2.GNXX_ZJID = #{funcId} AND T1.SYBZ=1 AND T1.JLYXZT=1
+	</select>
+	
+	<delete id="deleteUserFuncByFuncId" parameterType="String">
+		DELETE FROM TB_YHXX_R_GNXX WHERE GNXX_ZJID=#{funcId}
+	</delete>
+</mapper>

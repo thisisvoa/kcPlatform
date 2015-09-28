@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcp.platform.bpm.dao.IBpmNodeConfigMapper">
+	<resultMap id="nodeConfigMapper" type="com.kcp.platform.bpm.entity.BpmNodeConfig"> 
+			<result property="configId" column="CONFIG_ID" />  
+			<result property="defId" column="DEF_ID" />  
+			<result property="actDefId" column="ACT_DEF_ID" />  
+			<result property="nodeId" column="NODE_ID" />  
+			<result property="nodeName" column="NODE_NAME" />  
+			<result property="formType" column="FORM_TYPE" />  
+			<result property="formUrl" column="FORM_URL" />  
+			<result property="formDefName" column="FORM_DEF_NAME" />
+			<result property="formKey" column="FORM_KEY" />
+			<result property="nodeType" column="NODE_TYPE" />  
+			<result property="joinTaskKey" column="JOIN_TASK_KEY" />
+			<result property="joinTaskName" column="JOIN_TASK_NAME" /> 
+			<result property="beforeHandler" column="BEFORE_HANDLER" />
+			<result property="afterHandler" column="AFTER_HANDLER" />
+			<result property="allowBack" column="ALLOW_BACK" />
+			<result property="setType" column="SET_TYPE" />
+			<result property="sn" column="SN" />
+	</resultMap>
+	
+	<resultMap id="nodeConfigMapperExt" extends="nodeConfigMapper" type="com.kcp.platform.bpm.entity.BpmNodeConfig">
+		<result property="formDefId" column="FORM_DEF_ID"/>
+	</resultMap>
+	
+	<!--查询(不分页)-->
+	<select id="findNodeConfig" parameterType="hashmap" resultMap="nodeConfigMapper">
+		SELECT 
+				CONFIG_ID,
+				DEF_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				NODE_NAME,
+				FORM_TYPE,
+				FORM_URL,
+				FORM_DEF_NAME,
+				FORM_KEY,
+				NODE_TYPE,
+				JOIN_TASK_KEY,
+				JOIN_TASK_NAME,
+				BEFORE_HANDLER,
+				AFTER_HANDLER,
+				ALLOW_BACK,
+				SET_TYPE,
+				SN
+		FROM BPM_NODE_CONFIG
+		WHERE 1 = 1 
+			<if test="defId != null and defId != '' ">
+				AND DEF_ID = #{defId}
+			</if>
+			<if test="actDefId != null and actDefId != '' ">
+				AND ACT_DEF_ID = #{actDefId}
+			</if>
+			<if test="nodeId != null and nodeId != '' ">
+				AND NODE_ID = #{nodeId}
+			</if>
+			<if test="nodeType != null and nodeType != '' ">
+				AND NODE_TYPE = #{nodeType}
+			</if>
+			<if test="nodeName != null and nodeName != '' ">
+				AND NODE_NAME LIKE #{nodeName}||'%'
+			</if>
+		ORDER BY SN
+	</select>
+	
+	<!--根据Id进行查询-->
+	<select id="getNodeConfigById" parameterType="String" resultMap="nodeConfigMapper">
+		SELECT 
+				CONFIG_ID,
+				DEF_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				NODE_NAME,
+				FORM_TYPE,
+				FORM_URL,
+				FORM_DEF_NAME,
+				FORM_KEY,
+				NODE_TYPE,
+				JOIN_TASK_KEY,
+				JOIN_TASK_NAME,
+				BEFORE_HANDLER,
+				AFTER_HANDLER,
+				ALLOW_BACK,
+				SET_TYPE,
+				SN
+		FROM BPM_NODE_CONFIG
+		WHERE CONFIG_ID=#{id}
+	</select>
+	
+	<!--根据Id进行查询-->
+	<select id="getNodeConfig" parameterType="String" resultMap="nodeConfigMapper">
+		SELECT 
+				CONFIG_ID,
+				DEF_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				NODE_NAME,
+				FORM_TYPE,
+				FORM_URL,
+				FORM_DEF_NAME,
+				FORM_KEY,
+				NODE_TYPE,
+				JOIN_TASK_KEY,
+				JOIN_TASK_NAME,
+				BEFORE_HANDLER,
+				AFTER_HANDLER,
+				ALLOW_BACK,
+				SET_TYPE,
+				SN
+		FROM BPM_NODE_CONFIG
+		WHERE DEF_ID = #{defId}
+			AND NODE_ID = #{nodeId}
+	</select>
+	
+	<!--新增-->
+	<insert id="addNodeConfig" parameterType="com.kcp.platform.bpm.entity.BpmNodeConfig">
+		INSERT INTO BPM_NODE_CONFIG(
+				CONFIG_ID,
+				DEF_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				NODE_NAME,
+				FORM_TYPE,
+				FORM_URL,
+				FORM_DEF_NAME,
+				FORM_KEY,
+				NODE_TYPE,
+				JOIN_TASK_KEY,
+				JOIN_TASK_NAME,
+				BEFORE_HANDLER,
+				AFTER_HANDLER,
+				ALLOW_BACK,
+				SET_TYPE,
+				SN
+		 )
+		values(
+				#{configId,jdbcType=VARCHAR},
+				#{defId,jdbcType=VARCHAR},
+				#{actDefId,jdbcType=VARCHAR},
+				#{nodeId,jdbcType=VARCHAR},
+				#{nodeName,jdbcType=VARCHAR},
+				#{formType,jdbcType=VARCHAR},
+				#{formUrl,jdbcType=VARCHAR},
+				#{formDefName,jdbcType=VARCHAR},
+				#{formKey,jdbcType=VARCHAR},
+				#{nodeType,jdbcType=VARCHAR},
+				#{joinTaskKey,jdbcType=VARCHAR},
+				#{joinTaskName,jdbcType=VARCHAR},
+				#{beforeHandler,jdbcType=VARCHAR},
+				#{afterHandler,jdbcType=VARCHAR},
+				#{allowBack,jdbcType=VARCHAR},
+				#{setType,jdbcType=VARCHAR},
+				#{sn,jdbcType=INTEGER}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateNodeConfig" parameterType="com.kcp.platform.bpm.entity.BpmNodeConfig">
+		UPDATE BPM_NODE_CONFIG SET
+			DEF_ID=#{defId,jdbcType=VARCHAR},
+			ACT_DEF_ID=#{actDefId,jdbcType=VARCHAR},
+			NODE_ID=#{nodeId,jdbcType=VARCHAR},
+			NODE_NAME=#{nodeName,jdbcType=VARCHAR},
+			FORM_TYPE=#{formType,jdbcType=VARCHAR},
+			FORM_URL=#{formUrl,jdbcType=VARCHAR},
+			FORM_DEF_NAME=#{formDefName,jdbcType=VARCHAR},
+			FORM_KEY=#{formKey,jdbcType=VARCHAR},
+			NODE_TYPE=#{nodeType,jdbcType=VARCHAR},
+			JOIN_TASK_KEY=#{joinTaskKey,jdbcType=VARCHAR},
+			JOIN_TASK_NAME=#{joinTaskName,jdbcType=VARCHAR},
+			BEFORE_HANDLER=#{beforeHandler,jdbcType=VARCHAR},
+			AFTER_HANDLER=#{afterHandler,jdbcType=VARCHAR},
+			ALLOW_BACK=#{allowBack,jdbcType=VARCHAR},
+			SET_TYPE=#{setType,jdbcType=VARCHAR},
+			SN = #{sn,jdbcType=INTEGER}
+		where CONFIG_ID=#{configId}
+    </update>
+    
+	<!-- 物理删除 -->
+    <delete id="deleteNodeConfig" parameterType="String">
+     	DELETE FROM BPM_NODE_CONFIG WHERE CONFIG_ID=#{id}
+    </delete>
+    
+    <!-- 根据条件统计记录数 -->
+	<select id="countNodeConfig" parameterType="com.kcp.platform.bpm.entity.BpmNodeConfig" resultType="int">
+    	SELECT COUNT(1) FROM BPM_NODE_CONFIG WHERE 1=1
+    	<if test="configId != null and configId != ''">
+    		AND	CONFIG_ID != #{configId}
+    	</if>
+    </select>
+    <delete id="delGlobalStartNodeConfig" parameterType="String">
+    	DELETE FROM BPM_NODE_CONFIG WHERE DEF_ID=#{defId} AND SET_TYPE>'0'
+    </delete>
+    
+    <select id="getOnlineFormByActDefId" parameterType="String" resultMap="nodeConfigMapperExt">
+	   SELECT A.*, B.FORM_DEF_ID
+		  FROM BPM_NODE_CONFIG A
+		  JOIN BPM_FORM_DEF B ON A.FORM_KEY = B.FORM_KEY
+		 WHERE A.ACT_DEF_ID = #{actDefId}
+		   AND A.FORM_TYPE = '1'
+		   AND B.IS_DEFAULT = '1'
+		   AND B.IS_PUBLISHED = '1'
+	</select>
+	
+	<select id="getBySetType" resultMap="nodeConfigMapper">
+		SELECT CONFIG_ID,
+				DEF_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				NODE_NAME,
+				FORM_TYPE,
+				FORM_URL,
+				FORM_DEF_NAME,
+				FORM_KEY,
+				NODE_TYPE,
+				JOIN_TASK_KEY,
+				JOIN_TASK_NAME,
+				BEFORE_HANDLER,
+				AFTER_HANDLER,
+				ALLOW_BACK,
+				SET_TYPE,
+				SN
+			FROM BPM_NODE_CONFIG WHERE 
+				DEF_ID=#{defId} 
+				AND SET_TYPE=#{setType}
+	</select>
+	
+	<select id="getByDefIdNodeId" resultMap="nodeConfigMapper">
+		SELECT CONFIG_ID,
+				DEF_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				NODE_NAME,
+				FORM_TYPE,
+				FORM_URL,
+				FORM_DEF_NAME,
+				FORM_KEY,
+				NODE_TYPE,
+				JOIN_TASK_KEY,
+				JOIN_TASK_NAME,
+				BEFORE_HANDLER,
+				AFTER_HANDLER,
+				ALLOW_BACK,
+				SET_TYPE,
+				SN
+			FROM BPM_NODE_CONFIG
+			WHERE DEF_ID=#{defId} 
+			AND NODE_ID=#{nodeId} 
+	</select>
+	
+	<select id="getByActDefIdJoinTaskKey" resultMap="nodeConfigMapper">
+		SELECT CONFIG_ID,
+				DEF_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				NODE_NAME,
+				FORM_TYPE,
+				FORM_URL,
+				FORM_DEF_NAME,
+				FORM_KEY,
+				NODE_TYPE,
+				JOIN_TASK_KEY,
+				JOIN_TASK_NAME,
+				BEFORE_HANDLER,
+				AFTER_HANDLER,
+				ALLOW_BACK,
+				SET_TYPE,
+				SN
+			FROM BPM_NODE_CONFIG 
+			WHERE ACT_DEF_ID=#{actDefId} 
+				AND JOIN_TASK_KEY=#{joinTaskKey}
+	</select>
+	
+	<select id="getByActDefIdNodeId" resultMap="nodeConfigMapper">
+		SELECT CONFIG_ID,
+				DEF_ID,
+				ACT_DEF_ID,
+				NODE_ID,
+				NODE_NAME,
+				FORM_TYPE,
+				FORM_URL,
+				FORM_DEF_NAME,
+				FORM_KEY,
+				NODE_TYPE,
+				JOIN_TASK_KEY,
+				JOIN_TASK_NAME,
+				BEFORE_HANDLER,
+				AFTER_HANDLER,
+				ALLOW_BACK,
+				SET_TYPE,
+				SN
+			FROM BPM_NODE_CONFIG 
+			WHERE ACT_DEF_ID=#{actDefId} 
+				AND NODE_ID=#{nodeId}
+	</select>
+	
+	<delete id="delByDefId" parameterType="String">
+     	DELETE FROM BPM_NODE_CONFIG WHERE DEF_ID=#{defId}
+    </delete>
+</mapper>

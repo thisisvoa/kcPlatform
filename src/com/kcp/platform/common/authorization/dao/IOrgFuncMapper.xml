@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcp.platform.common.authorization.dao.IOrgFuncMapper">
+		<!-- 查询树形功能树,需关联单位功能信息表 -->
+	<select id="queryFuncTreeList" parameterType="String" resultType="hashmap">
+		 SELECT *
+		  FROM (SELECT 0 ISCHECK,
+		               ZJID AS NODEID,
+		               CDMC AS LABLE,
+		               SJCD AS PARENTNODEID,
+		               'MENU' TYPE,
+		               CDXH AS XH
+		          FROM TB_CDXX
+		         WHERE TB_CDXX.Sybz = 1
+		           and TB_CDXX.Jlyxzt = 1
+		        UNION
+		        SELECT 1 ISCHECK,
+		               ZJID AS NODEID,
+		               GNMC AS LABEL,
+		               CDXX_ZJID AS PARENTNODEID,
+		               'FUNC' TYPE,
+		               GNXH AS XH
+		          FROM TB_GNXX T1
+		         WHERE T1.Sybz = 1
+		           and T1.Jlyxzt = 1
+		           and EXISTS (SELECT T2.GNXX_ZJID
+		                  FROM TB_DWXX_R_GNXX T2
+		                 WHERE T1.ZJID = T2.GNXX_ZJID
+		                   AND T2.DWXX_ZJID = #{orgId})
+		        UNION
+		        SELECT 0 ISCHECK,
+		               ZJID AS NODEID,
+		               GNMC AS LABEL,
+		               CDXX_ZJID AS PARENTNODEID,
+		               'FUNC' TYPE,
+		               GNXH AS XH
+		          FROM TB_GNXX T1
+		         WHERE T1.Sybz = 1
+		           and T1.Jlyxzt = 1
+		           and NOT EXISTS (SELECT T2.GNXX_ZJID
+		                  FROM TB_DWXX_R_GNXX T2
+		                 WHERE T1.ZJID = T2.GNXX_ZJID
+		                   AND T2.DWXX_ZJID = #{orgId})) A
+		 ORDER BY A.XH ASC
+	</select>
+	
+	<delete id="deleteOrgFuncByOrgId" parameterType="String">
+		DELETE FROM TB_DWXX_R_GNXX WHERE DWXX_ZJID=#{orgId}
+	</delete>
+	
+	<insert id= "insertOrgFunc" parameterType="hashmap">     
+		<selectKey   keyProperty="id" resultType= "String" order="BEFORE"> 
+			SELECT SEQ_TB_DWXX_R_GNXX.NEXTVAL FROM DUAL 
+		</selectKey>
+		INSERT INTO TB_DWXX_R_GNXX(ZJID,DWXX_ZJID,GNXX_ZJID) VALUES 
+		(#{id},#{orgId},#{funcId})
+	</insert> 
+	
+	<select id="queryAssignedOrgByFunc" resultType="hashmap">
+		SELECT T1.ZJID AS ZJID, T1.DWMC AS DWMC,(SELECT DWMC FROM TB_DWXX T3 WHERE T3.ZJID=T1.SJDW_ZJID) SJDW
+			  FROM TB_DWXX T1,TB_DWXX_R_GNXX T2
+			 WHERE T1.ZJID = T2.DWXX_ZJID 
+			 	AND T2.GNXX_ZJID=#{funcId} 
+			 	AND T1.JLYXZT=1
+	</select>
+	
+	<delete id="deleteOrgFuncByFuncId" parameterType="String">
+		DELETE FROM TB_DWXX_R_GNXX WHERE GNXX_ZJID=#{funcId}
+	</delete>
+</mapper>

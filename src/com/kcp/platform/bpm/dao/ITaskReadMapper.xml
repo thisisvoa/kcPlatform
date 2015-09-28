@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcp.platform.bpm.dao.ITaskReadMapper">
+	<resultMap id="taskReadMapper" type="com.kcp.platform.bpm.entity.TaskRead"> 
+			<result property="id" column="ID" />  
+			<result property="actInstId" column="ACT_INST_ID" />  
+			<result property="taskId" column="TASK_ID" />  
+			<result property="userId" column="USER_ID" />  
+			<result property="userName" column="USER_NAME" />  
+			<result property="createTime" column="CREATE_TIME" />  
+	</resultMap>
+	
+	<!--根据Id进行查询-->
+	<select id="getTaskReadById" parameterType="String" resultMap="taskReadMapper">
+		SELECT 
+				ID,
+				ACT_INST_ID,
+				TASK_ID,
+				USER_ID,
+				USER_NAME,
+				CREATE_TIME
+		FROM BPM_TASK_READ
+		WHERE ID=#{id}
+	</select>
+	
+	<!--新增-->
+	<insert id="addTaskRead" parameterType="com.kcp.platform.bpm.entity.TaskRead">
+		INSERT INTO BPM_TASK_READ(
+				ID,
+				ACT_INST_ID,
+				TASK_ID,
+				USER_ID,
+				USER_NAME,
+				CREATE_TIME
+		 )
+		values(
+				#{id,jdbcType=VARCHAR},
+				#{actInstId,jdbcType=VARCHAR},
+				#{taskId,jdbcType=VARCHAR},
+				#{userId,jdbcType=VARCHAR},
+				#{userName,jdbcType=VARCHAR},
+				#{createTime,jdbcType=TIMESTAMP}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateTaskRead" parameterType="com.kcp.platform.bpm.entity.TaskRead">
+		UPDATE BPM_TASK_READ SET
+			ACT_INST_ID=#{actInstId,jdbcType=VARCHAR},
+			TASK_ID=#{taskId,jdbcType=VARCHAR},
+			USER_ID=#{userId,jdbcType=VARCHAR},
+			USER_NAME=#{userName,jdbcType=VARCHAR},
+			CREATE_TIME=#{createTime,jdbcType=TIMESTAMP}
+		where ID=#{id}
+    </update>
+    
+	<!-- 物理删除 -->
+    <delete id="delById" parameterType="String">
+     	DELETE FROM BPM_TASK_READ WHERE ID=#{id}
+    </delete>
+    
+    <select id="isTaskRead"  resultType="int">
+		SELECT count(*) amount FROM BPM_TASK_READ WHERE TASK_ID=#{taskId,jdbcType=VARCHAR} and USER_ID=#{userId,jdbcType=VARCHAR}
+	</select>
+		
+	
+	<delete id="delByActInstId" parameterType="String">
+		DELETE FROM BPM_TASK_READ WHERE ACT_INST_ID=#{actInstId,jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="delByTaskId" parameterType="String">
+		DELETE FROM BPM_TASK_READ WHERE TASK_ID=#{taskId,jdbcType=VARCHAR}
+	</delete>
+    
+    <delete id="delByActDefId" parameterType="String">
+		DELETE FROM BPM_TASK_READ WHERE ACT_INST_ID IN (SELECT ACT_INST_ID FROM BPM_PRO_RUN WHERE ACT_DEF_ID = #{actDefId})
+	</delete>
+    
+    <select id="getTaskRead" resultMap="taskReadMapper">
+		SELECT 
+				ID,
+				ACT_INST_ID,
+				TASK_ID,
+				USER_ID,
+				USER_NAME,
+				CREATE_TIME
+		FROM BPM_TASK_READ
+		WHERE ACT_INST_ID=#{actInstId,jdbcType=VARCHAR}
+			AND TASK_ID=#{taskId,jdbcType=VARCHAR}
+	</select>
+</mapper>

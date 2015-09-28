@@ -233,7 +233,7 @@
 	</ui:Layout>
 	<ui:Layout region="south" style="height:100px;padding:5px;color:#4040a0" border="false">
 		<b>提示：</b><br>
-		1、每条任务必须在程序中拥有对应的Bean，即实现com.casic27.platform.base.job.Job接口，且Bean名称为"任务组名.周知标识"，TAG可为空，而周知标识不能为空；<br>
+		1、每条任务必须在程序中拥有对应的Bean，即实现com.kcp.platform.base.job.Job接口，且Bean名称为"任务组名.周知标识"，TAG可为空，而周知标识不能为空；<br>
 		2、系统将会在启动时自动装配任务并运行，所以在配置任务后，必须编写Job并重新部署启动应用，任务才会运行；<br>
 		3、只有"未装配"或处于"停止状态"的任务才能进行修改或删除；<br>
 		4、<img src="${ctx}/ui/css/icon/images/blue.gif" style="vertical-align:middle;"/>&nbsp;发布且处于活动状态的任务&nbsp;&nbsp;

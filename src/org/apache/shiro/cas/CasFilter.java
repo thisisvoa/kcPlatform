@@ -27,11 +27,11 @@ import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.casic27.platform.common.log.entity.LogonLog;
-import com.casic27.platform.common.org.entity.Org;
-import com.casic27.platform.common.user.entity.User;
-import com.casic27.platform.sys.constants.CommonConst;
-import com.casic27.platform.sys.security.context.SecurityContext;
+import com.kcp.platform.common.log.entity.LogonLog;
+import com.kcp.platform.common.org.entity.Org;
+import com.kcp.platform.common.user.entity.User;
+import com.kcp.platform.sys.constants.CommonConst;
+import com.kcp.platform.sys.security.context.SecurityContext;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -132,7 +132,7 @@ public class CasFilter extends AuthenticatingFilter {
     	((HttpServletRequest)request).getSession().setAttribute("loginUser", user);
     	LogonLog logonLog = genBasicLogonLog(user, org);
         logonLog.setLogonResult(CommonConst.YES);
-		com.casic27.platform.common.log.Logger.getInstance().addLogonLog(logonLog);//记录登录日志
+		com.kcp.platform.common.log.Logger.getInstance().addLogonLog(logonLog);//记录登录日志
         issueSuccessRedirect(request, response);
         return false;
     }

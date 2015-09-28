@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcp.platform.bpm.dao.IProcessRunMapper">
+	<resultMap id="processRunMapper" type="com.kcp.platform.bpm.entity.ProcessRun"> 
+			<result property="runId" column="RUN_ID" />  
+			<result property="defId" column="DEF_ID" />  
+			<result property="processName" column="PROCESS_NAME" />  
+			<result property="subject" column="SUBJECT" />  
+			<result property="creatorId" column="CREATOR_ID" />  
+			<result property="creator" column="CREATOR" />  
+			<result property="createTime" column="CREATE_TIME" />  
+			<result property="busDescp" column="BUS_DESCP" />  
+			<result property="status" column="STATUS" />  
+			<result property="actInstId" column="ACT_INST_ID" />  
+			<result property="actDefId" column="ACT_DEF_ID" />  
+			<result property="businessKey" column="BUSINESS_KEY" />  
+			<result property="businessUrl" column="BUSINESS_URL" />  
+			<result property="endTime" column="END_TIME" />  
+			<result property="duration" column="DURATION" />  
+			<result property="pkName" column="PK_NAME" />  
+			<result property="tableName" column="TABLE_NAME" />
+			<result property="parentId" column="PARENT_ID" />  
+			<result property="startOrgId" column="START_ORG_ID" />  
+			<result property="startOrgName" column="START_ORG_NAME" />  
+			<result property="formDefId" column="FORM_DEF_ID" />  
+			<result property="typeId" column="TYPE_ID" />  
+			<result property="flowKey" column="FLOW_KEY" />
+			<result property="formKeyUrl" column="FORM_KEY_URL" />
+			<result property="lastSubmitDuration" column="LAST_SUBMIT_DURATION" />
+			<result property="isFormal" column="IS_FORMAL" />
+	</resultMap>
+	<!--查询(不分页)-->
+	<select id="findProcessRun" parameterType="hashmap" resultMap="processRunMapper">
+		SELECT 
+				RUN_ID,
+				DEF_ID,
+				PROCESS_NAME,
+				SUBJECT,
+				CREATOR_ID,
+				CREATOR,
+				CREATE_TIME,
+				BUS_DESCP,
+				STATUS,
+				ACT_INST_ID,
+				ACT_DEF_ID,
+				BUSINESS_KEY,
+				BUSINESS_URL,
+				END_TIME,
+				DURATION,
+				PK_NAME,
+				TABLE_NAME,
+				PARENT_ID,
+				START_ORG_ID,
+				START_ORG_NAME,
+				FORM_DEF_ID,
+				TYPE_ID,
+				FLOW_KEY,
+				FORM_KEY_URL,
+				LAST_SUBMIT_DURATION,
+				IS_FORMAL
+		FROM BPM_PRO_RUN
+		WHERE STATUS != 10
+			<if test="defId != null and defId != '' ">
+				AND DEF_ID = #{defId}
+			</if>
+			<if test="processName != null and processName != '' ">
+				AND PROCESS_NAME LIKE '%'||#{processName}||'%'
+			</if>
+			<if test="subject != null and subject != '' ">
+				AND SUBJECT LIKE '%'||#{subject}||'%'
+			</if>
+			<if test="status != null and status != '' ">
+				AND STATUS = #{status}
+			</if>
+			<if test="startTime != null">
+				AND CREATE_TIME >= #{startTime}
+			</if>
+			<if test="endTime != null ">
+				AND CREATE_TIME &lt; = #{endTime}
+			</if>
+		ORDER BY CREATE_TIME
+	</select>
+	
+	<!--查询(分页)-->
+	<select id="findProcessRunPaging" parameterType="hashmap" resultMap="processRunMapper">
+		SELECT 
+				RUN_ID,
+				DEF_ID,
+				PROCESS_NAME,
+				SUBJECT,
+				CREATOR_ID,
+				CREATOR,
+				CREATE_TIME,
+				BUS_DESCP,
+				STATUS,
+				ACT_INST_ID,
+				ACT_DEF_ID,
+				BUSINESS_KEY,
+				BUSINESS_URL,
+				END_TIME,
+				DURATION,
+				PK_NAME,
+				TABLE_NAME,
+				PARENT_ID,
+				START_ORG_ID,
+				START_ORG_NAME,
+				FORM_DEF_ID,
+				TYPE_ID,
+				FLOW_KEY,
+				FORM_KEY_URL,
+				LAST_SUBMIT_DURATION,
+				IS_FORMAL
+		FROM BPM_PRO_RUN
+		WHERE STATUS != 10
+			<if test="defId != null and defId != '' ">
+				AND DEF_ID = #{defId}
+			</if>
+			<if test="processName != null and processName != '' ">
+				AND PROCESS_NAME LIKE '%'||#{processName}||'%'
+			</if>
+			<if test="subject != null and subject != '' ">
+				AND SUBJECT LIKE '%'||#{subject}||'%'
+			</if>
+			<if test="status != null and status != '' ">
+				AND STATUS = #{status}
+			</if>
+			<if test="startTime != null">
+				AND CREATE_TIME >= #{startTime}
+			</if>
+			<if test="endTime != null ">
+				AND CREATE_TIME &lt; = #{endTime}
+			</if>
+		ORDER BY CREATE_TIME DESC
+	</select>
+	
+	<!--根据Id进行查询-->
+	<select id="getProcessRunById" parameterType="String" resultMap="processRunMapper">
+		SELECT 
+				RUN_ID,
+				DEF_ID,
+				PROCESS_NAME,
+				SUBJECT,
+				CREATOR_ID,
+				CREATOR,
+				CREATE_TIME,
+				BUS_DESCP,
+				STATUS,
+				ACT_INST_ID,
+				ACT_DEF_ID,
+				BUSINESS_KEY,
+				BUSINESS_URL,
+				END_TIME,
+				DURATION,
+				PK_NAME,
+				TABLE_NAME,
+				PARENT_ID,
+				START_ORG_ID,
+				START_ORG_NAME,
+				FORM_DEF_ID,
+				TYPE_ID,
+				FLOW_KEY,
+				FORM_KEY_URL,
+				LAST_SUBMIT_DURATION,
+				IS_FORMAL
+		FROM BPM_PRO_RUN
+		WHERE RUN_ID=#{id}
+	</select>
+	
+	<select id="getProcessRunByActInstId" parameterType="String" resultMap="processRunMapper">
+		SELECT 
+				RUN_ID,
+				DEF_ID,
+				PROCESS_NAME,
+				SUBJECT,
+				CREATOR_ID,
+				CREATOR,
+				CREATE_TIME,
+				BUS_DESCP,
+				STATUS,
+				ACT_INST_ID,
+				ACT_DEF_ID,
+				BUSINESS_KEY,
+				BUSINESS_URL,
+				END_TIME,
+				DURATION,
+				PK_NAME,
+				TABLE_NAME,
+				PARENT_ID,
+				START_ORG_ID,
+				START_ORG_NAME,
+				FORM_DEF_ID,
+				TYPE_ID,
+				FLOW_KEY,
+				FORM_KEY_URL,
+				LAST_SUBMIT_DURATION,
+				IS_FORMAL
+		FROM BPM_PRO_RUN
+		WHERE ACT_INST_ID=#{actInstId}
+	</select>
+	
+	
+	<select id="getProcessRunByActDefId" parameterType="String" resultMap="processRunMapper">
+		SELECT 
+				RUN_ID,
+				DEF_ID,
+				PROCESS_NAME,
+				SUBJECT,
+				CREATOR_ID,
+				CREATOR,
+				CREATE_TIME,
+				BUS_DESCP,
+				STATUS,
+				ACT_INST_ID,
+				ACT_DEF_ID,
+				BUSINESS_KEY,
+				BUSINESS_URL,
+				END_TIME,
+				DURATION,
+				PK_NAME,
+				TABLE_NAME,
+				PARENT_ID,
+				START_ORG_ID,
+				START_ORG_NAME,
+				FORM_DEF_ID,
+				TYPE_ID,
+				FLOW_KEY,
+				FORM_KEY_URL,
+				LAST_SUBMIT_DURATION,
+				IS_FORMAL
+		FROM BPM_PRO_RUN
+		WHERE ACT_DEF_ID=#{actDefId}
+	</select>
+	<!--新增-->
+	<insert id="addProcessRun" parameterType="com.kcp.platform.bpm.entity.ProcessRun">
+		INSERT INTO BPM_PRO_RUN(
+				RUN_ID,
+				DEF_ID,
+				PROCESS_NAME,
+				SUBJECT,
+				CREATOR_ID,
+				CREATOR,
+				CREATE_TIME,
+				BUS_DESCP,
+				STATUS,
+				ACT_INST_ID,
+				ACT_DEF_ID,
+				BUSINESS_KEY,
+				BUSINESS_URL,
+				END_TIME,
+				DURATION,
+				PK_NAME,
+				TABLE_NAME,
+				PARENT_ID,
+				START_ORG_ID,
+				START_ORG_NAME,
+				FORM_DEF_ID,
+				TYPE_ID,
+				FLOW_KEY,
+				FORM_KEY_URL,
+				LAST_SUBMIT_DURATION,
+				IS_FORMAL
+		 )
+		values(
+				#{runId,jdbcType=VARCHAR},
+				#{defId,jdbcType=VARCHAR},
+				#{processName,jdbcType=VARCHAR},
+				#{subject,jdbcType=VARCHAR},
+				#{creatorId,jdbcType=VARCHAR},
+				#{creator,jdbcType=VARCHAR},
+				#{createTime,jdbcType=TIMESTAMP},
+				#{busDescp,jdbcType=VARCHAR},
+				#{status,jdbcType=INTEGER},
+				#{actInstId,jdbcType=VARCHAR},
+				#{actDefId,jdbcType=VARCHAR},
+				#{businessKey,jdbcType=VARCHAR},
+				#{businessUrl,jdbcType=VARCHAR},
+				#{endTime,jdbcType=TIMESTAMP},
+				#{duration,jdbcType=BIGINT},
+				#{pkName,jdbcType=VARCHAR},
+				#{tableName,jdbcType=VARCHAR},
+				#{parentId,jdbcType=VARCHAR},
+				#{startOrgId,jdbcType=VARCHAR},
+				#{startOrgName,jdbcType=VARCHAR},
+				#{formDefId,jdbcType=VARCHAR},
+				#{typeId,jdbcType=VARCHAR},
+				#{flowKey,jdbcType=VARCHAR},
+				#{formKeyUrl,jdbcType=VARCHAR},
+				#{lastSubmitDuration,jdbcType=BIGINT},
+				#{isFormal,jdbcType=VARCHAR}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateProcessRun" parameterType="com.kcp.platform.bpm.entity.ProcessRun">
+		UPDATE BPM_PRO_RUN SET
+			DEF_ID=#{defId,jdbcType=VARCHAR},
+			PROCESS_NAME=#{processName,jdbcType=VARCHAR},
+			SUBJECT=#{subject,jdbcType=VARCHAR},
+			CREATOR_ID=#{creatorId,jdbcType=VARCHAR},
+			CREATOR=#{creator,jdbcType=VARCHAR},
+			CREATE_TIME=#{createTime,jdbcType=TIMESTAMP},
+			BUS_DESCP=#{busDescp,jdbcType=VARCHAR},
+			STATUS=#{status,jdbcType=INTEGER},
+			ACT_INST_ID=#{actInstId,jdbcType=VARCHAR},
+			ACT_DEF_ID=#{actDefId,jdbcType=VARCHAR},
+			BUSINESS_KEY=#{businessKey,jdbcType=VARCHAR},
+			BUSINESS_URL=#{businessUrl,jdbcType=VARCHAR},
+			END_TIME=#{endTime,jdbcType=TIMESTAMP},
+			DURATION=#{duration,jdbcType=INTEGER},
+			PK_NAME=#{pkName,jdbcType=VARCHAR},
+			TABLE_NAME=#{tableName,jdbcType=VARCHAR},
+			PARENT_ID=#{parentId,jdbcType=VARCHAR},
+			START_ORG_ID=#{startOrgId,jdbcType=VARCHAR},
+			START_ORG_NAME=#{startOrgName,jdbcType=VARCHAR},
+			FORM_DEF_ID=#{formDefId,jdbcType=VARCHAR},
+			TYPE_ID=#{typeId,jdbcType=VARCHAR},
+			FLOW_KEY=#{flowKey,jdbcType=VARCHAR},
+			FORM_KEY_URL=#{formKeyUrl,jdbcType=VARCHAR},
+			LAST_SUBMIT_DURATION=#{lastSubmitDuration,jdbcType=NUMERIC},
+			IS_FORMAL=#{isFormal,jdbcType=VARCHAR}
+		where RUN_ID=#{runId}
+    </update>
+    
+	<!-- 物理删除 -->
+    <delete id="delById" parameterType="String">
+     	DELETE FROM BPM_PRO_RUN WHERE RUN_ID=#{id}
+    </delete>
+    
+    <!-- 根据条件统计记录数 -->
+	<select id="countProcessRun" parameterType="com.kcp.platform.bpm.entity.ProcessRun" resultType="int">
+    	SELECT COUNT(1) FROM BPM_PRO_RUN WHERE 1=1
+    	<if test="runId != null and runId != ''">
+    		AND	RUN_ID != #{runId}
+    	</if>
+    </select>
+    <delete id="delByActDefId" parameterType="String">
+     	DELETE FROM BPM_PRO_RUN WHERE ACT_DEF_ID=#{actDefId}
+    </delete>
+    
+    <select id="getAlreadyMattersList" resultMap="processRunMapper">
+	    SELECT DISTINCT RUN.*
+	      FROM BPM_PRO_RUN RUN
+	      JOIN ACT_HI_ACTINST TK ON RUN.ACT_INST_ID = TK.PROC_INST_ID_
+	      LEFT JOIN BPM_DEFINITION DEF ON RUN.DEF_ID = DEF.DEF_ID
+	     WHERE TK.ASSIGNEE_ = #{assignee}
+	       AND TK.END_TIME_ IS NOT NULL
+	       AND DEF.STATUS != 3
+	       AND RUN.STATUS IN (1, 5, 6)
+		<if test="subject!=null and subject!=''"> AND UPPER(RUN.SUBJECT) LIKE '%'||#{subject}||'%'</if>
+		<if test="creator!=null and creator!=''"> AND RUN.CREATOR LIKE '%'||#{creator}||'%'</if>
+		<if test="startTime!=null"> AND RUN.CREATE_TIME  >=#{startTime,jdbcType=DATE} </if>
+		<if test="endTime!=null"> AND <![CDATA[ RUN.CREATE_TIME <= #{endTime,jdbcType=DATE}  ]]> </if>
+		<if test="status!=null and status!=''"> AND RUN.STATUS  = #{status} </if>
+		<if test="processName!=null and processName!=''"> AND UPPER(RUN.PROCESS_NAME)  LIKE '%'||#{processName}||'%'</if>
+		ORDER BY RUN.CREATE_TIME DESC
+    </select>
+    
+    <select id="getCompleteMattersList" resultMap="processRunMapper">
+	    SELECT DISTINCT RUN.*
+	      FROM BPM_PRO_RUN RUN
+	      JOIN ACT_HI_ACTINST TK ON RUN.ACT_INST_ID = TK.PROC_INST_ID_
+	      LEFT JOIN BPM_DEFINITION DEF ON RUN.DEF_ID = DEF.DEF_ID
+	     WHERE TK.ASSIGNEE_ = #{assignee}
+	       AND TK.END_TIME_ IS NOT NULL
+	       AND DEF.STATUS != 3
+	       AND RUN.STATUS IN (2,3)
+		<if test="subject!=null and subject!=''"> AND UPPER(RUN.SUBJECT) LIKE '%'||#{subject}||'%'</if>
+		<if test="creator!=null and creator!=''"> AND RUN.CREATOR LIKE '%'||#{creator}||'%'</if>
+		<if test="startTime!=null"> AND RUN.CREATE_TIME  >=#{startTime,jdbcType=DATE} </if>
+		<if test="endTime!=null"> AND <![CDATA[ RUN.CREATE_TIME <= #{endTime,jdbcType=DATE}  ]]> </if>
+		<if test="status!=null and status!=''"> AND RUN.STATUS  = #{status} </if>
+		<if test="processName!=null and processName!=''"> AND UPPER(RUN.PROCESS_NAME)  LIKE '%'||#{processName}||'%'</if>
+		ORDER BY RUN.END_TIME DESC
+    </select>
+    
+    <select id="getMyRequestList" resultMap="processRunMapper">
+    	SELECT DISTINCT RUN.*
+		  FROM BPM_PRO_RUN RUN
+		  LEFT JOIN BPM_DEFINITION DEF ON RUN.DEF_ID = DEF.DEF_ID
+		 WHERE RUN.CREATOR_ID = #{creatorId}
+		   AND RUN.STATUS IN (1, 5, 6)
+		   AND DEF.STATUS != 3
+			<if test="subject!=null and subject!=''"> AND UPPER(RUN.SUBJECT) LIKE '%'||UPPER(#{subject})||'%'</if>
+			<if test="startTime!=null"> AND RUN.CREATE_TIME  >=#{startTime,jdbcType=DATE} </if>
+			<if test="endTime!=null"> AND <![CDATA[ RUN.CREATE_TIME <= #{endTime,jdbcType=DATE}  ]]> </if>
+			<if test="status!=null and status!=''"> AND RUN.STATUS  = #{status} </if>
+			<if test="processName!=null and processName!=''"> AND UPPER(RUN.PROCESS_NAME)  LIKE '%'||UPPER(#{processName})||'%'</if>
+			ORDER BY RUN.CREATE_TIME DESC
+    </select>
+    <select id="getMyCompleteList" resultMap="processRunMapper">
+    	SELECT DISTINCT RUN.*
+		  FROM BPM_PRO_RUN RUN
+		  LEFT JOIN BPM_DEFINITION DEF ON RUN.DEF_ID = DEF.DEF_ID
+		 WHERE RUN.CREATOR_ID = #{creatorId}
+		   AND (RUN.STATUS = 2 OR  RUN.STATUS = 3 ) 
+		   AND DEF.STATUS != 3
+			<if test="subject!=null and subject!=''"> AND UPPER(RUN.SUBJECT) LIKE '%'||UPPER(#{subject})||'%'</if>
+			<if test="startTime!=null"> AND RUN.CREATE_TIME  >=#{startTime,jdbcType=DATE} </if>
+			<if test="endTime!=null"> AND <![CDATA[ RUN.CREATE_TIME <= #{endTime,jdbcType=DATE}  ]]> </if>
+			<if test="status!=null and status!=''"> AND RUN.STATUS  = #{status} </if>
+			<if test="processName!=null and processName!=''"> AND UPPER(RUN.PROCESS_NAME)  LIKE '%'||UPPER(#{processName})||'%'</if>
+			ORDER BY RUN.CREATE_TIME DESC
+    </select>
+    
+    <select id="getMyDraftList" resultMap="processRunMapper">
+    	SELECT DISTINCT RUN.*
+		  FROM BPM_PRO_RUN RUN
+		  LEFT JOIN BPM_DEFINITION DEF ON RUN.DEF_ID = DEF.DEF_ID
+		 WHERE RUN.CREATOR_ID = #{creatorId}
+		   AND RUN.STATUS = 4 
+		   AND DEF.STATUS != 3
+			<if test="subject!=null and subject!=''"> AND UPPER(RUN.SUBJECT) LIKE '%'||UPPER(#{subject})||'%'</if>
+			<if test="startTime!=null"> AND RUN.CREATE_TIME  >=#{startTime,jdbcType=DATE} </if>
+			<if test="endTime!=null"> AND <![CDATA[ RUN.CREATE_TIME <= #{endTime,jdbcType=DATE}  ]]> </if>
+			<if test="processName!=null and processName!=''"> AND UPPER(RUN.PROCESS_NAME)  LIKE '%'||UPPER(#{processName})||'%'</if>
+			ORDER BY RUN.CREATE_TIME DESC
+    </select>
+</mapper>

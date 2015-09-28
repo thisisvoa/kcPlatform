@@ -245,7 +245,7 @@
 	</ui:Layout>
 	<ui:Layout region="south" style="height:90px;padding:5px;" border="false">
 		<b>提示：</b><br>
-		1、每条任务必须在程序中拥有对应的Bean，即实现com.casic27.platform.base.job.Job接口，且Bean名称为"任务组名.周知标识"，TAG可为空，而周知标识不能为空；<br>
+		1、每条任务必须在程序中拥有对应的Bean，即实现com.kcp.platform.base.job.Job接口，且Bean名称为"任务组名.周知标识"，TAG可为空，而周知标识不能为空；<br>
 		2、开始时间为空表示即时开始，结束时间为空表示永不结束，格式为yyyyMMddhhmmss；<br>
 		3、Corn表达式的配置<a href="#" style="color:#4040a0" onclick="showCronInfo()">参见详细说明</a>
 	</ui:Layout>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kcp.platform.base.file.dao.IUploadFileMapper">
+	<resultMap id="uploadFileMapper" type="com.kcp.platform.base.file.entity.UploadFile"> 
+			<result property="fileId" column="FILE_ID" />  
+			<result property="fileName" column="FILE_NAME" />  
+			<result property="diskFileName" column="DISK_FILE_NAME" />  
+			<result property="fileSize" column="FILE_SIZE" />  
+			<result property="fileType" column="FILE_TYPE" />  
+			<result property="filePath" column="FILE_PATH" />  
+			<result property="downloadNum" column="DOWNLOAD_NUM" />  
+			<result property="remark" column="REMARK" />  
+			<result property="createTime" column="CREATE_TIME" />  
+			<result property="creator" column="CREATOR" />
+			<result property="userName" column="USER_NAME" />  
+			<result property="modifyTime" column="MODIFY_TIME" />  
+			<result property="modifyUser" column="MODIFY_USER" />  
+	</resultMap>
+	<!--查询(不分页)-->
+	<select id="findUploadFile" parameterType="hashmap" resultMap="uploadFileMapper">
+		SELECT 
+				FILE_ID,
+				FILE_NAME,
+				DISK_FILE_NAME,
+				FILE_SIZE,
+				FILE_TYPE,
+				FILE_PATH,
+				DOWNLOAD_NUM,
+				REMARK,
+				CREATE_TIME,
+				CREATOR,
+				MODIFY_TIME,
+				MODIFY_USER
+		FROM TB_UPLOAD_FILE
+		WHERE 1 = 1 
+			<if test="fileName != null and fileName != '' ">
+				AND FILE_NAME like '%'||#{fileName}||'%'
+			</if>
+	
+	</select>
+	
+	<!--查询(分页)-->
+	<select id="findUploadFilePaging" parameterType="hashmap" resultMap="uploadFileMapper">
+		SELECT T1.*, T2.YHMC AS USER_NAME
+		  FROM TB_UPLOAD_FILE T1
+		  LEFT JOIN TB_YHXX T2 ON T1.CREATOR = T2.ZJID
+		 WHERE 1 = 1
+			<if test="fileName != null and fileName != '' ">
+				AND T1.FILE_NAME like '%'||#{fileName}||'%'
+			</if>
+			<if test="userName != null and userName != '' ">
+				AND T2.YHMC like '%'||#{userName}||'%'
+			</if>
+			<if test="startTime!=null">
+    			AND T1.CREATE_TIME >= #{startTime}
+    		</if>
+    		<if test="endTime!=null">
+    			AND T1.CREATE_TIME &lt; #{endTime}
+    		</if>
+			ORDER BY T1.CREATE_TIME DESC
+	</select>
+	
+	<!--根据Id进行查询-->
+	<select id="getUploadFileById" parameterType="String" resultMap="uploadFileMapper">
+		SELECT 
+				FILE_ID,
+				FILE_NAME,
+				DISK_FILE_NAME,
+				FILE_SIZE,
+				FILE_TYPE,
+				FILE_PATH,
+				DOWNLOAD_NUM,
+				REMARK,
+				CREATE_TIME,
+				CREATOR,
+				MODIFY_TIME,
+				MODIFY_USER
+		FROM TB_UPLOAD_FILE
+		WHERE FILE_ID=#{id}
+	</select>
+	
+	<select id="getUploadFileListById"  resultMap="uploadFileMapper">
+		SELECT 
+				FILE_ID,
+				FILE_NAME,
+				DISK_FILE_NAME,
+				FILE_SIZE,
+				FILE_TYPE,
+				FILE_PATH,
+				DOWNLOAD_NUM,
+				REMARK,
+				CREATE_TIME,
+				CREATOR,
+				MODIFY_TIME,
+				MODIFY_USER
+		FROM TB_UPLOAD_FILE
+		WHERE FILE_ID in 
+		 <foreach collection="array" item="ids"  open="(" separator="," close=")">  
+	        #{ids}  
+	     </foreach>
+	
+	</select>
+	
+	<!--新增-->
+	<insert id="addUploadFile" parameterType="com.kcp.platform.base.file.entity.UploadFile">
+		INSERT INTO TB_UPLOAD_FILE(
+				FILE_ID,
+				FILE_NAME,
+				DISK_FILE_NAME,
+				FILE_SIZE,
+				FILE_TYPE,
+				FILE_PATH,
+				DOWNLOAD_NUM,
+				REMARK,
+				CREATE_TIME,
+				CREATOR,
+				MODIFY_TIME,
+				MODIFY_USER
+		 )
+		values(
+				#{fileId,jdbcType=VARCHAR},
+				#{fileName,jdbcType=VARCHAR},
+				#{diskFileName,jdbcType=VARCHAR},
+				#{fileSize,jdbcType=INTEGER},
+				#{fileType,jdbcType=VARCHAR},
+				#{filePath,jdbcType=VARCHAR},
+				#{downloadNum,jdbcType=INTEGER},
+				#{remark,jdbcType=VARCHAR},
+				SYSDATE,
+				#{creator,jdbcType=VARCHAR},
+				SYSDATE,
+				#{modifyUser,jdbcType=VARCHAR}
+		 )
+    </insert>
+    
+    <!--修改-->
+    <update id="updateUploadFile" parameterType="com.kcp.platform.base.file.entity.UploadFile">
+		UPDATE TB_UPLOAD_FILE SET
+		FILE_NAME=#{fileName,jdbcType=VARCHAR},
+DISK_FILE_NAME=#{diskFileName,jdbcType=VARCHAR},
+FILE_SIZE=#{fileSize,jdbcType=INTEGER},
+FILE_TYPE=#{fileType,jdbcType=VARCHAR},
+FILE_PATH=#{filePath,jdbcType=VARCHAR},
+DOWNLOAD_NUM=#{downloadNum,jdbcType=INTEGER},
+REMARK=#{remark,jdbcType=VARCHAR}
+		where FILE_ID=#{fileId}
+    </update>
+    
+	<!-- 物理删除 -->
+    <delete id="deleteUploadFile" parameterType="String">
+     	DELETE FROM TB_UPLOAD_FILE WHERE FILE_ID=#{id}
+    </delete>
+    
+    <!-- 根据条件统计记录数 -->
+	<select id="countUploadFile" parameterType="com.kcp.platform.base.file.entity.UploadFile" resultType="int">
+    	SELECT COUNT(1) FROM TB_UPLOAD_FILE WHERE 1=1
+    	<if test="fileId != null and fileId != ''">
+    		AND	FILE_ID != #{fileId}
+    	</if>
+    </select>
+    
+    <update id="upDownloadNum" parameterType="String">
+    	UPDATE TB_UPLOAD_FILE SET DOWNLOAD_NUM = DOWNLOAD_NUM+1  WHERE FILE_ID=#{id}
+    </update>
+</mapper>
