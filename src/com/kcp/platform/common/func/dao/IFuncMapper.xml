@@ -17,12 +17,12 @@
 		<result property="jlscsj" column="JLSCSJ"/> 
 		<result property="jlyxzt" column="JLYXZT"/> 
 	</resultMap>
-	<resultMap id="menuMap" type="com.kcp.platform.common.menu.entity.Menu"> 
-		<id property="zjId" column="ZJID" /> 
-		<result property="cdmc" column="CDMC"/> 
-		<result property="cdjb" column="CDJB"/> 
-		<result property="cdxh" column="CDXH"/> 
-		<result property="sjcd" column="SJCD"/> 
+	<resultMap id="menuMap" type="com.kcp.platform.common.menu.entity.SysMenu"> 
+		<id property="id" column="ID" /> 
+		<result property="menuName" column="menu_name"/> 
+		<result property="menuLevel" column="menu_level"/> 
+		<result property="menuIndex" column="menu_index"/> 
+		<result property="parentMenuId" column="parent_menu_id"/> 
 	</resultMap>
 	
 	<!-- 查询有效功能清单 -->

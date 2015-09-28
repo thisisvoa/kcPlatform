@@ -1,5 +1,6 @@
 package com.kcp.platform.common.authorization.action;
 
+import java.awt.Menu;
 import java.security.cert.X509Certificate;
 import java.util.List;
 
@@ -14,11 +15,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
+import com.jit.util.GACertParser;
 import com.kcp.platform.common.authorization.menutree.MenuTreeUtil;
 import com.kcp.platform.common.authorization.service.AuthoriztationService;
-import com.kcp.platform.common.menu.entity.Menu;
+import com.kcp.platform.common.menu.entity.SysMenu;
 import com.kcp.platform.common.org.entity.Org;
 import com.kcp.platform.common.user.entity.User;
 import com.kcp.platform.core.exception.BusinessException;
@@ -27,9 +28,7 @@ import com.kcp.platform.sys.security.context.SecurityContext;
 import com.kcp.platform.sys.security.exception.LoginExceptionResolver;
 import com.kcp.platform.util.CipherUtil;
 import com.kcp.platform.util.StringUtils;
-import com.kcp.platform.web.listener.OnLineListener;
 import com.kcp.platform.web.listener.OnlineStore;
-import com.jit.util.GACertParser;
 
 /**
  *
@@ -67,7 +66,7 @@ public class LoginController extends BaseMultiActionController{
 	public String toleft(HttpServletRequest request, Model model){
 		User user = SecurityContext.getCurrentUser();
 		//获取菜单
-		List<Menu> menuList = authoriztationService.getAssignedMenuList(user);
+		List<SysMenu> menuList = authoriztationService.getAssignedMenuList(user);
 		String menuHTML = MenuTreeUtil.bulidMenuHTML(menuList,request.getContextPath());
 		model.addAttribute("menuHTML",menuHTML);
 		return "framework/left";
@@ -197,7 +196,7 @@ public class LoginController extends BaseMultiActionController{
 	public String toMain(HttpServletRequest request, Model model){
 		User user = SecurityContext.getCurrentUser();
 		//获取菜单
-		List<Menu> menuList = authoriztationService.getAssignedMenuList(user);
+		List<SysMenu> menuList = authoriztationService.getAssignedMenuList(user);
 		String menuHTML = MenuTreeUtil.bulidMenuHTML(menuList,request.getContextPath());
 		model.addAttribute("menuHTML",menuHTML);
 		

@@ -4,7 +4,6 @@
 package com.kcp.platform.sys.security.filter;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -12,12 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.kcp.platform.common.menu.entity.Menu;
 import com.kcp.platform.common.menu.service.MenuService;
 
 
 /**
- * @author wangyt
  *
  */
 public class FilterChainDefinitionFactoryBean implements FactoryBean<Map<String, String>> {

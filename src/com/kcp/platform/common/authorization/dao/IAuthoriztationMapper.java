@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.kcp.platform.common.func.entity.Function;
-import com.kcp.platform.common.menu.entity.Menu;
+import com.kcp.platform.common.menu.entity.SysMenu;
 import com.kcp.platform.common.role.entity.Role;
 
 /**
@@ -37,5 +37,5 @@ public interface IAuthoriztationMapper {
 	 * @param userId
 	 * @return
 	 */
-	List<Menu> getAssignedMenuList(@Param("userId")String userId);
+	List<SysMenu> getAssignedMenuList(@Param("userId")String userId);
 }

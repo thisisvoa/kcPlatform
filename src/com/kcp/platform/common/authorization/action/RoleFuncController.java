@@ -1,5 +1,6 @@
 package com.kcp.platform.common.authorization.action;
 
+import java.awt.Menu;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -8,7 +9,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kcp.platform.common.authorization.service.RoleFuncService;
 import com.kcp.platform.common.func.entity.Function;
 import com.kcp.platform.common.func.service.FuncService;
-import com.kcp.platform.common.menu.entity.Menu;
+import com.kcp.platform.common.menu.entity.SysMenu;
 import com.kcp.platform.common.menu.service.MenuService;
 import com.kcp.platform.common.role.entity.Role;
 import com.kcp.platform.common.role.service.RoleService;
@@ -188,7 +188,7 @@ public class RoleFuncController extends BaseMultiActionController {
 		if(func == null){
 			throw new BusinessException("所选择的功能不存在！");
 		}
-		List<Menu> parentMenuList = menuService.queryParentMenuList(func.getCdxxZjId());
+		List<SysMenu> parentMenuList = menuService.queryParentMenuList(func.getCdxxZjId());
 		
 		return new ModelAndView("common/authorization/assignRoleToFunc")
 						.addObject("parentMenuList", parentMenuList)
@@ -212,24 +212,24 @@ public class RoleFuncController extends BaseMultiActionController {
 		String id = request.getParameter("id");
 		List<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
 		if(StringUtils.isEmpty(id)){
-			List<Menu> menuList = menuService.queryMenusByParentMenuId(CommonConst.TREE_ROOT_ID);
-			for(Menu menu:menuList){
+			List<SysMenu> menuList = menuService.queryMenusByParentMenuId(CommonConst.TREE_ROOT_ID);
+			for(SysMenu menu:menuList){
 				Map<String,Object> node = new HashMap<String,Object>();
-				node.put("id", menu.getZjId());
-				node.put("name", menu.getCdmc());
-				node.put("pId", menu.getSjcd());
+				node.put("id", menu.getId());
+				node.put("name", menu.getMenuName());
+				node.put("pId", menu.getParentMenuId());
 				node.put("isParent", true);
 				node.put("type", "menu");
 				result.add(node);
 			}
 		}else{
-			List<Menu> menuList = menuService.queryMenusByParentMenuId(id);
+			List<SysMenu> menuList = menuService.queryMenusByParentMenuId(id);
 			List<Function> funcList = funcService.queryFuncByParentMenuId(id);
-			for(Menu menu:menuList){
+			for(SysMenu menu:menuList){
 				Map<String,Object> node = new HashMap<String,Object>();
-				node.put("id", menu.getZjId());
-				node.put("name", menu.getCdmc());
-				node.put("pId", menu.getSjcd());
+				node.put("id", menu.getId());
+				node.put("name", menu.getMenuName());
+				node.put("pId", menu.getParentMenuId());
 				node.put("isParent", true);
 				node.put("type", "menu");
 				result.add(node);

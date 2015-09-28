@@ -7,18 +7,18 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.kcp.platform.common.log.annotation.OperateLog;
-import com.kcp.platform.common.menu.entity.Menu;
+import com.kcp.platform.common.menu.entity.SysMenu;
 
 @Repository
 public interface IMenuMapper {
 
-	public List<Menu> queryMenuList(Menu menu);
+	public List<SysMenu> queryMenuList(SysMenu menu);
 	
 	@OperateLog(isRecord=false)
-	public int insert(Menu paramMap);
+	public int insert(SysMenu paramMap);
 	
 	@OperateLog(isRecord=false)
-	public int update(Menu paramMap);
+	public int update(SysMenu paramMap);
 	
 	@OperateLog(isRecord=false)
 	public int delete(String id);
@@ -28,34 +28,34 @@ public interface IMenuMapper {
 	 * @param sjcd
 	 * @return
 	 */
-	public String queryMaxCdxh(@Param("sjcd")String sjcd);
+	public String queryMaxCdxh(@Param("PARENT_MENU_ID")String PARENT_MENU_ID);
 	
 	/**
 	 * 查询菜单信息
 	 * @param menu
 	 * @return
 	 */
-	public List<Menu> findMenuList(Menu menu);
+	public List<SysMenu> findMenuList(SysMenu menu);
 	
 	/**
 	 * 查询菜单的上级菜单
 	 */
-	public List<Menu> queryParentMenuList(@Param("menuId")String menuId);
+	public List<SysMenu> queryParentMenuList(@Param("menuId")String menuId);
 	
 	/**
 	 * 查询所有菜单，以树形数据结构返回
 	 * @return
 	 */
-	public List<Menu> findAllEnableMenus();
+	public List<SysMenu> findAllEnableMenus();
 	
 	/**
 	 * 修改树形所有菜单的使用标识
 	 * @param paramMap
 	 */
-	public void updateChildrenSybz(Menu paramMap);
+	public void updateChildrenSybz(SysMenu paramMap);
 	
 	
-	public void updateParentSybz(Menu paramMap);
+	public void updateParentSybz(SysMenu paramMap);
 	/**
 	 * 获取菜单权限信息
 	 * @return
@@ -63,7 +63,7 @@ public interface IMenuMapper {
 	@OperateLog(isRecord=false)
 	public List<Map<String,Object>> getAuthInfo(String[] menuIds);
 	
-	public Menu getMenuById(@Param("id")String id);
+	public SysMenu getMenuById(@Param("id")String id);
 	
-	public void logicDelMenu(Menu menu);
+	public void logicDelMenu(SysMenu menu);
 }

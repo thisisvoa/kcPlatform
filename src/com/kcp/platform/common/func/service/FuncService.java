@@ -10,7 +10,7 @@ import com.kcp.platform.common.func.dao.IFuncMapper;
 import com.kcp.platform.common.func.entity.Function;
 import com.kcp.platform.common.log.annotation.Log;
 import com.kcp.platform.common.log.annotation.OperateLogType;
-import com.kcp.platform.common.menu.entity.Menu;
+import com.kcp.platform.common.menu.entity.SysMenu;
 import com.kcp.platform.core.service.BaseService;
 import com.kcp.platform.sys.constants.CommonConst;
 import com.kcp.platform.util.DateUtils;
@@ -32,7 +32,7 @@ public class FuncService extends BaseService{
 		return iFuncMapper.queryFuncList(funcMap);
 	}
 	
-	public List<Menu> queryMenuList(){
+	public List<SysMenu> queryMenuList(){
 		return iFuncMapper.queryMenuList();
 	}
 	

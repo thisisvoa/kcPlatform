@@ -1,113 +1,149 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kcp.platform.common.menu.dao.IMenuMapper">
-	<resultMap id="menuMap" type="com.kcp.platform.common.menu.entity.Menu"> 
-		<id property="zjId" column="ZJID" /> 
-		<result property="cdmc" column="CDMC"/> 
-		<result property="cdjb" column="CDJB"/> 
-		<result property="cdxh" column="CDXH"/> 
-		<result property="sjcd" column="SJCD"/> 
-		<result property="sjcdCdmc" column="SJCDCDMC"/> 
-		<result property="cddz" column="CDDZ"/> 
-		<result property="sfzhyicd" column="SFZHYICD"/> 
-		<result property="sybz" column="SYBZ"/> 
-		<result property="bz" column="BZ"/> 
-		<result property="cjyh" column="CJYH"/>
-		<result property="gxyh" column="GXYH"/>
-		<result property="jlxzsj" column="JLXZSJ"/> 
-		<result property="jlxgsj" column="JLXGSJ"/> 
-		<result property="jlscsj" column="JLSCSJ"/>
-		<result property="jlyxzt" column="JLYXZT"/>
+	<resultMap id="menuMap" type="com.kcp.platform.common.menu.entity.SysMenu"> 
+			<result property="id" column="ID" />  
+			<result property="menuName" column="MENU_NAME" />  
+			<result property="menuLevel" column="MENU_LEVEL" />  
+			<result property="menuIndex" column="MENU_INDEX" />  
+			<result property="parentMenuId" column="PARENT_MENU_ID" />  
+			<result property="menuAddr" column="MENU_ADDR" />  
+			<result property="isLast" column="IS_LAST" />  
+			<result property="isUsed" column="IS_USED" />  
+			<result property="menuType" column="MENU_TYPE" />  
+			<result property="memo" column="MEMO" />  
+			<result property="createTime" column="CREATE_TIME" />  
+			<result property="updateTime" column="UPDATE_TIME" />  
+			<result property="deleteTime" column="DELETE_TIME" />  
+			<result property="createdUserId" column="CREATED_USER_ID" />  
+			<result property="updateUserId" column="UPDATE_USER_ID" />  
+			<result property="deleteUserId" column="DELETE_USER_ID" />  
+			<result property="status" column="STATUS" />  
 	</resultMap>
 	
 	<!-- 查询有效菜单清单 -->
-	<select id="queryMenuList" parameterType="com.kcp.platform.common.menu.entity.Menu" resultMap="menuMap">
-		SELECT C.*,C1.CDMC AS SJCDCDMC
-		FROM TB_CDXX C
-		LEFT JOIN TB_CDXX C1 ON C.SJCD = C1.ZJID WHERE 1 = 1
-		<if test="zjId != null and zjId != ''">and C.ZJID = #{zjId}</if>
-		<if test="cdmc != null and cdmc != ''">and C.CDMC = #{cdmc}</if>
-		<if test="sjcd != null and sjcd != ''">and C.SJCD = #{sjcd}</if>
-		<if test="cdjb != null and cdjb != ''">and C.CDJB = #{cdjb}</if>
-		<if test="sfzhyicd != null and sfzhyicd != ''">and C.SFZHYICD = #{sfzhyicd}</if>
-		<if test="sybz != null and sybz != ''">and C.SYBZ = #{sybz}</if>
-		<if test="jlyxzt != null and jlyxzt != ''">and C.JLYXZT = #{jlyxzt}</if>
-		order by to_number(C.CDXH)
+	<select id="queryMenuList" parameterType="com.kcp.platform.common.menu.entity.SysMenu" resultMap="menuMap">
+		SELECT C.*,C1.menu_name AS parent_menu_name
+		FROM TB_sys_menu C
+		LEFT JOIN TB_sys_menu C1 ON C.PARENT_MENU_ID = C1.id WHERE 1 = 1
+		<if test="id != null and id != ''">and C.ID = #{id}</if>
+		<if test="menuName != null and menuName != ''">and C.menu_name = #{menuName}</if>
+		<if test="parentMenuId != null and parentMenuId != ''">and C.PARENT_MENU_ID = #{parentMenuId}</if>
+		<if test="menuLevel != null and menuLevel != ''">and C.MENU_LEVEL = #{menuLevel}</if>
+		<if test="sfzhyicd != null and isLast != ''">and C.IS_LAST = #{isLast}</if>
+		<if test="isvalid != null and isvalid != ''">and C.ISVALID = #{isvalid}</if>
+		<if test="status != null and status != ''">and C.status = #{status}</if>
+		order by to_number(C.MENU_INDEX)
 	</select>
 	
 	<select id="queryMaxCdxh" parameterType="String" resultType="java.lang.String">
-		SELECT (MAX(TO_NUMBER(CDXH))+1) FROM TB_CDXX WHERE SJCD=#{sjcd}
+		SELECT (MAX(TO_NUMBER(MENU_INDEX))+1) FROM TB_sys_menu WHERE PARENT_MENU_ID=#{PARENT_MENU_ID}
 	</select>
 	<!-- 新增 -->
-	<insert id="insert" parameterType="com.kcp.platform.common.menu.entity.Menu">
-		<selectKey keyProperty="zjId" resultType= "String" order="BEFORE"> 
-			SELECT SEQ_TB_CDXX.NEXTVAL FROM DUAL 
+	<insert id="insert" parameterType="com.kcp.platform.common.menu.entity.SysMenu">
+		<selectKey keyProperty="id" resultType= "String" order="BEFORE"> 
+			SELECT SEQ_tb_sys_menu.NEXTVAL FROM DUAL 
 		</selectKey>
-		insert into TB_CDXX(ZJID, CDMC, CDJB, CDXH, SJCD, CDDZ, SFZHYICD, SYBZ, 
-			BZ, CJYH, GXYH, JLXZSJ, JLXGSJ, JLSCSJ,JLYXZT) 
-		values(#{zjId,jdbcType=VARCHAR}, #{cdmc,jdbcType=VARCHAR}, #{cdjb,jdbcType=VARCHAR}, 
-			   #{cdxh,jdbcType=VARCHAR}, #{sjcd,jdbcType=VARCHAR}, #{cddz,jdbcType=VARCHAR}, 
-			   #{sfzhyicd,jdbcType=VARCHAR}, #{sybz,jdbcType=VARCHAR},#{bz,jdbcType=VARCHAR},
-			   #{cjyh,jdbcType=VARCHAR},#{gxyh,jdbcType=VARCHAR},#{jlxzsj,jdbcType=VARCHAR},
-			   #{jlxgsj,jdbcType=VARCHAR},#{jlscsj,jdbcType=VARCHAR},#{jlyxzt,jdbcType=VARCHAR})
+		INSERT INTO TB_SYS_MENU(
+				ID,
+				MENU_NAME,
+				MENU_LEVEL,
+				MENU_INDEX,
+				PARENT_MENU_ID,
+				MENU_ADDR,
+				IS_LAST,
+				IS_USED,
+				MENU_TYPE,
+				MEMO,
+				CREATE_TIME,
+				UPDATE_TIME,
+				DELETE_TIME,
+				CREATED_USER_ID,
+				UPDATE_USER_ID,
+				DELETE_USER_ID,
+				STATUS
+		 )
+		values(
+				#{id,jdbcType=VARCHAR},
+				#{menuName,jdbcType=VARCHAR},
+				#{menuLevel,jdbcType=VARCHAR},
+				#{menuIndex,jdbcType=VARCHAR},
+				#{parentMenuId,jdbcType=VARCHAR},
+				#{menuAddr,jdbcType=VARCHAR},
+				#{isLast,jdbcType=VARCHAR},
+				#{isUsed,jdbcType=VARCHAR},
+				#{menuType,jdbcType=VARCHAR},
+				#{memo,jdbcType=VARCHAR},
+				#{createTime,jdbcType=TIMESTAMP},
+				#{updateTime,jdbcType=TIMESTAMP},
+				#{deleteTime,jdbcType=TIMESTAMP},
+				#{createdUserId,jdbcType=VARCHAR},
+				#{updateUserId,jdbcType=VARCHAR},
+				#{deleteUserId,jdbcType=VARCHAR},
+				#{status,jdbcType=VARCHAR}
+		 )
 	</insert>
 	
 	<!-- 修改 -->
-	<update id="update" parameterType="com.kcp.platform.common.menu.entity.Menu">
-		update TB_CDXX SET
-			CDMC = #{cdmc,jdbcType=VARCHAR},
-			CDJB = #{cdjb,jdbcType=VARCHAR},
-			CDXH = #{cdxh,jdbcType=VARCHAR},
-			SJCD = #{sjcd,jdbcType=VARCHAR},
-			CDDZ = #{cddz,jdbcType=VARCHAR},
-			SFZHYICD = #{sfzhyicd,jdbcType=VARCHAR},
-			SYBZ = #{sybz,jdbcType=VARCHAR},
-			BZ = #{bz,jdbcType=VARCHAR},
-			JLXZSJ = #{jlxzsj,jdbcType=VARCHAR},
-			JLXGSJ = #{jlxgsj,jdbcType=VARCHAR},
-			JLSCSJ = #{jlscsj,jdbcType=VARCHAR},
-			JLYXZT = #{jlyxzt,jdbcType=VARCHAR}
-		where ZJID = #{zjId}
+	<update id="update" parameterType="com.kcp.platform.common.menu.entity.SysMenu">
+		UPDATE TB_SYS_MENU SET ID=#{id}
+<if test="menuName != null and menuName != ''">,MENU_NAME=#{menuName,jdbcType=VARCHAR}</if>
+<if test="menuLevel != null and menuLevel != ''">,MENU_LEVEL=#{menuLevel,jdbcType=VARCHAR}</if>
+<if test="menuIndex != null and menuIndex != ''">,MENU_INDEX=#{menuIndex,jdbcType=VARCHAR}</if>
+<if test="parentMenuId != null and parentMenuId != ''">,PARENT_MENU_ID=#{parentMenuId,jdbcType=VARCHAR}</if>
+<if test="menuAddr != null and menuAddr != ''">,MENU_ADDR=#{menuAddr,jdbcType=VARCHAR}</if>
+<if test="isLast != null and isLast != ''">,IS_LAST=#{isLast,jdbcType=VARCHAR}</if>
+<if test="isUsed != null and isUsed != ''">,IS_USED=#{isUsed,jdbcType=VARCHAR}</if>
+<if test="menuType != null and menuType != ''">,MENU_TYPE=#{menuType,jdbcType=VARCHAR}</if>
+<if test="memo != null and memo != ''">,MEMO=#{memo,jdbcType=VARCHAR}</if>
+<if test="createTime != null and createTime != ''">,CREATE_TIME=#{createTime,jdbcType=TIMESTAMP}</if>
+<if test="updateTime != null and updateTime != ''">,UPDATE_TIME=#{updateTime,jdbcType=TIMESTAMP}</if>
+<if test="deleteTime != null and deleteTime != ''">,DELETE_TIME=#{deleteTime,jdbcType=TIMESTAMP}</if>
+<if test="createdUserId != null and createdUserId != ''">,CREATED_USER_ID=#{createdUserId,jdbcType=VARCHAR}</if>
+<if test="updateUserId != null and updateUserId != ''">,UPDATE_USER_ID=#{updateUserId,jdbcType=VARCHAR}</if>
+<if test="deleteUserId != null and deleteUserId != ''">,DELETE_USER_ID=#{deleteUserId,jdbcType=VARCHAR}</if>
+<if test="status != null and status != ''">,STATUS=#{status,jdbcType=VARCHAR}</if>
+		where ID=#{id}
 	</update>
 	
 	<!-- 删除 -->
 	<delete id="delete">
-		delete from TB_CDXX where ZJID = #{zjId}
+		delete from TB_SYS_MENU where ID = #{ID}
 	</delete>
 	
 	<!-- 查询Menu -->
-	<select id="findMenuList" parameterType="com.kcp.platform.common.menu.entity.Menu" resultMap="menuMap">
-		SELECT ZJID,CDMC,CDJB,CDXH,SJCD,CDDZ,SFZHYICD,SYBZ,BZ,CJYH,GXYH,JLXZSJ,JLXGSJ,JLSCSJ,JLYXZT 
-		FROM TB_CDXX WHERE 1=1
-		<if test="zjId!=null and zjId!=''">
-			AND ZJID=#{zjId}
+	<select id="findMenuList" parameterType="com.kcp.platform.common.menu.entity.SysMenu" resultMap="menuMap">
+		SELECT ID,MENU_NAME,MENU_LEVEL,MENU_INDEX,PARENT_MENU_INDEX,MENU_ADDR,IS_LAST,IS_USED,MEMO,CREATED_USER_ID,UPDATE_USER_ID,DELETE_USER_ID,STATUS
+		FROM TB_SYS_MENU WHERE 1=1
+		<if test="ID!=null and ID''">
+			AND ID=#{ID}
 		</if>
-		<if test="sjcd!=null and sjcd!=''">
-			AND SJCD=#{sjcd}
+		<if test="parentMenuId!=null and parentMenuId!=''">
+			AND parent_Menu_Id=#{parentMenuId}
 		</if>
-		<if test="sybz!=null and sybz!=''">
-			AND SYBZ=#{sybz}
+		<if test="IS_USED!=null and IS_USED!=''">
+			AND IS_USED=#{IS_USED}
 		</if>
-		<if test="jlyxzt!=null and jlyxzt!=''">
-			AND JLYXZT=#{jlyxzt}
+		<if test="STATUS!=null and STATUS!=''">
+			AND STATUS=#{STATUS}
 		</if>
 	</select>
 	
 	<!-- 查询某个菜单的所有上级菜单 ，返回值包括自己-->
 	<select id="queryParentMenuList" parameterType="String" resultMap="menuMap">
-		SELECT * FROM TB_CDXX
-			CONNECT BY PRIOR SJCD=ZJID
-			START WITH ZJID=#{menuId}
+		SELECT * FROM TB_SYS_MENU
+			CONNECT BY PRIOR parent_Menu_Id=ID
+			START WITH ID=#{ID}
 	</select>
 	
 	<!-- 查询所有菜单，以树形数据结构返回-->
 	<select id="findAllEnableMenus" resultMap="menuMap">
-		SELECT * FROM(SELECT * FROM TB_CDXX CONNECT BY PRIOR ZJID=SJCD
-				START WITH SJCD=0 ORDER SIBLINGS BY to_number(CDXH) ) A WHERE JLYXZT=1 AND SYBZ=1
+		SELECT * FROM(SELECT * FROM TB_SYS_MENU CONNECT BY PRIOR ID=parent_Menu_Id
+				START WITH parent_Menu_Id=0 ORDER SIBLINGS BY to_number(MENU_INDEX) ) A WHERE STATUS=1 AND IS_USED=1
 	</select>
 	
 	<select id="getAuthInfo" resultType="hashmap">
-		SELECT DISTINCT(T1.ZJID) AS CDID,T5.ZJID AS YHID,T1.CDMC,T5.YHMC,T5.JYBH, T5.SFZH,T6.DWMC FROM TB_CDXX T1
+		SELECT DISTINCT(T1.ID) AS MENU_ID,T5.ZJID AS YHID,T1.CDMC,T5.YHMC,T5.JYBH, T5.SFZH,T6.DWMC FROM TB_CDXX T1
 		       JOIN TB_GNXX T2 ON T1.ZJID = T2.CDXX_ZJID
 		       JOIN TB_JSXX_R_GNXX T3 ON T2.ZJID = T3.GNXX_ZJID
 		       JOIN TB_YHXX_R_JSXX T4 ON T3.JSXX_ZJID = T4.JSXX_ZJID
@@ -133,25 +169,25 @@
 	</select>
 	
 	<!-- 修改树形所有菜单的使用标识 -->
-	<update id="updateChildrenSybz" parameterType="com.kcp.platform.common.menu.entity.Menu">
-		update TB_CDXX set SYBZ = #{sybz} where ZJID in 
-		(select ZJID from TB_CDXX connect by prior ZJID=SJCD start with SJCD = #{zjId})
+	<update id="updateChildrenSybz" parameterType="com.kcp.platform.common.menu.entity.SysMenu">
+		update TB_SYS_MENU set IS_USED = #{isUsed} where ID in 
+		(select ID from TB_SYS_MENU connect by prior ID=parent_Menu_Id start with parent_Menu_Id = #{ID})
 	</update>
 	
-	<update id="updateParentSybz" parameterType="com.kcp.platform.common.menu.entity.Menu">
-		update TB_CDXX set SYBZ = #{sybz} where ZJID in 
-		(select ZJID from TB_CDXX connect by prior SJCD=ZJID start with zjid = #{zjId})
+	<update id="updateParentSybz" parameterType="com.kcp.platform.common.menu.entity.SysMenu">
+		update TB_SYS_MENU set IS_USED = #{isUsed} where ID in 
+		(select ID from TB_SYS_MENU connect by prior parent_Menu_Id=ID start with ID = #{ID})
 	</update>
 	<select id="getMenuById" resultMap="menuMap">
-		SELECT * FROM TB_CDXX WHERE ZJID = #{id}
+		SELECT * FROM TB_SYS_MENU WHERE ID = #{id}
 	</select>
 	
-	<update id="logicDelMenu" parameterType="com.kcp.platform.common.menu.entity.Menu">
-		UPDATE TB_CDXX
-		   SET JLYXZT = '0', JLSCSJ = #{jlscsj}
-		 WHERE ZJID IN (SELECT ZJID
-		                  FROM TB_CDXX
-		                 START WITH ZJID = #{zjId}
-		                CONNECT BY PRIOR ZJID = SJCD)
+	<update id="logicDelMenu" parameterType="com.kcp.platform.common.menu.entity.SysMenu">
+		UPDATE TB_SYS_MENU
+		   SET STATUS = '0', deleteTime = #{deleteTime},DELETE_USER_ID=#{deleteUserId}
+		 WHERE ID IN (SELECT ID
+		                  FROM TB_SYS_MENU
+		                 START WITH ID = #{ID}
+		                CONNECT BY PRIOR ID = parent_Menu_Id)
 	</update>
 </mapper>

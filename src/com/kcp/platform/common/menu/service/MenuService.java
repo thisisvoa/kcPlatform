@@ -16,7 +16,7 @@ import com.kcp.platform.common.func.service.FuncService;
 import com.kcp.platform.common.log.annotation.Log;
 import com.kcp.platform.common.log.annotation.OperateLogType;
 import com.kcp.platform.common.menu.dao.IMenuMapper;
-import com.kcp.platform.common.menu.entity.Menu;
+import com.kcp.platform.common.menu.entity.SysMenu;
 import com.kcp.platform.core.service.BaseService;
 import com.kcp.platform.sys.constants.CommonConst;
 import com.kcp.platform.util.DateUtils;
@@ -29,7 +29,7 @@ public class MenuService extends BaseService{
 	@Autowired
 	private FuncService funcService;
 
-	public List<Menu> queryMenuList(Menu paramMap){
+	public List<SysMenu> queryMenuList(SysMenu paramMap){
 		return iMenuMapper.queryMenuList(paramMap);
 	}
 	
@@ -50,12 +50,12 @@ public class MenuService extends BaseService{
 	 */
 	@CacheEvict(cacheItemManager="authCacheItemManger", evitAll=true)
 	@Log(type=OperateLogType.INSERT, moduleName="菜单信息管理", operateDesc="'[新增] 新增[菜单名称：'+#paramMap.cdmc+'] [菜单地址：'+#paramMap.cddz+'] [使用标识：'+#paramMap.sybz+']的菜单信息'")
-	public int insert(Menu paramMap){
+	public int insert(SysMenu paramMap){
 		int result = iMenuMapper.insert(paramMap);
 		Function func = new Function();
 		func.setGnmc("查看");//新增的菜单都添加一个"查看"的功能(用于权限分配)
 		func.setGndm("VIEW_"+new Date().getTime());
-		func.setCdxxZjId(paramMap.getZjId());
+		func.setCdxxZjId(paramMap.getId());
 		func.setGnxh("1");
 		func.setJlxzsj(DateUtils.getCurrentDateTime14());
 		func.setJlxgsj(DateUtils.getCurrentDateTime14());
@@ -72,7 +72,7 @@ public class MenuService extends BaseService{
 	 */
 	@CacheEvict(cacheItemManager="authCacheItemManger", evitAll=true)
 	@Log(type=OperateLogType.UPDATE, moduleName="菜单信息管理", operateDesc="'[修改] 修改[菜单名称：'+#paramMap.cdmc+'] [菜单地址：'+#paramMap.cddz+'] [使用标识:'+#paramMap.sybz+']的菜单信息'")
-	public int update(Menu paramMap){
+	public int update(SysMenu paramMap){
 		return iMenuMapper.update(paramMap);
 	}
 	
@@ -104,7 +104,7 @@ public class MenuService extends BaseService{
 		return rebuildObjectList;
 	}
 	
-	public List<Menu> findAllEnableMenus(){
+	public List<SysMenu> findAllEnableMenus(){
 		return iMenuMapper.findAllEnableMenus();
 	}
 	
@@ -113,11 +113,11 @@ public class MenuService extends BaseService{
 	 * @param parentMenuId
 	 * @return
 	 */
-	public List<Menu> queryMenusByParentMenuId(String parentMenuId){
-		Menu menu = new Menu();
-		menu.setSjcd(parentMenuId);
-		menu.setSybz(CommonConst.ENABLE_FLAG);
-		menu.setJlyxzt(CommonConst.ENABLE_FLAG);
+	public List<SysMenu> queryMenusByParentMenuId(String parentMenuId){
+		SysMenu menu = new SysMenu();
+		menu.setParentMenuId(parentMenuId);
+		menu.setIsUsed(CommonConst.ENABLE_FLAG);
+		menu.setStatus(CommonConst.ENABLE_FLAG);
 		return iMenuMapper.findMenuList(menu);
 	}
 	
@@ -126,8 +126,8 @@ public class MenuService extends BaseService{
 	 * @param menuId
 	 * @return
 	 */
-	public List<Menu> queryParentMenuList(String menuId){
-		List<Menu> menuList = iMenuMapper.queryParentMenuList(menuId);
+	public List<SysMenu> queryParentMenuList(String menuId){
+		List<SysMenu> menuList = iMenuMapper.queryParentMenuList(menuId);
 		Collections.reverse(menuList);
 		return menuList;
 	}
@@ -138,11 +138,11 @@ public class MenuService extends BaseService{
 	 * @param menuId
 	 * @return
 	 */
-	public void updateChildrenSybz(Menu paramMap){
+	public void updateChildrenSybz(SysMenu paramMap){
 		iMenuMapper.updateChildrenSybz(paramMap);
 	}
 	
-	public void updateParentSybz(Menu paramMap){
+	public void updateParentSybz(SysMenu paramMap){
 		iMenuMapper.updateParentSybz(paramMap);
 	}
 	/**
@@ -154,14 +154,14 @@ public class MenuService extends BaseService{
 		return iMenuMapper.getAuthInfo(menuIds);
 	}
 	
-	public Menu getMenuById(String id){
+	public SysMenu getMenuById(String id){
 		return iMenuMapper.getMenuById(id);
 	}
 	@CacheEvict(cacheItemManager="authCacheItemManger", evitAll=true)
 	@Log(type=OperateLogType.DELETE, moduleName="菜单信息管理", operateDesc="'[删除] 删除[菜单名称：'+#menu.cdmc+']的菜单信息'")
-	public void logicDelMenu(Menu menu){
-		funcService.logicDelByMenuId(menu.getZjId());
-		menu.setJlscsj(DateUtils.getCurrentDateTime14());
+	public void logicDelMenu(SysMenu menu){
+		funcService.logicDelByMenuId(menu.getId());
+		menu.setDeleteTime(DateUtils.getCurrentDateTime());
 		iMenuMapper.logicDelMenu(menu);
 	}
 }

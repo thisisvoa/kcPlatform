@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kcp.platform.common.authorization.service.UserFuncService;
 import com.kcp.platform.common.func.entity.Function;
 import com.kcp.platform.common.func.service.FuncService;
-import com.kcp.platform.common.menu.entity.Menu;
+import com.kcp.platform.common.menu.entity.SysMenu;
 import com.kcp.platform.common.menu.service.MenuService;
 import com.kcp.platform.common.org.entity.Org;
 import com.kcp.platform.common.org.service.OrgService;
@@ -228,7 +228,7 @@ public class UserFuncController extends BaseMultiActionController {
 		if(func==null){
 			throw new BusinessException("选择的功能不存在!");
 		}
-		List<Menu> parentMenuList = menuService.queryParentMenuList(func.getCdxxZjId());
+		List<SysMenu> parentMenuList = menuService.queryParentMenuList(func.getCdxxZjId());
 		return new ModelAndView("common/authorization/assignUserToFunc")
 					.addObject("func", func)
 					.addObject("parentMenuList", parentMenuList);

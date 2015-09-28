@@ -16,7 +16,7 @@ import com.kcp.platform.common.func.service.FuncService;
 import com.kcp.platform.common.log.Logger;
 import com.kcp.platform.common.log.annotation.OperateLogType;
 import com.kcp.platform.common.log.core.SqlContextHolder;
-import com.kcp.platform.common.menu.entity.Menu;
+import com.kcp.platform.common.menu.entity.SysMenu;
 import com.kcp.platform.common.menu.service.MenuService;
 import com.kcp.platform.core.exception.BusinessException;
 import com.kcp.platform.core.page.Page;
@@ -117,7 +117,7 @@ public class FuncController extends BaseMultiActionController{
 	public String funcView(Model model, HttpServletRequest request) {
 		String zjId = request.getParameter("zjId");
 		Function funcMap = funcService.getFuncById(zjId);
-		Menu menu = menuService.getMenuById(funcMap.getCdxxZjId());
+		SysMenu menu = menuService.getMenuById(funcMap.getCdxxZjId());
 		String sql = SqlContextHolder.getSql();
 		Logger.getInstance().addSysLog(OperateLogType.QUERY.value(), sql, "功能信息管理", "[查看] 查看[功能名称："+funcMap.getGnmc()+"] [功能代码："+funcMap.getGndm()+"]的功能信息");
 		model.addAttribute("func", funcMap);
@@ -199,7 +199,7 @@ public class FuncController extends BaseMultiActionController{
 	 */
 	@RequestMapping("/funcSscd")
 	public void funcSscd(Model model, HttpServletRequest request) {
-		List<Menu> menuList = funcService.queryMenuList();
+		List<SysMenu> menuList = funcService.queryMenuList();
 		model.addAttribute("sscdList", menuList);
 	}
 	

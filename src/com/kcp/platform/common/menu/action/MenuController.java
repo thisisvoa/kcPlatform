@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kcp.platform.common.log.Logger;
 import com.kcp.platform.common.log.annotation.OperateLogType;
 import com.kcp.platform.common.log.core.SqlContextHolder;
-import com.kcp.platform.common.menu.entity.Menu;
+import com.kcp.platform.common.menu.entity.SysMenu;
 import com.kcp.platform.common.menu.service.MenuService;
 import com.kcp.platform.core.exception.BusinessException;
 import com.kcp.platform.core.web.BaseMultiActionController;
@@ -30,8 +30,6 @@ import com.kcp.platform.util.StringUtils;
  *
  *类描述：
  * 
- *@Author： 施阳钦(shiyangqin@kcp.com)
- *@Version：1.0
  */
 @Controller
 @RequestMapping("/menu")
@@ -57,11 +55,11 @@ public class MenuController extends BaseMultiActionController{
 		if(StringUtils.isEmpty(parentId)){
 			parentId = "0";
 		}
-		Menu menu = new Menu();
-		menu.setSjcd(parentId);
-		menu.setCdxh(menuService.queryMaxCdxh(parentId));
-		menu.setSfzhyicd("0");
-		menu.setSybz(CommonConst.ENABLE_FLAG);
+		SysMenu menu = new SysMenu();
+		menu.setParentMenuId(parentId);
+		menu.setMenuIndex(menuService.queryMaxCdxh(parentId));
+		menu.setIsLast("0");
+		menu.setIsUsed(CommonConst.ENABLE_FLAG);
 		model.addAttribute("menu", menu);
 		model.addAttribute("type", "add");
 		return "common/menu/menuDetail";
@@ -70,10 +68,10 @@ public class MenuController extends BaseMultiActionController{
 	@RequestMapping("/menuEdit")
 	public String menuEdit(Model model, HttpServletRequest request) {
 		String zjId = request.getParameter("zjId");
-		Menu menuMap = new Menu();
+		SysMenu menuMap = new SysMenu();
 		if (StringUtils.isNotBlank(zjId)) {
-			menuMap.setZjId(zjId);
-			List<Menu> resultList = menuService.queryMenuList(menuMap);
+			menuMap.setId(zjId);
+			List<SysMenu> resultList = menuService.queryMenuList(menuMap);
 			model.addAttribute("menu", resultList.get(0));
 		}
 		model.addAttribute("type", "edit");
@@ -88,10 +86,10 @@ public class MenuController extends BaseMultiActionController{
 	 */
 	private String menuDetail(Model model, HttpServletRequest request, Boolean show) {
 		String zjId = request.getParameter("zjId");
-		Menu menuMap = new Menu();
+		SysMenu menuMap = new SysMenu();
 		if (StringUtils.isNotBlank(zjId)) {
-			menuMap.setZjId(zjId);
-			List<Menu> resultList = menuService.queryMenuList(menuMap);
+			menuMap.setId(zjId);
+			List<SysMenu> resultList = menuService.queryMenuList(menuMap);
 			if (resultList != null && !resultList.isEmpty()) {
 				model.addAttribute("menu", resultList.get(0));
 			}
@@ -112,22 +110,22 @@ public class MenuController extends BaseMultiActionController{
 		model.addAttribute("type", type);
 		model.addAttribute("show", "Y");
 		
-		Menu menuMap;
+		SysMenu menuMap;
 		if ("add".equals(type)) {
-			menuMap = new Menu();
+			menuMap = new SysMenu();
 			setMap(menuMap, request);
-			menuMap.setSybz("1");
-			menuMap.setJlxzsj(DateUtils.getCurrentDateTime14());
-			menuMap.setJlxgsj(DateUtils.getCurrentDateTime14());
-			menuMap.setJlyxzt("1");
+			menuMap.setIsUsed("1");
+			menuMap.setCreateTime(DateUtils.getCurrentDateTime());
+			menuMap.setUpdateTime(DateUtils.getCurrentDateTime());
+			menuMap.setStatus("1");
 			menuService.insert(menuMap);
 		} else if ("edit".equals(type)) {
 			String zjid = request.getParameter("zjId");
 			menuMap = menuService.getMenuById(zjid);
 			setMap(menuMap, request);
-			menuMap.setJlxgsj(DateUtils.getCurrentDateTime14());
+			menuMap.setUpdateTime(DateUtils.getCurrentDateTime());
 			menuService.update(menuMap);
-			if(CommonConst.NO.equals(menuMap.getSybz())){
+			if(CommonConst.NO.equals(menuMap.getIsUsed())){
 				menuService.updateChildrenSybz(menuMap);
 			}else{
 				menuService.updateParentSybz(menuMap);
@@ -143,15 +141,15 @@ public class MenuController extends BaseMultiActionController{
 	 * @param funcMap
 	 * @param request
 	 */
-	private void setMap(Menu menuMap, HttpServletRequest request) {
-		menuMap.setCdmc(StringUtils.getNullBlankStr(request.getParameter("cdmc")));
-		menuMap.setCddz(StringUtils.getNullBlankStr(request.getParameter("cddz")));
-		menuMap.setCdjb(StringUtils.getNullBlankStr(request.getParameter("cdjb")));
-		menuMap.setSjcd(StringUtils.getNullBlankStr(request.getParameter("sjcd")));
-		menuMap.setSfzhyicd(StringUtils.getNullBlankStr(request.getParameter("sfzhyicd")));
-		menuMap.setCdxh(StringUtils.getNullBlankStr(request.getParameter("cdxh")));
-		menuMap.setSybz(StringUtils.getNullBlankStr(request.getParameter("sybz")));
-		menuMap.setBz(StringUtils.getNullBlankStr(request.getParameter("bz")));
+	private void setMap(SysMenu menuMap, HttpServletRequest request) {
+		menuMap.setMenuName(StringUtils.getNullBlankStr(request.getParameter("menu_name")));
+		menuMap.setMenuAddr(StringUtils.getNullBlankStr(request.getParameter("menu_addr")));
+		menuMap.setMenuLevel(StringUtils.getNullBlankStr(request.getParameter("menu_level")));
+		menuMap.setParentMenuId(StringUtils.getNullBlankStr(request.getParameter("parent_menu_id")));
+		menuMap.setIsLast(StringUtils.getNullBlankStr(request.getParameter("is_last")));
+		menuMap.setMenuIndex(StringUtils.getNullBlankStr(request.getParameter("menu_index")));
+		menuMap.setIsUsed(StringUtils.getNullBlankStr(request.getParameter("is_used")));
+		menuMap.setMemo(StringUtils.getNullBlankStr(request.getParameter("memo")));
 	}
 	
 	/**
@@ -161,13 +159,13 @@ public class MenuController extends BaseMultiActionController{
 	 * @return
 	 */
 	@RequestMapping("loadAllMenu")
-	public @ResponseBody List<Menu> loadAllMenu(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		Menu menu = new Menu();
-		menu.setJlyxzt("1");
-		List<Menu> menuList = menuService.queryMenuList(menu);
-		Menu m = new Menu();
-		m.setZjId("0");
-		m.setCdmc("菜单树");
+	public @ResponseBody List<SysMenu> loadAllMenu(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		SysMenu menu = new SysMenu();
+		menu.setStatus("1");
+		List<SysMenu> menuList = menuService.queryMenuList(menu);
+		SysMenu m = new SysMenu();
+		m.setId("0");
+		m.setMenuName("菜单树");
 		menuList.add(m);
 		return menuList;
 	}
@@ -178,14 +176,14 @@ public class MenuController extends BaseMultiActionController{
 	 * @param request
 	 */
 	@RequestMapping("/loadAllEnableMenu")
-	public @ResponseBody List<Menu> loadAllEnableMenu(Model model, HttpServletRequest request) {
-		Menu menu = new Menu();
-		menu.setSybz(CommonConst.ENABLE_FLAG);
-		menu.setJlyxzt(CommonConst.ENABLE_FLAG);
-		List<Menu> menuList = menuService.queryMenuList(menu);
-		Menu m = new Menu();
-		m.setZjId("0");
-		m.setCdmc("菜单树");
+	public @ResponseBody List<SysMenu> loadAllEnableMenu(Model model, HttpServletRequest request) {
+		SysMenu menu = new SysMenu();
+		menu.setIsUsed(CommonConst.ENABLE_FLAG);
+		menu.setStatus(CommonConst.ENABLE_FLAG);
+		List<SysMenu> menuList = menuService.queryMenuList(menu);
+		SysMenu m = new SysMenu();
+		m.setId("0");
+		m.setMenuName("菜单树");
 		menuList.add(m);
 		return menuList;
 	}
@@ -238,7 +236,7 @@ public class MenuController extends BaseMultiActionController{
 	@RequestMapping("/delMenu")
 	public @ResponseBody void delMenu(HttpServletRequest request){
 		String id = StringUtils.getNullBlankStr(request.getParameter("id"));
-		Menu menu = menuService.getMenuById(id);
+		SysMenu menu = menuService.getMenuById(id);
 		menuService.logicDelMenu(menu);
 	}
 }

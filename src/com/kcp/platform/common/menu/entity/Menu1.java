@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class Menu {
+public class Menu1 {
 	
 	/**
 	 * 主键ID

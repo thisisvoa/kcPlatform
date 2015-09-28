@@ -54,7 +54,7 @@
 		                                AND T3.ZJID = #{userId}))
 	</select>
 	
-	<select id="getAssignedMenuList" parameterType="String" resultType="com.kcp.platform.common.menu.entity.Menu">
+	<select id="getAssignedMenuList" parameterType="String" resultType="com.kcp.platform.common.menu.entity.SysMenu">
 		SELECT T.ZJID     AS zjId,
 		       T.CDMC     AS cdmc,
 		       T.CDJB     AS cdjb,

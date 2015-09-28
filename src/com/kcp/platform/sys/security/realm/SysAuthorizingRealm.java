@@ -30,7 +30,7 @@ import com.kcp.platform.common.authorization.service.AuthoriztationService;
 import com.kcp.platform.common.func.entity.Function;
 import com.kcp.platform.common.log.Logger;
 import com.kcp.platform.common.log.entity.LogonLog;
-import com.kcp.platform.common.menu.entity.Menu;
+import com.kcp.platform.common.menu.entity.SysMenu;
 import com.kcp.platform.common.org.entity.Org;
 import com.kcp.platform.common.role.entity.Role;
 import com.kcp.platform.common.user.entity.User;
@@ -95,10 +95,10 @@ public class SysAuthorizingRealm extends AuthorizingRealm implements BaseEventLi
 			info.addObjectPermission(permission);
 		}else{
 			//菜单权限
-			List<Menu> menuList = authoriztationService.getAssignedMenuList(user);
-			for(Menu menu:menuList){
-				if("1".equals(menu.getSfzhyicd())){
-					info.addStringPermission("MENU_"+menu.getZjId());
+			List<SysMenu> menuList = authoriztationService.getAssignedMenuList(user);
+			for(SysMenu menu:menuList){
+				if("1".equals(menu.getIsLast())){
+					info.addStringPermission("MENU_"+menu.getId());
 				}
 			}
 			

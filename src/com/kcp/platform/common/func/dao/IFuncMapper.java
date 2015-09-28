@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kcp.platform.common.func.entity.Function;
 import com.kcp.platform.common.log.annotation.OperateLog;
-import com.kcp.platform.common.menu.entity.Menu;
+import com.kcp.platform.common.menu.entity.SysMenu;
 import com.kcp.platform.core.mybatis.annotation.Pageable;
 
 @Repository
@@ -17,7 +17,7 @@ public interface IFuncMapper {
 	@OperateLog(isRecord=false)
 	public List<Function> queryFuncList(Function funcMap);
 	
-	public List<Menu> queryMenuList();
+	public List<SysMenu> queryMenuList();
 	
 	@OperateLog(isRecord=false)
 	public int insert(Function paramMap);

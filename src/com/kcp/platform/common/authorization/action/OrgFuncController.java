@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kcp.platform.common.authorization.service.OrgFuncService;
 import com.kcp.platform.common.func.entity.Function;
 import com.kcp.platform.common.func.service.FuncService;
-import com.kcp.platform.common.menu.entity.Menu;
+import com.kcp.platform.common.menu.entity.SysMenu;
 import com.kcp.platform.common.menu.service.MenuService;
 import com.kcp.platform.common.org.service.OrgService;
 import com.kcp.platform.core.exception.BusinessException;
@@ -155,7 +155,7 @@ public class OrgFuncController extends BaseMultiActionController {
 		if(func==null){
 			throw new BusinessException("选择的功能不存在!");
 		}
-		List<Menu> parentMenuList = menuService.queryParentMenuList(func.getCdxxZjId());
+		List<SysMenu> parentMenuList = menuService.queryParentMenuList(func.getCdxxZjId());
 		return new ModelAndView("common/authorization/assignOrgToFunc")
 						.addObject("func", func)
 						.addObject("parentMenuList", parentMenuList);

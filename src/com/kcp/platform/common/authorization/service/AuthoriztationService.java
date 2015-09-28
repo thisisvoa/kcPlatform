@@ -10,7 +10,7 @@ import com.kcp.platform.base.cache.annotation.Cacheable;
 import com.kcp.platform.common.authorization.dao.IAuthoriztationMapper;
 import com.kcp.platform.common.func.entity.Function;
 import com.kcp.platform.common.func.service.FuncService;
-import com.kcp.platform.common.menu.entity.Menu;
+import com.kcp.platform.common.menu.entity.SysMenu;
 import com.kcp.platform.common.menu.service.MenuService;
 import com.kcp.platform.common.org.entity.Org;
 import com.kcp.platform.common.org.service.OrgService;
@@ -101,7 +101,7 @@ public class AuthoriztationService extends BaseService {
 	 * @return
 	 */
 	@Cacheable(cacheItemManager="authCacheItemManger",key="'menu.'+#user.yhdlzh")
-	public List<Menu> getAssignedMenuList(User user){
+	public List<SysMenu> getAssignedMenuList(User user){
 		if(user.isSuperAdmin()){
 			return menuService.findAllEnableMenus();
 		}else{
