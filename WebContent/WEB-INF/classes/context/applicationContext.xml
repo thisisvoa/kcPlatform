@@ -6,11 +6,11 @@
     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
     ">
     
-	<!-- KPM核心配置 -->
+	<!-- KCP核心配置 -->
 	<import resource="classpath:/context/base/kpm-base.xml" />
 	
 	
-	<!-- KPM核心配置 -->
+	<!-- KCP核心配置 -->
 	<import resource="classpath:/context/base/kpm-common.xml" />
 	
 	<!-- 授权模块配置 -->

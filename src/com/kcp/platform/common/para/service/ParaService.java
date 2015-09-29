@@ -34,7 +34,7 @@ public class ParaService extends BaseService{
 	public String queryMaxId(){
 		return iParaMapper.queryMaxId();
 	}
-	@Log(type=OperateLogType.INSERT, moduleName="参数信息管理", operateDesc="'[新增] 新增[参数名称：'+#paramMap.csmc+'] [参数代码：'+#paramMap.csdm+'] [参数值：'+#paramMap.csz+']的参数信息'")
+	@Log(type=OperateLogType.INSERT, moduleName="参数信息管理", operateDesc="'[新增] 新增[参数名称：'+#paramMap.parmName+'] [参数代码：'+#paramMap.parmCode+'] [参数值：'+#paramMap.parmValue+']的参数信息'")
 	public int insert(SysParameter paramMap){
 		int result = iParaMapper.insert(paramMap);
 		ParamChangeEvent event = new ParamChangeEvent(ParamChangeEvent.CHANGE_TYPE_ADD, paramMap);
@@ -42,7 +42,7 @@ public class ParaService extends BaseService{
 		return result;
 	}
 	
-	@Log(type=OperateLogType.UPDATE, moduleName="参数信息管理", operateDesc="'[修改] 修改[参数名称：'+#paramMap.csmc+'] [参数代码：'+#paramMap.csdm+'] [参数值：'+#paramMap.csz+']的参数信息'")
+	@Log(type=OperateLogType.UPDATE, moduleName="参数信息管理", operateDesc="'[修改] 修改[参数名称：'+#paramMap.parmName+'] [参数代码：'+#paramMap.parmCode+'] [参数值：'+#paramMap.parmValue+']的参数信息'")
 	public int update(SysParameter paramMap){
 		int result = iParaMapper.update(paramMap);
 		ParamChangeEvent event = new ParamChangeEvent(ParamChangeEvent.CHANGE_TYPE_UPDATE, paramMap);
@@ -50,7 +50,7 @@ public class ParaService extends BaseService{
 		return result;
 	}
 	
-	@Log(type=OperateLogType.UPDATE, moduleName="参数信息管理", operateDesc="'[启用/禁用参数] 修改[参数名称：'+#paramMap.csmc+'] [参数代码：'+#paramMap.csdm+'] [参数值：'+#paramMap.csz+']的使用标志为['+#sybz+']'")
+	@Log(type=OperateLogType.UPDATE, moduleName="参数信息管理", operateDesc="'[启用/禁用参数] 修改[参数名称：'+#paramMap.parmName+'] [参数代码：'+#paramMap.parmCode+'] [参数值：'+#paramMap.parmValue+']的使用标志为['+#sybz+']'")
 	public void updateSybz(SysParameter paramMap, String sybz){
 		paramMap.setIsUsed(sybz);
 		iParaMapper.updateSybz(paramMap);
@@ -58,7 +58,7 @@ public class ParaService extends BaseService{
 		EventDispatcher.publishEvent(event);
 	}
 	
-	@Log(type=OperateLogType.DELETE, moduleName="参数信息管理", operateDesc="'[删除] 删除[参数名称：'+#paramMap.csmc+'] [参数代码：'+#paramMap.csdm+'] [参数值：'+#paramMap.csz+']的参数信息'")
+	@Log(type=OperateLogType.DELETE, moduleName="参数信息管理", operateDesc="'[删除] 删除[参数名称：'+#paramMap.parmName+'] [参数代码：'+#paramMap.parmCode+'] [参数值：'+#paramMap.parmValue+']的参数信息'")
 	public void logicDelParam(SysParameter paramMap){
 		SysParameter param = getParaById(paramMap.getId());
 		iParaMapper.logicDelParam(paramMap);

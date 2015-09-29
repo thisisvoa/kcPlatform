@@ -7,5 +7,5 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		<import resource="springMVC/kpm-base.xml"/>
 		<import resource="springMVC/kpm-common.xml"/>
-		<import resource="springMVC/kpm-bpm.xml"/>
+		<!-- <import resource="springMVC/kpm-bpm.xml"/> 暂时取消加载工作流-->
 </beans>
