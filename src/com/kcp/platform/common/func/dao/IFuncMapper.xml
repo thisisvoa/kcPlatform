@@ -44,9 +44,9 @@
 	
 	<!-- 查询有效菜单清单 -->
 	<select id="queryMenuList" resultMap="menuMap">
-		select ZJID, CDMC, CDJB, CDXH, SJCD
-		from (select * from tb_cdxx order by to_number(cdxh)) tb_cdxx 
-		connect by prior ZJID = SJCD start with SJCD = '0'
+		select id, menu_name,menu_level,menu_index, parent_menu_id
+		from (select * from tb_sys_menu order by to_number(menu_index)) tb_sys_menu 
+		connect by prior id = parent_menu_id start with parent_menu_id = '0'
 	</select>
 	
 	<!-- 新增 -->
@@ -110,10 +110,10 @@
 	<delete id="logicDelByMenuId">
 		UPDATE TB_GNXX SET JLYXZT = '0', JLSCSJ = #{curTime, jdbcType=VARCHAR} 
 			WHERE CDXX_ZJID in 
-				(SELECT ZJID
-		                  FROM TB_CDXX
-		                 START WITH ZJID = #{menuId}
-		                CONNECT BY PRIOR ZJID = SJCD)
+				(SELECT id
+		                  FROM TB_sys_menu
+		                 START WITH id = #{menuId}
+		                CONNECT BY PRIOR id = parent_menu_id)
 	</delete>
 	
 	<!-- 查询功能 -->
