@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.kcp.platform.common.org.entity.Org;
-import com.kcp.platform.common.para.entity.Parameter;
+import com.kcp.platform.common.para.entity.SysParameter;
 import com.kcp.platform.common.para.service.ParaService;
 import com.kcp.platform.common.user.entity.User;
 import com.kcp.platform.sys.context.SpringContextHolder;
@@ -29,16 +29,15 @@ public class OnlineStore {
 	private OnlineStore(){
 		userList = new CopyOnWriteArrayList<Map<String,Object>>();
 		paraService = SpringContextHolder.getBean(ParaService.class);
-		Parameter para = paraService.getParaByCsdm(HIS_ONLINE_NAME);
+		SysParameter para = paraService.getParaByCsdm(HIS_ONLINE_NAME);
 		if(para==null){//若系统参数表中不存在[历史在线人数]这个参数，则添加之
-			para = new Parameter();
-			para.setCsmc("历史在线人数");
-			para.setCsdm(HIS_ONLINE_NAME);
-			para.setCsz("0");
-			para.setJlxzsj(DateUtils.getCurrentDateTime14());
-			para.setJlxgsj(DateUtils.getCurrentDateTime14());
-			para.setJlyxzt("1");
-			para.setSybz("1");
+			para = new SysParameter();
+			para.setParmName("历史在线人数");
+			para.setParmCode(HIS_ONLINE_NAME);
+			para.setParmValue("0");
+			para.setCreateTime(DateUtils.getCurrentDateTime());
+			para.setStatus("1");
+			para.setIsUsed("1");
 			paraService.insert(para);
 		}
 	}
@@ -105,7 +104,7 @@ public class OnlineStore {
 	}
 	
 	public int getHisOnline(){
-		Parameter para = paraService.getParaByCsdm(HIS_ONLINE_NAME);
-		return Integer.parseInt(para.getCsz());
+		SysParameter para = paraService.getParaByCsdm(HIS_ONLINE_NAME);
+		return Integer.parseInt(para.getParmValue());
 	}
 }

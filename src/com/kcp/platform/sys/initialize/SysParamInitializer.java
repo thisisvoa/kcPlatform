@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.kcp.platform.base.event.BaseEvent;
 import com.kcp.platform.base.event.BaseEventListener;
-import com.kcp.platform.common.para.entity.Parameter;
+import com.kcp.platform.common.para.entity.SysParameter;
 import com.kcp.platform.common.para.event.ParamChangeEvent;
 import com.kcp.platform.common.para.service.ParaService;
 import com.kcp.platform.sys.config.SysConfig;
@@ -38,26 +38,26 @@ public class SysParamInitializer extends AbstractInitializer implements BaseEven
 	 */
 	public void onEvent(BaseEvent event){
 		ParamChangeEvent changeEvent = (ParamChangeEvent)event;
-		Parameter parameter = changeEvent.getParam();
+		SysParameter parameter = changeEvent.getParam();
 		if(parameter == null){
 			return;
 		}
 		if(ParamChangeEvent.CHANGE_TYPE_DEL.equals(changeEvent.getChangeType())){
-			if(SysConfig.CSDM_ORG_MANAGER_SHENGJI.equals(parameter.getCsdm())){
+			if(SysConfig.CSDM_ORG_MANAGER_SHENGJI.equals(parameter.getParmCode())){
 				SysConfig.ORG_MANAGER_SHENGJI = "";
-			}else if(SysConfig.CSDM_ORG_MANAGER_SHENGJI.equals(parameter.getCsdm())){
+			}else if(SysConfig.CSDM_ORG_MANAGER_SHENGJI.equals(parameter.getParmCode())){
 				SysConfig.ORG_MANAGER_SHIJI = "";
-			}else if(SysConfig.CSDM_ORG_MANAGER_SHENGJI.equals(parameter.getCsdm())){
+			}else if(SysConfig.CSDM_ORG_MANAGER_SHENGJI.equals(parameter.getParmCode())){
 				SysConfig.ORG_MANAGER_XIANJI = "";
 			}
 		}else{
-			if(parameter.getCsdm().equals(SysConfig.CSDM_ORG_MANAGER_SHENGJI)){
+			if(parameter.getParmCode().equals(SysConfig.CSDM_ORG_MANAGER_SHENGJI)){
 				initOrgManagerShJ(SysConfig.CSDM_ORG_MANAGER_SHENGJI);
 			}
-			if(parameter.getCsdm().equals(SysConfig.CSDM_ORG_MANAGER_SHIJI)){
+			if(parameter.getParmCode().equals(SysConfig.CSDM_ORG_MANAGER_SHIJI)){
 				initOrgManagerShJ(SysConfig.CSDM_ORG_MANAGER_SHIJI);
 			}
-			if(parameter.getCsdm().equals(SysConfig.CSDM_ORG_MANAGER_XIANJI)){
+			if(parameter.getParmCode().equals(SysConfig.CSDM_ORG_MANAGER_XIANJI)){
 				initOrgManagerShJ(SysConfig.CSDM_ORG_MANAGER_XIANJI);
 			}
 		}
@@ -74,14 +74,14 @@ public class SysParamInitializer extends AbstractInitializer implements BaseEven
 	};
 	
 	private void initOrgManagerShJ(String type){
-		Parameter param = paraService.getParaByCsdm(type);
-		if(param!=null && param.getSybz().equals(CommonConst.YES) && param.getJlyxzt().equals(CommonConst.YES)){
+		SysParameter param = paraService.getParaByCsdm(type);
+		if(param!=null && param.getIsUsed().equals(CommonConst.YES) && param.getStatus().equals(CommonConst.YES)){
 			if(SysConfig.CSDM_ORG_MANAGER_SHENGJI.equals(type)){
-				SysConfig.ORG_MANAGER_SHENGJI = param.getCsz();
+				SysConfig.ORG_MANAGER_SHENGJI = param.getParmValue();
 			}else if(SysConfig.CSDM_ORG_MANAGER_SHIJI.equals(type)){
-				SysConfig.ORG_MANAGER_SHIJI = param.getCsz();
+				SysConfig.ORG_MANAGER_SHIJI = param.getParmValue();
 			}else if(SysConfig.CSDM_ORG_MANAGER_XIANJI.equals(type)){
-				SysConfig.ORG_MANAGER_XIANJI = param.getCsz();
+				SysConfig.ORG_MANAGER_XIANJI = param.getParmValue();
 			}
 		}else{
 			if(SysConfig.CSDM_ORG_MANAGER_SHENGJI.equals(type)){

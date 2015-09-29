@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kcp.platform.common.log.Logger;
 import com.kcp.platform.common.log.annotation.OperateLogType;
 import com.kcp.platform.common.log.core.SqlContextHolder;
-import com.kcp.platform.common.para.entity.Parameter;
+import com.kcp.platform.common.para.entity.SysParameter;
 import com.kcp.platform.common.para.service.ParaService;
 import com.kcp.platform.core.page.Page;
 import com.kcp.platform.core.page.PageContextHolder;
@@ -57,21 +57,20 @@ public class ParaController extends BaseMultiActionController{
 		String csdm = StringUtils.escapeSqlLike(StringUtils.getNullBlankStr(request.getParameter("csdm")));
 		String useFlag = StringUtils.escapeSqlLike(request.getParameter("useFlag"));
 		String res = request.getParameter("res");
-		Parameter paraMap = new Parameter();
-		paraMap.setJlyxzt("1");
-		paraMap.setSybz(res);
-		paraMap.setCsmc(csmc);
-		paraMap.setCsdm(csdm);
-		paraMap.setSybz(useFlag);
-		List<Parameter> resultList = paraService.queryParaList(paraMap);
+		SysParameter paraMap = new SysParameter();
+		paraMap.setStatus("1");
+		paraMap.setParmName(csmc);
+		paraMap.setParmCode(csdm);
+		paraMap.setIsUsed(useFlag);
+		List<SysParameter> resultList = paraService.queryParaList(paraMap);
 		Page page = PageContextHolder.getPage();
 		return new GridData(resultList, page.getPage(), page.getTotalPages(), page.getTotalItems());
 	}
 	
 	@RequestMapping("toParaAdd")
 	public String toParaAdd(Model model, HttpServletRequest request) {
-		Parameter paraMap = new Parameter();
-		paraMap.setSybz("1");
+		SysParameter paraMap = new SysParameter();
+		paraMap.setIsUsed("1");
 		model.addAttribute("para", paraMap);
 		model.addAttribute("type", "ADD");
 		return "common/para/paraDetail";
@@ -80,7 +79,7 @@ public class ParaController extends BaseMultiActionController{
 	@RequestMapping("toParaEdit")
 	public String toParaEdit(Model model, HttpServletRequest request) {
 		String zjId = request.getParameter("zjId");
-		Parameter para = paraService.getParaById(zjId);
+		SysParameter para = paraService.getParaById(zjId);
 		model.addAttribute("para", para);
 		model.addAttribute("type", "UPDATE");
 		return "common/para/paraDetail";
@@ -89,30 +88,30 @@ public class ParaController extends BaseMultiActionController{
 	@RequestMapping("paraView")
 	public String paraView(Model model, HttpServletRequest request) {
 		String zjId = request.getParameter("zjId");
-		Parameter para = paraService.getParaById(zjId);
+		SysParameter para = paraService.getParaById(zjId);
 		String sql = SqlContextHolder.getSql();
-		Logger.getInstance().addSysLog(OperateLogType.QUERY.value(), sql, "参数信息管理", "[查看] 查看[参数名称："+para.getCsmc()+"] [参数代码："+para.getCsdm()+"] [参数值："+para.getCsz()+"]的参数信息");
+		Logger.getInstance().addSysLog(OperateLogType.QUERY.value(), sql, "参数信息管理", "[查看] 查看[参数名称："+para.getParmName()+"] [参数代码："+para.getParmCode()+"] [参数值："+para.getParmValue()+"]的参数信息");
 		model.addAttribute("para", para);
 		return "common/para/paraView";
 	}
 	
 	@RequestMapping("addPara")
 	public @ResponseBody void addPara(HttpServletRequest request){
-		Parameter paraMap = new Parameter();
+		SysParameter paraMap = new SysParameter();
 		setMap(paraMap, request);
-		paraMap.setJlxzsj(DateUtils.getCurrentDateTime14());
-		paraMap.setJlxgsj(DateUtils.getCurrentDateTime14());
-		paraMap.setJlyxzt("1");
+		paraMap.setCreateTime(DateUtils.getCurrentDateTime());
+		paraMap.setUpdateTime(DateUtils.getCurrentDateTime());
+		paraMap.setStatus("1");
 		paraService.insert(paraMap);
 	}
 	
 	@RequestMapping("updatePara")
 	public @ResponseBody void updatePara(HttpServletRequest request){
-		Parameter paraMap = new Parameter();
+		SysParameter paraMap = new SysParameter();
 		setMap(paraMap, request);
-		paraMap.setZjId(request.getParameter("zjId"));
+		paraMap.setId(request.getParameter("zjId"));
 		setMap(paraMap, request);
-		paraMap.setJlxgsj(DateUtils.getCurrentDateTime14());
+		paraMap.setCreateTime(DateUtils.getCurrentDateTime());
 		paraService.update(paraMap);
 	}
 	
@@ -125,7 +124,7 @@ public class ParaController extends BaseMultiActionController{
 			if(zjIds != null && !"".equals(zjIds.trim())){
 				String[] zjidArr = zjIds.split(",");
 				for(int i = 0, len = zjidArr.length; i < len; i++){
-					Parameter param = paraService.getParaById(zjidArr[i]);
+					SysParameter param = paraService.getParaById(zjidArr[i]);
 					paraService.updateSybz(param, sybz);
 				}
 			}
@@ -144,8 +143,8 @@ public class ParaController extends BaseMultiActionController{
 			if(StringUtils.isNotEmpty(ids)){
 				String[] idArr = ids.split(",");
 				for (String zjId:idArr) {
-					Parameter paraMap = paraService.getParaById(zjId);
-					paraMap.setJlscsj(DateUtils.getCurrentDateTime14());
+					SysParameter paraMap = paraService.getParaById(zjId);
+					paraMap.setDeleteTime(DateUtils.getCurrentDateTime());
 					paraService.logicDelParam(paraMap);
 				}
 			}
@@ -161,12 +160,12 @@ public class ParaController extends BaseMultiActionController{
 	 * @param paraMap
 	 * @param request
 	 */
-	private void setMap(Parameter paraMap, HttpServletRequest request) {
-		paraMap.setCsmc(StringUtils.getNullBlankStr(request.getParameter("csmc")));
-		paraMap.setCsdm(StringUtils.getNullBlankStr(request.getParameter("csdm")));
-		paraMap.setCsz(StringUtils.getNullBlankStr(request.getParameter("csz")));
-		paraMap.setSybz(StringUtils.getNullBlankStr(request.getParameter("sybz")));
-		paraMap.setBz(StringUtils.getNullBlankStr(request.getParameter("bz")));
+	private void setMap(SysParameter paraMap, HttpServletRequest request) {
+		paraMap.setParmName(StringUtils.getNullBlankStr(request.getParameter("csmc")));
+		paraMap.setParmCode(StringUtils.getNullBlankStr(request.getParameter("csdm")));
+		paraMap.setParmValue(StringUtils.getNullBlankStr(request.getParameter("csz")));
+		paraMap.setIsUsed(StringUtils.getNullBlankStr(request.getParameter("sybz")));
+		paraMap.setMemo(StringUtils.getNullBlankStr(request.getParameter("bz")));
 	}
 	/**
 	 * 校验唯一性
@@ -178,9 +177,9 @@ public class ParaController extends BaseMultiActionController{
 		String zjId = request.getParameter("zjId");
 		String csdm = request.getParameter("fieldValue");
 		String fieldId = request.getParameter("fieldId");
-		Parameter param = new Parameter();
-		param.setZjId(zjId);
-		param.setCsdm(csdm);
+		SysParameter param = new SysParameter();
+		param.setId(zjId);
+		param.setParmCode(csdm);
 		boolean isExist = paraService.isCsdmExist(param);
 		Object[] result = new Object[2];
 		result[0] = fieldId;

@@ -1,7 +1,7 @@
 package com.kcp.platform.common.para.event;
 
 import com.kcp.platform.base.event.BaseEvent;
-import com.kcp.platform.common.para.entity.Parameter;
+import com.kcp.platform.common.para.entity.SysParameter;
 
 public class ParamChangeEvent extends BaseEvent {
 	
@@ -16,7 +16,7 @@ public class ParamChangeEvent extends BaseEvent {
 	/**
 	 * 变化的参数
 	 */
-	public Parameter  param;
+	public SysParameter  param;
 	
 	/**
 	 * 事件类型
@@ -31,16 +31,16 @@ public class ParamChangeEvent extends BaseEvent {
 		this.changeType = changeType;
 	}
 	
-	public ParamChangeEvent(String changeType, Parameter  param){
+	public ParamChangeEvent(String changeType, SysParameter  param){
 		this.changeType = changeType;
 		this.param = param;
 	}
 	
-	public Parameter getParam() {
+	public SysParameter getParam() {
 		return param;
 	}
 
-	public void setParam(Parameter param) {
+	public void setParam(SysParameter param) {
 		this.param = param;
 	}
 	
